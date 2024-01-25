@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 const linkVariants = cva(
   cn(
     "decoration-current decoration-solid decoration-auto underline-offset-4 transition-all duration-300",
-    "hover:opacity-100 hover:underline",
+    "hover:opacity-100",
   ),
   {
     variants: {

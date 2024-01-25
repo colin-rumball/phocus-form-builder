@@ -5,11 +5,11 @@
 @layer base {
   :root {
     /* VARIABLES */
-    --spring-wood: #f6f7f0;
-    --lemon-grass: #c5ceb5;
-    --red-damask: #d25842;
-    --teak: #54432e;
-    --kelp: #424236;
+    --spring-wood: 246 247 240;
+    --lemon-grass: 197 206 181;
+    --red-damask: 210 88 66;
+    --teak: 84 67 46;
+    --kelp: 66 66 54;
 
     --header-height: 120px;
     --radius: 0.5rem;
@@ -31,20 +31,20 @@
     --secondary-foreground: var(--teak);
 
     --muted: var(--lemon-grass);
-    --muted-foreground: 240 3.8% 46.1%;
+    --muted-foreground: var(--kelp);
 
     --accent: var(--lemon-grass);
     --accent-foreground: var(--teak);
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
+    --destructive: 230 120 88;
+    --destructive-foreground: var(--kelp);
 
     --border: var(--kelp);
     --input: var(--kelp);
     --ring: var(--red-damask);
   }
 
-  .dark {
+  /* .dark {
     --background: var(--spring-wood);
     --foreground: var(--kelp);
 
@@ -72,7 +72,7 @@
     --border: var(--kelp);
     --input: var(--kelp);
     --ring: var(--red-damask);
-  }
+  } */
 }
 
 @layer base {

@@ -25,10 +25,13 @@ import {
 } from "@/convex/zodSchemas/form";
 import { useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
+import { BsFileEarmarkPlus } from "react-icons/bs";
+import { useRouter } from "next/navigation";
 
 type CreateFormButtonProps = ComponentPropsWithoutRef<"div">;
 
 const CreateFormButton = ({ className, children }: CreateFormButtonProps) => {
+  const router = useRouter();
   const createForm = useMutation(api.forms.create);
 
   const form = useForm<z.infer<FormSchemaType>>({
@@ -46,6 +49,7 @@ const CreateFormButton = ({ className, children }: CreateFormButtonProps) => {
         title: data.name,
         description: "Form created",
       });
+      router.push(`/builder/${res}`);
     } catch (e) {
       toast({
         title: "Error",
@@ -58,8 +62,17 @@ const CreateFormButton = ({ className, children }: CreateFormButtonProps) => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className="border-primary/20 group flex h-[190px] flex-col items-center justify-center border">
-          Create new form
+        <Button
+          variant={"outline"}
+          className={cn(
+            "border-primary/20 group flex h-[190px] flex-col items-center justify-center gap-4 border border-dashed",
+            "hover:cursor-pointer hover:border-primary",
+          )}
+        >
+          <BsFileEarmarkPlus className="h-8 w-8 text-muted-foreground group-hover:text-primary" />
+          <p className="text-xl font-bold text-muted-foreground group-hover:text-primary">
+            Create new form
+          </p>
         </Button>
       </DialogTrigger>
       <DialogContent>
