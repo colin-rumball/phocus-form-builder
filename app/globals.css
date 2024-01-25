@@ -1,0 +1,85 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* VARIABLES */
+    --spring-wood: #f6f7f0;
+    --lemon-grass: #c5ceb5;
+    --red-damask: #d25842;
+    --teak: #54432e;
+    --kelp: #424236;
+
+    --header-height: 120px;
+    --radius: 0.5rem;
+
+    /* ASSIGNMENTS */
+    --background: var(--spring-wood);
+    --foreground: var(--kelp);
+
+    --card: var(--spring-wood);
+    --card-foreground: var(--kelp);
+
+    --popover: var(--spring-wood);
+    --popover-foreground: var(--kelp);
+
+    --primary: var(--red-damask);
+    --primary-foreground: var(--spring-wood);
+
+    --secondary: var(--lemon-grass);
+    --secondary-foreground: var(--teak);
+
+    --muted: var(--lemon-grass);
+    --muted-foreground: 240 3.8% 46.1%;
+
+    --accent: var(--lemon-grass);
+    --accent-foreground: var(--teak);
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: var(--kelp);
+    --input: var(--kelp);
+    --ring: var(--red-damask);
+  }
+
+  .dark {
+    --background: var(--spring-wood);
+    --foreground: var(--kelp);
+
+    --card: var(--spring-wood);
+    --card-foreground: var(--kelp);
+
+    --popover: var(--spring-wood);
+    --popover-foreground: var(--kelp);
+
+    --primary: var(--red-damask);
+    --primary-foreground: var(--spring-wood);
+
+    --secondary: var(--lemon-grass);
+    --secondary-foreground: var(--teak);
+
+    --muted: var(--lemon-grass);
+    --muted-foreground: 240 3.8% 46.1%;
+
+    --accent: var(--lemon-grass);
+    --accent-foreground: var(--teak);
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: var(--kelp);
+    --input: var(--kelp);
+    --ring: var(--red-damask);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
