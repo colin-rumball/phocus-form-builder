@@ -1,7 +1,6 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { type ComponentPropsWithoutRef } from "react";
 import {
   Dialog,
   DialogContent,
@@ -28,9 +27,7 @@ import { api } from "@/convex/_generated/api";
 import { BsFileEarmarkPlus } from "react-icons/bs";
 import { useRouter } from "next/navigation";
 
-type CreateFormButtonProps = ComponentPropsWithoutRef<"div">;
-
-const CreateFormButton = ({ className, children }: CreateFormButtonProps) => {
+const CreateFormButton = () => {
   const router = useRouter();
   const createForm = useMutation(api.forms.create);
 
@@ -65,7 +62,7 @@ const CreateFormButton = ({ className, children }: CreateFormButtonProps) => {
         <Button
           variant={"outline"}
           className={cn(
-            "border-primary/20 group flex h-[190px] flex-col items-center justify-center gap-4 border border-dashed",
+            "group flex h-[190px] flex-col items-center justify-center gap-4 border border-dashed border-primary/20",
             "hover:cursor-pointer hover:border-primary",
           )}
         >

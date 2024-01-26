@@ -6,7 +6,7 @@ import DesignerSidebar from "./designer-sidebar";
 import { useDndMonitor, useDraggable, useDroppable } from "@dnd-kit/core";
 import {
   type ElementsType,
-  FormElementInstance,
+  type FormElementInstance,
   FormElements,
 } from "./form-elements";
 import { useDesigner } from "@/lib/hooks/useDesigner";
@@ -85,7 +85,7 @@ const DesignerElementWrapper = ({
 }: {
   element: FormElementInstance;
 }) => {
-  const { removeElement, selectedElement, setSelectedElement } = useDesigner();
+  const { removeElement, setSelectedElement } = useDesigner();
   const [mouseOver, setMouseOver] = useState(false);
 
   const topHalf = useDroppable({

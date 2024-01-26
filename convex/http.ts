@@ -1,7 +1,7 @@
 import { httpRouter } from "convex/server";
 import { httpAction } from "./_generated/server";
-import { api, internal } from "./_generated/api";
-import { EmailAddressJSON, UserJSON, WebhookEvent } from "@clerk/nextjs/server";
+import { internal } from "./_generated/api";
+import { type UserJSON } from "@clerk/nextjs/server";
 
 const http = httpRouter();
 

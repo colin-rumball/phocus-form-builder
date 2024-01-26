@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
 import { type ComponentPropsWithoutRef } from "react";
-import { FormElement, FormElements } from "./form-elements";
+import { type FormElement, FormElements } from "./form-elements";
 import { Button } from "./ui/button";
 import { useDraggable } from "@dnd-kit/core";
 import { useDesigner } from "@/lib/hooks/useDesigner";
@@ -8,7 +8,7 @@ import FormElementInspector from "./form-element-inspector";
 
 type DesignerSidebarProps = ComponentPropsWithoutRef<"div">;
 
-const DesignerSidebar = ({ className, children }: DesignerSidebarProps) => {
+const DesignerSidebar = ({ className }: DesignerSidebarProps) => {
   const { selectedElement } = useDesigner();
   return (
     <aside
