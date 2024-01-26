@@ -113,7 +113,7 @@ const FormCard = ({
           </Button>
         )}
         {!published && (
-          <Button asChild className="mt-2 w-full gap-4">
+          <Button variant={"secondary"} asChild className="mt-2 w-full gap-4">
             <Link href={`/builder/${_id}`}>
               Edit form <FaEdit />
             </Link>

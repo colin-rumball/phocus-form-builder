@@ -14,10 +14,9 @@ const Headline = ({ className, children, as }: Props) => {
         as === "h1" && "mb text-heading leading-headline md:text-headline",
         as === "h2" && "text-heading font-medium leading-heading",
         (as === "h3" || as === "h4" || as === "h5") && "text-lg leading-lg",
-        className,
       )}
     >
-      {children}
+      <span className={className}>{children}</span>
     </Element>
   );
 };

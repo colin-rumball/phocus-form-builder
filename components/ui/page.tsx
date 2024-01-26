@@ -9,7 +9,7 @@ const Page = forwardRef<HTMLDivElement, Props>(
       <main
         ref={ref}
         className={cn(
-          "pb-xl relative flex flex-col overflow-x-hidden",
+          "relative flex h-full flex-col overflow-x-hidden",
           className,
         )}
       >
