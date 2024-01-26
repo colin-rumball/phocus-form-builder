@@ -101,8 +101,8 @@ const FormCard = ({
           )}
         </CardDescription>
       </CardHeader>
-      <CardContent className="h-[20px] truncate text-muted-foreground">
-        {description ?? "No description"}
+      <CardContent className="h-[20px] truncate">
+        {description ? description : "No description"}
       </CardContent>
       <CardFooter>
         {published && (

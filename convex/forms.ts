@@ -1,13 +1,60 @@
 import { api } from "./_generated/api";
 import { query, mutation } from "./_generated/server";
+import { Doc } from "./_generated/dataModel";
 import { ConvexError, v } from "convex/values";
 import { getClerkId, getUser } from "./utils";
 import { z } from "zod";
 import { NoOp } from "convex-helpers/server/customFunctions";
 import { zCustomMutation } from "convex-helpers/server/zod";
-import { formSchemaInner } from "./zodSchemas/form";
+import { createFormSchemaInner } from "./zodSchemas/form";
 
 const zMutation = zCustomMutation(mutation, NoOp);
+
+export const update = mutation({
+  args: {
+    id: v.id("forms"),
+    data: v.object({
+      published: v.optional(v.boolean()),
+      name: v.optional(v.string()),
+      description: v.optional(v.string()),
+      content: v.optional(v.string()),
+    }),
+  },
+  handler: async (ctx, { id, data }) => {
+    const clerkId = await getClerkId(ctx);
+
+    if (!clerkId) {
+      // TODO: error handling
+      // throw new ConvexError("you must be logged in to create a form");
+      return null;
+    }
+
+    const user = await ctx.db
+      .query("users")
+      .withIndex("by_clerkId", (q) => q.eq("clerkId", clerkId))
+      .first();
+
+    if (!user) {
+      throw new ConvexError("No user found");
+    }
+
+    const form = await ctx.db.get(id);
+
+    if (!form) {
+      throw new ConvexError("No form found");
+    }
+
+    if (form.authorId !== user._id) {
+      throw new ConvexError("You do not have permission to view this form");
+    }
+
+    const updatedForm = await ctx.db.patch(id, {
+      ...data,
+    });
+
+    return updatedForm;
+  },
+});
 
 export const get = query({
   args: { id: v.id("forms") },
@@ -73,7 +120,7 @@ export const list = query({
 });
 
 export const create = zMutation({
-  args: formSchemaInner,
+  args: createFormSchemaInner,
   handler: async (ctx, { name, description }) => {
     const clerkId = await getClerkId(ctx);
 

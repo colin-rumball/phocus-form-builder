@@ -1,10 +1,10 @@
 import { z } from "zod";
 
-export const formSchemaInner = {
+export const createFormSchemaInner = {
   name: z.string().min(4),
   description: z.string().optional(),
 };
 
-export const formSchemaObject = z.object(formSchemaInner);
+export const createFormSchemaObject = z.object(createFormSchemaInner);
 
-export type FormSchemaType = typeof formSchemaObject;
+export type CreateFormSchemaType = typeof createFormSchemaObject;

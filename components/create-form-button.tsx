@@ -19,8 +19,8 @@ import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
 import { toast } from "./ui/use-toast";
 import {
-  type FormSchemaType,
-  formSchemaObject,
+  type CreateFormSchemaType,
+  createFormSchemaObject,
 } from "@/convex/zodSchemas/form";
 import { useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
@@ -31,15 +31,15 @@ const CreateFormButton = () => {
   const router = useRouter();
   const createForm = useMutation(api.forms.create);
 
-  const form = useForm<z.infer<FormSchemaType>>({
-    resolver: zodResolver(formSchemaObject),
+  const form = useForm<z.infer<CreateFormSchemaType>>({
+    resolver: zodResolver(createFormSchemaObject),
     defaultValues: {
       name: "",
       description: "",
     },
   });
 
-  const onSubmit = async (data: z.infer<FormSchemaType>) => {
+  const onSubmit = async (data: z.infer<CreateFormSchemaType>) => {
     try {
       const res = await createForm(data);
       toast({
