@@ -15,15 +15,10 @@ export type FormElement = {
   designerComponent: React.FC<{
     element: FormElementInstance;
   }>;
-  formComponent: React.FC;
+  formComponent: React.FC<{
+    element: FormElementInstance;
+  }>;
   propertiesComponent: React.FC<{ element: FormElementInstance }>;
-
-  // id: string;
-  // label: string;
-  // placeholder: string;
-  // required: boolean;
-  // description: string;
-  // options: string[];
 };
 
 export type FormElementInstance = {
