@@ -32,8 +32,6 @@ export const DesignerContextProvider = ({
 
   const addElement = (index: number, element: FormElementInstance) => {
     setElements((prev) => {
-      console.log(`🚀 ~ addElement ~ ${element.id}`);
-
       const newElements = [...prev];
       newElements.splice(index, 0, element);
       return newElements;
@@ -42,8 +40,6 @@ export const DesignerContextProvider = ({
 
   const removeElement = (id: string) => {
     setElements((prev) => {
-      console.log(`🚀 ~ removeElement ~ ${id}`);
-
       const newElements = [...prev];
       const index = newElements.findIndex((e) => e.id === id);
       if (index !== -1) {
@@ -55,8 +51,6 @@ export const DesignerContextProvider = ({
 
   const updateElement = (id: string, element: FormElementInstance) => {
     setElements((prev) => {
-      console.log(`🚀 ~ updateElement ~ ${element.id}`);
-
       const newElements = [...prev];
       const index = newElements.findIndex((e) => e.id === id);
       if (index !== -1) {

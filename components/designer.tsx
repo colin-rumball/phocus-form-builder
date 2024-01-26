@@ -17,8 +17,13 @@ import { Button } from "./ui/button";
 type DesignerProps = ComponentPropsWithoutRef<"div">;
 
 const Designer = ({ className }: DesignerProps) => {
-  const { elements, addElement, selectedElement, setSelectedElement } =
-    useDesigner();
+  const {
+    elements,
+    removeElement,
+    addElement,
+    selectedElement,
+    setSelectedElement,
+  } = useDesigner();
 
   const droppable = useDroppable({
     id: "designer-drop-area",
@@ -31,9 +36,67 @@ const Designer = ({ className }: DesignerProps) => {
     onDragEnd: ({ active, over }) => {
       if (!active || !over) return;
 
-      if (active.data.current?.isDesignerBtnElement) {
+      const isDesignerBtnElement = !!active.data?.current?.isDesignerBtnElement;
+      const isDroppingOverDesignerDropArea =
+        !!over.data?.current?.isDesignerDropArea;
+      const isDroppingOverDesignerElementTopHalf =
+        !!over.data?.current?.isTopHalfDesignerElement;
+      const isDroppingOverDesignerElementBottomHalf =
+        !!over.data?.current?.isBottomHalfDesignerElement;
+      const isDroppingOverDesignerElement =
+        isDroppingOverDesignerElementTopHalf ||
+        isDroppingOverDesignerElementBottomHalf;
+
+      if (isDesignerBtnElement) {
+        // New element from sidebar
         const type = active.data.current?.type as ElementsType;
-        addElement(0, FormElements[type].construct(short.generate()));
+        const newElement = FormElements[type].construct(short.generate());
+        if (isDroppingOverDesignerDropArea) {
+          // add to the bottom
+          addElement(elements.length, newElement);
+          return;
+        } else {
+          // add in place of another element
+          if (isDroppingOverDesignerElement) {
+            const index = elements.findIndex(
+              (e) => e.id === over.data.current?.elementId,
+            );
+            if (index === -1) throw new Error("Element not found");
+            let newElementIndex = index;
+            if (isDroppingOverDesignerElementBottomHalf) newElementIndex += 1;
+            addElement(newElementIndex, newElement);
+            return;
+          }
+        }
+      }
+
+      const isDesignerElement = !!active.data?.current?.isDesignerElement;
+
+      if (isDesignerElement) {
+        const activeId = active.data.current?.elementId as string;
+        const activeElementIndex = elements.findIndex((e) => e.id === activeId);
+
+        if (activeElementIndex === -1)
+          throw new Error("Active element index not found");
+
+        const activeElement = elements[activeElementIndex];
+        if (!activeElement) throw new Error("Active element not found");
+
+        removeElement(activeElement.id);
+
+        if (isDroppingOverDesignerElement) {
+          const overId = over.data.current?.elementId as string;
+          const overElementIndex = elements.findIndex((e) => e.id === overId);
+
+          if (overElementIndex === -1)
+            throw new Error("Over element not found");
+
+          let newElementIndex = overElementIndex;
+          if (isDroppingOverDesignerElementBottomHalf) newElementIndex += 1;
+          addElement(newElementIndex, activeElement);
+        } else {
+          addElement(elements.length, activeElement);
+        }
       }
     },
   });
@@ -51,7 +114,7 @@ const Designer = ({ className }: DesignerProps) => {
           ref={droppable.setNodeRef}
           className={cn(
             "m-auto flex h-full max-w-[920px] flex-1 flex-grow flex-col items-center justify-start overflow-y-auto rounded-xl bg-background",
-            droppable.isOver && "ring-2 ring-primary/60",
+            droppable.isOver && "ring-4 ring-primary/70",
           )}
         >
           {!droppable.isOver && elements.length === 0 && (
@@ -65,7 +128,7 @@ const Designer = ({ className }: DesignerProps) => {
             </div>
           )}
           {elements.length > 0 && (
-            <div className="flex w-full flex-col gap-1">
+            <div className="flex w-full flex-col gap-1 p-1">
               {elements.map((element: FormElementInstance) => {
                 return (
                   <DesignerElementWrapper key={element.id} element={element} />
@@ -85,7 +148,7 @@ const DesignerElementWrapper = ({
 }: {
   element: FormElementInstance;
 }) => {
-  const { removeElement, setSelectedElement } = useDesigner();
+  const { removeElement, selectedElement, setSelectedElement } = useDesigner();
   const [mouseOver, setMouseOver] = useState(false);
 
   const topHalf = useDroppable({
@@ -134,7 +197,7 @@ const DesignerElementWrapper = ({
         setSelectedElement(element);
       }}
       className={cn(
-        "relative flex h-[120px] flex-col rounded-md text-foreground ring-1 ring-inset ring-accent hover:cursor-pointer",
+        "relative flex h-[120px] cursor-grab flex-col rounded-md text-foreground ring-1 ring-inset ring-accent active:cursor-grabbing",
       )}
     >
       <div
@@ -157,6 +220,7 @@ const DesignerElementWrapper = ({
       <div
         className={cn(
           "pointer-events-none flex h-[120px] w-full items-center rounded-md bg-accent/40 px-4 py-2 opacity-100 transition-opacity",
+          selectedElement === element && "ring-1 ring-primary",
           mouseOver && "opacity-30",
         )}
       >

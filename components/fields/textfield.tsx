@@ -77,7 +77,7 @@ const PropertiesComponent = ({ element }: { element: FormElementInstance }) => {
   });
 
   useEffect(() => {
-    // form.reset(elementTyped.extraAttributes);
+    form.reset(elementTyped.extraAttributes);
   }, [elementTyped, form]);
 
   const applyChanges = (data: z.infer<typeof propertiesSchema>) => {
