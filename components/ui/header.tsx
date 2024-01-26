@@ -17,7 +17,6 @@ import { IoCloseOutline } from "react-icons/io5";
 import { SignInButton, UserButton } from "@clerk/nextjs";
 import ThemeSwitcher from "../theme-switcher";
 import { useConvexAuth } from "convex/react";
-import useStoreUserEffect from "@/lib/hooks/use-store-user-effect";
 
 type HeaderProps = ComponentPropsWithRef<"header">;
 

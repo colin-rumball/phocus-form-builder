@@ -18,7 +18,7 @@ import {
 import { LuView } from "react-icons/lu";
 import { FaEdit, FaWpforms } from "react-icons/fa";
 import { Link } from "./ui/link";
-import { BiRightArrow, BiRightArrowAlt } from "react-icons/bi";
+import { BiRightArrowAlt } from "react-icons/bi";
 import {} from "react-icons/fa";
 
 const FormCardList = () => {
@@ -59,7 +59,7 @@ const FormCards = () => {
 };
 
 const FormCardSkeleton = () => {
-  return <Skeleton className="border-primary/20 h-[190px] border-2" />;
+  return <Skeleton className="h-[190px] border-2 border-primary/20" />;
 };
 
 const FormCard = ({

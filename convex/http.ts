@@ -1,7 +1,7 @@
 import { httpRouter } from "convex/server";
 import { httpAction } from "./_generated/server";
 import { api, internal } from "./_generated/api";
-import { WebhookEvent } from "@clerk/nextjs/server";
+import { EmailAddressJSON, UserJSON, WebhookEvent } from "@clerk/nextjs/server";
 
 const http = httpRouter();
 
@@ -26,12 +26,24 @@ http.route({
         },
       });
 
+      if (!result?.data) {
+        return new Response("Error occurred", {
+          status: 400,
+        });
+      }
+
+      const data = result.data as UserJSON;
+      let email = "";
+      if (data.email_addresses.length > 0 && data.email_addresses[0]) {
+        email = data.email_addresses[0].email_address;
+      }
+
       switch (result.type) {
         case "user.created":
           await ctx.runMutation(internal.users.createUser, {
-            clerkId: result.data.id,
-            email: result.data.email_addresses[0].email_address,
-            name: result.data.first_name,
+            clerkId: data.id,
+            email: email,
+            name: data.first_name,
           });
           break;
       }
