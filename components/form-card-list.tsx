@@ -107,7 +107,7 @@ const FormCard = ({
       <CardFooter>
         {published && (
           <Button asChild className="mt-2 w-full gap-4">
-            <Link href={`/forms/${_id}`}>
+            <Link href={`/form/${_id}`}>
               View submissions <BiRightArrowAlt />
             </Link>
           </Button>
