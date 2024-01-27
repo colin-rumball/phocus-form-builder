@@ -1,12 +1,13 @@
 import "@/app/globals.css";
 
 import { Catamaran } from "next/font/google";
-import { Analytics } from "@vercel/analytics/react";
+// import { Analytics } from "@vercel/analytics/react";
 import Providers from "@/components/providers/providers";
 import Header from "@/components/ui/header";
 import { TailwindIndicator } from "@/components/dev/TailwindIndicator";
 import Footer from "@/components/ui/footer";
 import { Toaster } from "@/components/ui/toaster";
+import NextTopLoader from "nextjs-toploader";
 
 const catamaran = Catamaran({
   subsets: ["latin"],
@@ -32,13 +33,14 @@ export default function RootLayout({
       <body
         className={`font-sans ${catamaran.variable} relative overflow-x-hidden`}
       >
+        <NextTopLoader />
         <Providers>
           <Header />
           {children}
           <Toaster />
           {/* <Footer /> */}
         </Providers>
-        <Analytics />
+        {/* <Analytics /> */}
         <TailwindIndicator />
       </body>
     </html>

@@ -1,4 +1,5 @@
-import FormBuilder from "@/components/form-builder";
+import FormShareButton from "@/components/form-share-btn";
+import FormStatsCards from "@/components/form-stats-cards";
 import Headline from "@/components/ui/headline";
 import Page from "@/components/ui/page";
 import VisitBtn from "@/components/visit-btn";
@@ -13,6 +14,14 @@ export default async function FormPage({ params }: { params: { id: string } }) {
           <VisitBtn formId={params.id} />
         </div>
       </div>
+      <div className="border-b border-muted py-4">
+        <div className="container flex items-center justify-between gap-2">
+          <FormShareButton formId={params.id} />
+        </div>
+      </div>
+      <FormStatsCards formId={params.id as Id<"forms">} />
+
+      {/* TODO: SUBMISSION TABLE */}
     </Page>
   );
 }
