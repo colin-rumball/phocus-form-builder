@@ -18,9 +18,8 @@ export default defineSchema({
     submissions: v.number(),
     shareURL: v.string(),
   }).index("by_authorId", ["authorId"]),
-  formSubmissions: defineTable({
+  submissions: defineTable({
     formId: v.id("forms"),
-    submissionAuthorId: v.id("users"),
     content: v.string(), //TODO: string?
   }).index("by_formId", ["formId"]),
 });

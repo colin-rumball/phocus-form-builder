@@ -90,6 +90,23 @@ export const get = query({
   },
 });
 
+export const getPublicContent = query({
+  args: { id: v.id("forms") },
+  handler: async (ctx, { id }) => {
+    const form = await ctx.db.get(id);
+
+    if (!form) {
+      throw new ConvexError("No form found");
+    }
+
+    if (!form.published) {
+      throw new ConvexError("Form is not published");
+    }
+
+    return form.content;
+  },
+});
+
 export const list = query({
   args: {},
   handler: async (ctx) => {
