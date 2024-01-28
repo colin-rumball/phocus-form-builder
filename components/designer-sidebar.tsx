@@ -25,10 +25,13 @@ const DesignerSidebar = ({ className }: DesignerSidebarProps) => {
             <SidebarBtnElement formElement={FormElements.TitleField} />
             <SidebarBtnElement formElement={FormElements.SubtitleField} />
             <SidebarBtnElement formElement={FormElements.ParagraphField} />
+            <SidebarBtnElement formElement={FormElements.SeparatorField} />
+            <SidebarBtnElement formElement={FormElements.SpacerField} />
           </div>
           <Headline as="h3">Form Elements</Headline>
           <div className="grid grid-cols-1 place-items-center gap-2 md:grid-cols-2">
             <SidebarBtnElement formElement={FormElements.TextField} />
+            <SidebarBtnElement formElement={FormElements.NumberField} />
           </div>
         </div>
       )}
