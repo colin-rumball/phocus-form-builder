@@ -6,7 +6,7 @@ import {
   type ElementsType,
   type FormElement,
   type FormElementInstance,
-  FormElementFormComponentProps,
+  type FormElementFormComponentProps,
 } from "../form-elements";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";

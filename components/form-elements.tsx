@@ -1,6 +1,13 @@
-import { TextFieldFormElement } from "./fields/textfield";
+import { ParagraphFieldFormElement } from "./fields/paragraph-field";
+import { SubtitleFieldFormElement } from "./fields/subtitle-field";
+import { TextFieldFormElement } from "./fields/text-field";
+import { TitleFieldFormElement } from "./fields/title-field";
 
-export type ElementsType = "TextField";
+export type ElementsType =
+  | "TextField"
+  | "TitleField"
+  | "SubtitleField"
+  | "ParagraphField";
 
 export type FormElementFormComponentProps = {
   element: FormElementInstance;
@@ -40,4 +47,7 @@ type FormElementsType = {
 };
 export const FormElements: FormElementsType = {
   TextField: TextFieldFormElement,
+  TitleField: TitleFieldFormElement,
+  SubtitleField: SubtitleFieldFormElement,
+  ParagraphField: ParagraphFieldFormElement,
 };

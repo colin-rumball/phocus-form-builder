@@ -5,6 +5,7 @@ import { Button } from "./ui/button";
 import { useDraggable } from "@dnd-kit/core";
 import { useDesigner } from "@/lib/hooks/useDesigner";
 import FormElementInspector from "./form-element-inspector";
+import Headline from "./ui/headline";
 
 type DesignerSidebarProps = ComponentPropsWithoutRef<"div">;
 
@@ -18,7 +19,18 @@ const DesignerSidebar = ({ className }: DesignerSidebarProps) => {
       )}
     >
       {!selectedElement && (
-        <SidebarBtnElement formElement={FormElements.TextField} />
+        <div className="flex flex-col">
+          <Headline as="h3">Layout Elements</Headline>
+          <div className="grid grid-cols-1 place-items-center gap-2 md:grid-cols-2">
+            <SidebarBtnElement formElement={FormElements.TitleField} />
+            <SidebarBtnElement formElement={FormElements.SubtitleField} />
+            <SidebarBtnElement formElement={FormElements.ParagraphField} />
+          </div>
+          <Headline as="h3">Form Elements</Headline>
+          <div className="grid grid-cols-1 place-items-center gap-2 md:grid-cols-2">
+            <SidebarBtnElement formElement={FormElements.TextField} />
+          </div>
+        </div>
       )}
       {selectedElement && <FormElementInspector element={selectedElement} />}
     </aside>
