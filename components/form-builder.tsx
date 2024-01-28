@@ -234,7 +234,7 @@ const SaveFormBtn = ({ formId }: { formId: string }) => {
 };
 
 const PublishFormBtn = ({ formId }: { formId: Id<"forms"> }) => {
-  const {} = useRouter();
+  const { elements } = useDesigner();
   const [loading, startTransition] = useTransition();
   const updateForm = useMutation(api.forms.update);
 
@@ -243,6 +243,7 @@ const PublishFormBtn = ({ formId }: { formId: Id<"forms"> }) => {
       await updateForm({
         id: formId,
         data: {
+          content: JSON.stringify(elements),
           published: true,
         },
       });
