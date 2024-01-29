@@ -5,6 +5,7 @@ import { useTheme } from "next-themes";
 import { useEffect, useState, type ComponentPropsWithoutRef } from "react";
 import { Tabs, TabsList, TabsTrigger } from "./ui/tabs";
 import { RiComputerFill, RiMoonFill, RiSunFill } from "react-icons/ri";
+import { Skeleton } from "./ui/skeleton";
 
 type ThemeSwitcherProps = ComponentPropsWithoutRef<"div">;
 
@@ -14,7 +15,7 @@ const ThemeSwitcher = ({ className }: ThemeSwitcherProps) => {
 
   useEffect(() => setMounted(true), []);
 
-  if (!mounted) return null;
+  if (!mounted) return <Skeleton className="h-[40px] w-[128px]" />;
 
   return (
     <div className={cn("", className)}>
