@@ -43,8 +43,8 @@ const CreateFormButton = () => {
     try {
       const res = await createForm(data);
       toast({
-        title: data.name,
-        description: "Form created",
+        title: "New Form Created",
+        description: `${data.name} has been created.`,
       });
       router.push(`/builder/${res}`);
     } catch (e) {

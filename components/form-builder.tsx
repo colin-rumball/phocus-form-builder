@@ -2,7 +2,7 @@
 
 import { type Id } from "@/convex/_generated/dataModel";
 import { cn } from "@/lib/utils";
-import { startTransition, useEffect, useTransition } from "react";
+import { useEffect, useTransition } from "react";
 import Headline from "./ui/headline";
 import { Button } from "./ui/button";
 import { MdOutlinePublish, MdPreview } from "react-icons/md";
@@ -22,7 +22,7 @@ import { type FormElementInstance, FormElements } from "./form-elements";
 import { useMutation, useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { toast } from "./ui/use-toast";
-import { FaIcons, FaSpinner } from "react-icons/fa";
+import { FaSpinner } from "react-icons/fa";
 import Section from "./ui/section";
 import { ImSpinner2 } from "react-icons/im";
 import {
@@ -36,14 +36,13 @@ import {
   AlertDialogCancel,
   AlertDialogAction,
 } from "./ui/alert-dialog";
-import { useRouter } from "next/navigation";
 import { Input } from "./ui/input";
 import { Link } from "./ui/link";
 import { BsArrowLeft, BsArrowRight } from "react-icons/bs";
 
 const FormBuilder = ({ formId }: { formId: Id<"forms"> }) => {
   const form = useQuery(api.forms.get, { id: formId });
-  const { setElements } = useDesigner();
+  const { setElements, setSelectedElement } = useDesigner();
 
   useEffect(() => {
     if (form) {
@@ -51,11 +50,12 @@ const FormBuilder = ({ formId }: { formId: Id<"forms"> }) => {
         // TODO: handle parsing errors
         const JsonElements = JSON.parse(form.content) as FormElementInstance[];
         setElements(JsonElements);
+        setSelectedElement(null);
       } else {
         setElements([]);
       }
     }
-  }, [form]);
+  }, [form, setSelectedElement, setElements]);
 
   const mouseSensor = useSensor(MouseSensor, {
     activationConstraint: {
@@ -298,7 +298,7 @@ const PublishFormBtn = ({ formId }: { formId: Id<"forms"> }) => {
               startTransition(publishForm);
             }}
           >
-            Proceed {loading && <FaIcons />}
+            Proceed {loading && <FaSpinner />}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
