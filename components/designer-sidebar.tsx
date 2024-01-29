@@ -31,7 +31,11 @@ const DesignerSidebar = ({ className }: DesignerSidebarProps) => {
           <Headline as="h3">Form Elements</Headline>
           <div className="grid grid-cols-1 place-items-center gap-2 md:grid-cols-2">
             <SidebarBtnElement formElement={FormElements.TextField} />
+            <SidebarBtnElement formElement={FormElements.TextAreaField} />
             <SidebarBtnElement formElement={FormElements.NumberField} />
+            <SidebarBtnElement formElement={FormElements.DateField} />
+            <SidebarBtnElement formElement={FormElements.SelectField} />
+            <SidebarBtnElement formElement={FormElements.CheckboxField} />
           </div>
         </div>
       )}
