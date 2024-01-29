@@ -17,6 +17,7 @@ import { IoCloseOutline } from "react-icons/io5";
 import { SignInButton, UserButton } from "@clerk/nextjs";
 import ThemeSwitcher from "../theme-switcher";
 import { useConvexAuth } from "convex/react";
+import { FaRegUser, FaSpinner } from "react-icons/fa";
 
 type HeaderProps = ComponentPropsWithRef<"header">;
 
@@ -32,7 +33,7 @@ const Header = forwardRef<HTMLDivElement, HeaderProps>(({ className }, ref) => {
         setVisible(true);
         prevScrollPos = currentScrollPos;
       } else if (
-        currentScrollPos > 120 &&
+        currentScrollPos > 80 &&
         currentScrollPos > prevScrollPos + 120
       ) {
         setVisible(false);
@@ -68,8 +69,8 @@ type HeaderContentProps = ComponentPropsWithRef<"div">;
 
 const HeaderContent = forwardRef<HTMLDivElement, HeaderContentProps>(
   ({ className }, ref) => {
-    const [drawerOpen, setDrawerOpen] = useState(false);
     const { isAuthenticated, isLoading } = useConvexAuth();
+    const [drawerOpen, setDrawerOpen] = useState(false);
 
     const toggleDrawer = () => {
       setDrawerOpen((prev) => !prev);
@@ -133,13 +134,17 @@ const HeaderContent = forwardRef<HTMLDivElement, HeaderContentProps>(
 
         <div className="flex items-center space-x-lg">
           <ThemeSwitcher />
-          {isLoading ? (
-            <>checking</>
-          ) : isAuthenticated ? (
-            <UserButton afterSignOutUrl="/" />
-          ) : (
-            <SignInButton>Login</SignInButton>
-          )}
+          <div className="min-w-8">
+            {isLoading && <FaSpinner className="h-5 w-7 animate-spin" />}
+            {!isLoading && isAuthenticated && (
+              <UserButton afterSignOutUrl="/" />
+            )}
+            {!isLoading && !isAuthenticated && (
+              <SignInButton>
+                <FaRegUser className="h-5 w-7 cursor-pointer" />
+              </SignInButton>
+            )}
+          </div>
         </div>
       </div>
     );
