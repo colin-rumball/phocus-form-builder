@@ -38,7 +38,7 @@ export default function RootLayout({
           <Header />
           {children}
           <Toaster />
-          {/* <Footer /> */}
+          <Footer />
         </Providers>
         {/* <Analytics /> */}
         <TailwindIndicator />
