@@ -22,6 +22,7 @@ import { Button } from "./ui/button";
 const GenerateFormBtn = () => {
   const [generating, startTransition] = useTransition();
   const [userInput, setUserInput] = useState("");
+  const [dialogOpen, setDialogOpen] = useState(false);
   const generate = useAction(api.openai.generate);
   const { setElements } = useDesigner();
 
@@ -29,27 +30,36 @@ const GenerateFormBtn = () => {
     const rawResponse = await generate({
       messageBody: userInput,
     });
+
+    setDialogOpen(false);
+    setUserInput("");
+
     if (rawResponse === null) {
       console.log("No response");
       return;
     }
-    console.log("🚀 ~ ", rawResponse);
 
-    const jsonResponse = JSON.parse(rawResponse) as {
-      elements: FormElementInstance[];
-    };
+    try {
+      const jsonResponse = JSON.parse(rawResponse) as {
+        elements: FormElementInstance[];
+      };
+      const newElements = jsonResponse.elements;
 
-    const newElements = jsonResponse.elements;
+      newElements.forEach((element) => {
+        element.id = short.generate();
+      });
 
-    newElements.forEach((element) => {
-      element.id = short.generate();
-    });
+      setElements(newElements);
+    } catch (e) {
+      console.log("Error parsing openai response", rawResponse);
 
-    setElements(newElements);
+      console.error(e);
+      return;
+    }
   };
 
   return (
-    <Dialog>
+    <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
       <DialogTrigger asChild>
         <Button
           className={cn("gap-2 bg-gradient-to-r from-yellow-500 to-orange-500")}
