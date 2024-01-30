@@ -35,6 +35,7 @@ const DesignerSidebar = ({ className }: DesignerSidebarProps) => {
             <SidebarBtnElement formElement={FormElements.DateField} />
             <SidebarBtnElement formElement={FormElements.SelectField} />
             <SidebarBtnElement formElement={FormElements.CheckboxField} />
+            <SidebarBtnElement formElement={FormElements.OpenAIField} />
           </div>
         </div>
       )}
