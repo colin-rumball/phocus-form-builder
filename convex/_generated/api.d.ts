@@ -17,6 +17,7 @@ import type {
 import type * as clerk from "../clerk.js";
 import type * as forms from "../forms.js";
 import type * as http from "../http.js";
+import type * as openai from "../openai.js";
 import type * as submissions from "../submissions.js";
 import type * as users from "../users.js";
 import type * as utils from "../utils.js";
@@ -34,6 +35,7 @@ declare const fullApi: ApiFromModules<{
   clerk: typeof clerk;
   forms: typeof forms;
   http: typeof http;
+  openai: typeof openai;
   submissions: typeof submissions;
   users: typeof users;
   utils: typeof utils;
