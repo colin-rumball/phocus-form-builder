@@ -4,7 +4,7 @@ import UserSubmitForm from "@/components/user-submit-form";
 import { api } from "@/convex/_generated/api";
 import { type Id } from "@/convex/_generated/dataModel";
 import { getAuthToken } from "@/lib/auth";
-import { fetchQuery } from "convex/nextjs";
+import { fetchMutation, fetchQuery } from "convex/nextjs";
 
 export default async function SubmitPage({
   params,
@@ -19,6 +19,10 @@ export default async function SubmitPage({
     },
     { token },
   );
+
+  await fetchMutation(api.forms.incrementViews, {
+    id: params.id as Id<"forms">,
+  });
 
   if (!rawFormContent) {
     throw new Error("Form not found");

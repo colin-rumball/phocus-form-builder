@@ -1,5 +1,5 @@
 import { api } from "./_generated/api";
-import { query, mutation } from "./_generated/server";
+import { query, mutation, internalQuery } from "./_generated/server";
 import { Doc } from "./_generated/dataModel";
 import { ConvexError, v } from "convex/values";
 import { getClerkId, getUser } from "./utils";
@@ -107,10 +107,28 @@ export const getPublicContent = query({
   },
 });
 
+export const incrementViews = mutation({
+  args: { id: v.id("forms") },
+  handler: async (ctx, { id }) => {
+    const form = await ctx.db.get(id);
+
+    if (!form) {
+      throw new ConvexError("No form found");
+    }
+
+    await ctx.db.patch(id, {
+      visits: form.visits + 1,
+    });
+
+    return true;
+  },
+});
+
 export const list = query({
   args: {},
   handler: async (ctx) => {
-    const clerkId = await getClerkId(ctx);
+    const userIdentity = await ctx.auth.getUserIdentity();
+    const clerkId = userIdentity?.subject;
 
     if (!clerkId) {
       // TODO: convex error handling
