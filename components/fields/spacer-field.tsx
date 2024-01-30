@@ -117,7 +117,7 @@ export const SpacerFieldFormElement: FormElement = {
   }),
   designerButton: {
     icon: LuSeparatorHorizontal,
-    label: "Spacer Field",
+    label: "Form Spacer",
   },
   designerComponent: DesignerComponent,
   formComponent: FormComponent,

@@ -7,21 +7,6 @@ import {
   type FormElementFormComponentProps,
 } from "../form-elements";
 import { Label } from "../ui/label";
-import { Input } from "../ui/input";
-import { z } from "zod";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect } from "react";
-import { useDesigner } from "@/lib/hooks/useDesigner";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "../ui/form";
-import { LuHeading1 } from "react-icons/lu";
 import { RiSeparator } from "react-icons/ri";
 import { Separator } from "../ui/separator";
 
@@ -52,7 +37,7 @@ export const SeparatorFieldFormElement: FormElement = {
   }),
   designerButton: {
     icon: RiSeparator,
-    label: "Separator Field",
+    label: "Separator",
   },
   designerComponent: DesignerComponent,
   formComponent: FormComponent,
