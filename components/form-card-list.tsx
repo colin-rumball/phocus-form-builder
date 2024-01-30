@@ -2,7 +2,7 @@
 
 import { Skeleton } from "@/components/ui/skeleton";
 import { api } from "@/convex/_generated/api";
-import { useQuery } from "convex/react";
+import { useConvexAuth, useQuery } from "convex/react";
 import { Button } from "./ui/button";
 import CreateFormButton from "./create-form-button";
 import { Badge } from "./ui/badge";
@@ -20,10 +20,11 @@ import { FaEdit, FaWpforms } from "react-icons/fa";
 import { Link } from "./ui/link";
 import { BiRightArrowAlt } from "react-icons/bi";
 import {} from "react-icons/fa";
+import { useUser } from "@clerk/nextjs";
 
 const FormCardList = () => {
   return (
-    <div className="grid grid-cols-2 gap-6 md:grid-cols-3 xl:grid-cols-4">
+    <div className="my-xl grid grid-cols-2 gap-6 md:grid-cols-3 xl:grid-cols-4">
       <FormCards />
     </div>
   );
@@ -34,18 +35,17 @@ export default FormCardList;
 const FormCards = () => {
   const forms = useQuery(api.forms.list);
 
-  if (forms === undefined) {
+  if (!forms) {
     return (
       <>
         <FormCardSkeleton />
         <FormCardSkeleton />
         <FormCardSkeleton />
+        <FormCardSkeleton />
+        <FormCardSkeleton />
+        <FormCardSkeleton />
       </>
     );
-  }
-
-  if (forms === null) {
-    return <>something went wrong</>;
   }
 
   return (
@@ -91,14 +91,14 @@ const FormCard = ({
           <span className="">
             {formatDistance(_creationTime, Date.now(), { addSuffix: true })}
           </span>
-          {published && (
+          {/* {published && (
             <span className="flex items-center gap-2">
               <LuView className="text-muted-foreground" />
               <span className="">{visits.toLocaleString()}</span>
               <FaWpforms className="text-muted-foreground" />
               <span className="">{submissions.toLocaleString()}</span>
             </span>
-          )}
+          )} */}
         </CardDescription>
       </CardHeader>
       <CardContent className="h-[20px] truncate">

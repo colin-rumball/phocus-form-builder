@@ -8,10 +8,7 @@ const Page = forwardRef<HTMLDivElement, Props>(
     return (
       <main
         ref={ref}
-        className={cn(
-          "relative flex h-full flex-col overflow-x-hidden",
-          className,
-        )}
+        className={cn("relative flex min-h-main flex-col", className)}
       >
         {children}
       </main>

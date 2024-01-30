@@ -1,7 +1,7 @@
 "use client";
 
 import { api } from "@/convex/_generated/api";
-import { type Id } from "@/convex/_generated/dataModel";
+import { Doc, type Id } from "@/convex/_generated/dataModel";
 import { cn } from "@/lib/utils";
 import { useQuery } from "convex/react";
 import { type ReactNode, type ComponentPropsWithoutRef } from "react";
@@ -13,11 +13,11 @@ import { HiCursorClick } from "react-icons/hi";
 import { TbArrowBounce } from "react-icons/tb";
 
 type FormStatsCardsProps = ComponentPropsWithoutRef<"div"> & {
-  formId: Id<"forms">;
+  form: Doc<"forms">;
 };
 
-const FormStatsCards = ({ className, formId }: FormStatsCardsProps) => {
-  const form = useQuery(api.forms.get, { id: formId });
+const FormStatsCards = ({ className, form }: FormStatsCardsProps) => {
+  // const form = useQuery(api.forms.get, { id: formId });
 
   if (form === undefined)
     return (
@@ -26,7 +26,9 @@ const FormStatsCards = ({ className, formId }: FormStatsCardsProps) => {
     );
 
   if (form === null) {
-    throw new Error(`Form ${formId} not found`);
+    console.log("form null");
+    return null;
+    // throw new Error(`Form ${formId} not found`);
   }
 
   const { visits, submissions } = form;

@@ -14,7 +14,7 @@ const DesignerSidebar = ({ className }: DesignerSidebarProps) => {
   return (
     <aside
       className={cn(
-        "flex h-full w-[400px] max-w-[400px] flex-grow flex-col overflow-y-auto border-l-2 border-muted bg-background p-4",
+        "left-0 flex w-[400px] flex-col overflow-y-auto bg-background",
         className,
       )}
     >
@@ -28,7 +28,6 @@ const DesignerSidebar = ({ className }: DesignerSidebarProps) => {
             <SidebarBtnElement formElement={FormElements.SeparatorField} />
             <SidebarBtnElement formElement={FormElements.SpacerField} />
           </div>
-          <Headline as="h3">Form Elements</Headline>
           <div className="grid grid-cols-1 place-items-center gap-2 md:grid-cols-2">
             <SidebarBtnElement formElement={FormElements.TextField} />
             <SidebarBtnElement formElement={FormElements.TextAreaField} />

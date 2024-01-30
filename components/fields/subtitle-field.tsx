@@ -26,7 +26,7 @@ import { LuHeading2 } from "react-icons/lu";
 const type: ElementsType = "SubtitleField";
 
 const extraAttributes = {
-  subtitle: "Subtitle Field",
+  subtitle: "Subtitle",
 };
 
 type CustomInstance = FormElementInstance & {

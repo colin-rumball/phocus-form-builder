@@ -8,7 +8,7 @@ export default async function BuilderPage({
   params: { id: string };
 }) {
   return (
-    <Page className="h-main gap-xl">
+    <Page className="h-full">
       <FormBuilder formId={params.id as Id<"forms">} />
     </Page>
   );

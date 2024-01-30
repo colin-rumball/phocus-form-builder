@@ -103,6 +103,7 @@ const Designer = ({ className }: DesignerProps) => {
 
   return (
     <div className={cn("flex h-full w-full", className)}>
+      <DesignerSidebar />
       <div
         className="w-full p-4"
         onClick={(e) => {
@@ -138,7 +139,6 @@ const Designer = ({ className }: DesignerProps) => {
           )}
         </div>
       </div>
-      <DesignerSidebar />
     </div>
   );
 };

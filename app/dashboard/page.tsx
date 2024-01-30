@@ -1,5 +1,4 @@
 import FormCardList from "@/components/form-card-list";
-import FormStats from "@/components/form-stats";
 import Headline from "@/components/ui/headline";
 import Page from "@/components/ui/page";
 import Section from "@/components/ui/section";
@@ -14,12 +13,9 @@ export default function DashboardPage() {
         </div>
       </Section>
       <Section>
-        <FormStats />
-      </Section>
-      <Section>
-        <Separator className="my-6" />
+        <Separator className="my-lg" />
         <Headline as="h2">Your forms</Headline>
-        <Separator className="my-6" />
+        <Separator className="my-lg" />
         <FormCardList />
       </Section>
     </Page>

@@ -34,7 +34,7 @@ const extraAttributes = {
   label: "Number Field",
   helperText: "Helper text",
   required: false,
-  placeholder: "0",
+  placeholder: "",
 };
 
 type CustomInstance = FormElementInstance & {

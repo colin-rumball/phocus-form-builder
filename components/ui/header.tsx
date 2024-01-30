@@ -22,6 +22,7 @@ import { FaRegUser, FaSpinner } from "react-icons/fa";
 type HeaderProps = ComponentPropsWithRef<"header">;
 
 const Header = forwardRef<HTMLDivElement, HeaderProps>(({ className }, ref) => {
+  const pathname = usePathname();
   const [visible, setVisible] = useState(true);
 
   useEffect(() => {
@@ -43,6 +44,8 @@ const Header = forwardRef<HTMLDivElement, HeaderProps>(({ className }, ref) => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  if (pathname.includes("/builder")) return null;
 
   return (
     <>
