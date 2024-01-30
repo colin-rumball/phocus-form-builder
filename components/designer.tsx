@@ -1,7 +1,12 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { useState, type ComponentPropsWithoutRef } from "react";
+import {
+  useState,
+  type ComponentPropsWithoutRef,
+  useTransition,
+  useRef,
+} from "react";
 import DesignerSidebar from "./designer-sidebar";
 import { useDndMonitor, useDraggable, useDroppable } from "@dnd-kit/core";
 import {
@@ -13,6 +18,18 @@ import { useDesigner } from "@/lib/hooks/useDesigner";
 import short from "short-uuid";
 import { BiSolidTrash } from "react-icons/bi";
 import { Button } from "./ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "./ui/dialog";
+import { FaSpinner } from "react-icons/fa";
+import { Textarea } from "./ui/textarea";
+import { api } from "@/convex/_generated/api";
+import { useAction } from "convex/react";
 
 type DesignerProps = ComponentPropsWithoutRef<"div">;
 
@@ -25,12 +42,48 @@ const Designer = ({ className }: DesignerProps) => {
     setSelectedElement,
   } = useDesigner();
 
+  const [generating, startTransition] = useTransition();
+  const [userInput, setUserInput] = useState("");
+  const selectedIndex = useRef(0);
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const generate = useAction(api.openai.generate);
+
   const droppable = useDroppable({
     id: "designer-drop-area",
     data: {
       isDesignerDropArea: true,
     },
   });
+
+  const generateFormElements = async () => {
+    const rawResponse = await generate({
+      messageBody: userInput,
+    });
+
+    setDialogOpen(false);
+
+    if (rawResponse === null) {
+      console.log("No response");
+      return;
+    }
+
+    try {
+      const jsonResponse = JSON.parse(rawResponse) as {
+        elements: FormElementInstance[];
+      };
+      const newElements = jsonResponse.elements;
+
+      newElements.forEach((element, index) => {
+        element.id = short.generate();
+        addElement(selectedIndex.current + index, element);
+      });
+    } catch (e) {
+      console.log("Error parsing openai response", rawResponse);
+
+      console.error(e);
+      return;
+    }
+  };
 
   useDndMonitor({
     onDragEnd: ({ active, over }) => {
@@ -50,21 +103,32 @@ const Designer = ({ className }: DesignerProps) => {
       if (isDesignerBtnElement) {
         // New element from sidebar
         const type = active.data.current?.type as ElementsType;
+
         const newElement = FormElements[type].construct(short.generate());
         if (isDroppingOverDesignerDropArea) {
           // add to the bottom
-          addElement(elements.length, newElement);
-          return;
+          if (type !== "OpenAIField") {
+            addElement(elements.length, newElement);
+            return;
+          } else {
+            setDialogOpen(true);
+            selectedIndex.current = elements.length;
+            return;
+          }
         } else {
           // add in place of another element
           if (isDroppingOverDesignerElement) {
-            const index = elements.findIndex(
+            let newElementIndex = elements.findIndex(
               (e) => e.id === over.data.current?.elementId,
             );
-            if (index === -1) throw new Error("Element not found");
-            let newElementIndex = index;
+            if (newElementIndex === -1) throw new Error("Element not found");
             if (isDroppingOverDesignerElementBottomHalf) newElementIndex += 1;
-            addElement(newElementIndex, newElement);
+            if (type !== "OpenAIField") {
+              addElement(newElementIndex, newElement);
+            } else {
+              setDialogOpen(true);
+              selectedIndex.current = newElementIndex;
+            }
             return;
           }
         }
@@ -103,6 +167,34 @@ const Designer = ({ className }: DesignerProps) => {
 
   return (
     <div className={cn("flex h-full w-full", className)}>
+      <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+        <DialogContent className="flex flex-col gap-3 p-4">
+          <DialogHeader>
+            <DialogTitle>Generate Elements Using AI</DialogTitle>
+            <DialogDescription>
+              Describe the elements you're trying to add and we'll generate it
+              for you.
+            </DialogDescription>
+          </DialogHeader>
+          <Textarea
+            rows={5}
+            onChange={(e) => setUserInput(e.target.value)}
+            value={userInput}
+          />
+          <DialogFooter>
+            <Button
+              className="gap-2"
+              disabled={generating}
+              onClick={(e) => {
+                e.preventDefault();
+                startTransition(generateFormElements);
+              }}
+            >
+              Generate {generating && <FaSpinner className="animate-spin" />}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
       <DesignerSidebar />
       <div
         className="w-full p-4"
