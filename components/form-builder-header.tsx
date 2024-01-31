@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 import SaveFormBtn from "./save-form-btn";
 import { Link } from "./ui/link";
 import { MdOutlineKeyboardDoubleArrowLeft } from "react-icons/md";
-import useBuilderTabs, { BuilderTab } from "@/lib/hooks/useBuilderTabs";
+import useBuilderTabs, { type BuilderTab } from "@/lib/hooks/useBuilderTabs";
 
 const FormBuilderHeader = ({ form }: { form: Doc<"forms"> }) => {
   const { visible } = useHeader((state) => ({

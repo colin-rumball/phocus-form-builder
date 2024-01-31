@@ -8,17 +8,19 @@ import { useDraggable } from "@dnd-kit/core";
 import { useDesigner } from "@/lib/hooks/useDesigner";
 import FormElementInspector from "./form-element-inspector";
 import Headline from "./ui/headline";
+import useHeader from "@/lib/hooks/useHeader";
 
 type DesignerSidebarProps = ComponentPropsWithoutRef<"div">;
 
 const DesignerSidebar = ({ className }: DesignerSidebarProps) => {
+  const visible = useHeader((state) => state.visible);
   const { selectedElement } = useDesigner();
 
   return (
     <aside
       className={cn(
         "sticky flex h-full w-[400px] transition-all duration-500 ease-out",
-        window.scrollY === 0 && "top-0",
+        visible && window.scrollY === 0 && "top-0",
         window.scrollY !== 0 && "top-[150px]",
         className,
       )}
