@@ -1,7 +1,7 @@
 "use client";
 
 import { type Id } from "@/convex/_generated/dataModel";
-import { useEffect } from "react";
+import { type ReactNode, useEffect, useRef, useState } from "react";
 import Headline from "./ui/headline";
 import { Button } from "./ui/button";
 import Designer from "./designer";
@@ -23,14 +23,20 @@ import { ImSpinner2 } from "react-icons/im";
 import { Input } from "./ui/input";
 import { Link } from "./ui/link";
 import { BsArrowLeft, BsArrowRight } from "react-icons/bs";
-import GenerateFormBtn from "./generate-form-btn";
-import PreviewDialogBtn from "./preview-dialog-btn";
-import PublishFormBtn from "./publish-form-btn";
-import SaveFormBtn from "./save-form-btn";
+import useBuilderTabs, {
+  type BuilderTab,
+  tabMap,
+} from "@/lib/hooks/useBuilderTabs";
+import FormGenerator from "./form-generator";
+import { AnimatePresence, motion } from "framer-motion";
+import { cn } from "@/lib/utils";
+import FormPreviewer from "./form-previewer";
+import FormPublisher from "./form-publisher";
 
 const FormBuilder = ({ formId }: { formId: Id<"forms"> }) => {
   const form = useQuery(api.forms.get, { id: formId });
   const { setElements, setSelectedElement } = useDesigner();
+  const currentTab = useBuilderTabs((state) => state.currentTab);
 
   useEffect(() => {
     if (form) {
@@ -68,6 +74,7 @@ const FormBuilder = ({ formId }: { formId: Id<"forms"> }) => {
     );
   }
 
+  // TODO: just redirect to the form page?
   if (form.published) {
     return (
       <div className="container flex h-full w-full flex-col items-center justify-center">
@@ -120,33 +127,102 @@ const FormBuilder = ({ formId }: { formId: Id<"forms"> }) => {
 
   return (
     <DndContext sensors={sensors}>
-      <div className="flex h-full w-full flex-col">
-        <nav className="fixed inset-x-0 top-0 z-30 flex h-[80px] items-center justify-between gap-3 border-b-2 bg-background p-4">
-          <Link href={"/dashboard"} className="flex items-center space-x-2">
-            <BsArrowLeft />
-            <span>Dashboard</span>
-          </Link>
-          <Headline as="h3" className="flex-grow truncate font-medium">
-            {form.name}
-          </Headline>
-          <div className="flex items-center gap-2">
-            <PreviewDialogBtn />
-            {!form.published && (
-              <>
-                <GenerateFormBtn />
-                <SaveFormBtn formId={form._id} />
-                <PublishFormBtn formId={form._id} />
-              </>
-            )}
-          </div>
-        </nav>
-        <div className="relative mt-[80px] flex h-full w-full flex-grow items-center justify-center overflow-y-auto bg-accent bg-[url(/svg/graph-paper.svg)] dark:bg-[url(/svg/graph-paper-dark.svg)]">
+      <div className={cn("relative h-full w-full")}>
+        <AnimatedTab myTab="GENERATE">
+          <FormGenerator />
+        </AnimatedTab>
+
+        <AnimatedTab myTab="DESIGN">
           <Designer />
-        </div>
+        </AnimatedTab>
+
+        <AnimatedTab myTab="PREVIEW">
+          <FormPreviewer />
+        </AnimatedTab>
+
+        <AnimatedTab myTab="PUBLISH">
+          <FormPublisher formId={form._id} />
+        </AnimatedTab>
       </div>
+      <div
+        className={cn(
+          "fixed inset-x-0 bottom-0 top-0 -z-50 transition-all",
+          currentTab === "GENERATE" &&
+            "bg-accent bg-[url(/svg/topography.svg)]",
+          currentTab === "DESIGN" &&
+            "bg-accent bg-[url(/svg/graph-paper.svg)] dark:bg-[url(/svg/graph-paper-dark.svg)]",
+          currentTab === "PREVIEW" &&
+            "bg-accent bg-[url(/svg/graph-paper.svg)] dark:bg-[url(/svg/graph-paper-dark.svg)]",
+          currentTab === "PUBLISH" &&
+            "bg-accent bg-[url(/svg/graph-paper.svg)] dark:bg-[url(/svg/graph-paper-dark.svg)]",
+        )}
+      />
       <DragOverlayWrapper />
     </DndContext>
   );
 };
 
 export default FormBuilder;
+
+const variants = {
+  enter: (direction: number) => {
+    return {
+      x: direction > 0 ? "100%" : "-100%",
+      opacity: 0,
+    };
+  },
+  center: {
+    x: "0%",
+    y: "0%",
+    opacity: 1,
+  },
+  exit: (direction: number) => {
+    return {
+      x: direction > 0 ? "-100%" : "100%",
+      opacity: 0,
+    };
+  },
+};
+
+const AnimatedTab = ({
+  children,
+  myTab,
+}: {
+  children: ReactNode;
+  myTab: BuilderTab;
+}) => {
+  const currentTab = useBuilderTabs((state) => state.currentTab);
+  const prevTab = useRef(currentTab);
+  useEffect(() => {
+    prevTab.current = currentTab;
+  }, [currentTab]);
+  const [animating, setAnimating] = useState(false);
+  const direction = tabMap[currentTab] > tabMap[prevTab.current] ? 1 : -1;
+  return (
+    <AnimatePresence initial={false} custom={direction}>
+      {currentTab === myTab && (
+        <motion.div
+          className={cn(
+            "absolute inset-x-0",
+            animating && "pointer-events-none select-none overflow-hidden",
+          )}
+          key={`${myTab}-TAB`}
+          custom={direction}
+          variants={variants}
+          initial="enter"
+          animate="center"
+          exit={"exit"}
+          transition={{ ease: "backInOut", duration: 0.4 }}
+          onAnimationStart={() => {
+            setAnimating(true);
+          }}
+          onAnimationComplete={() => {
+            setAnimating(false);
+          }}
+        >
+          {children}
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+};

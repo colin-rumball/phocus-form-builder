@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 import SaveFormBtn from "./save-form-btn";
 import { Link } from "./ui/link";
 import { MdOutlineKeyboardDoubleArrowLeft } from "react-icons/md";
-import { usePathname } from "next/navigation";
+import useBuilderTabs, { BuilderTab } from "@/lib/hooks/useBuilderTabs";
 
 const FormBuilderHeader = ({ form }: { form: Doc<"forms"> }) => {
   const { visible } = useHeader((state) => ({
@@ -35,50 +35,61 @@ const FormBuilderHeader = ({ form }: { form: Doc<"forms"> }) => {
 export default FormBuilderHeader;
 
 const BuilderTabs = ({ formId }: { formId: string }) => {
-  const pathname = usePathname();
+  const { currentTab, setCurrentTab } = useBuilderTabs((state) => ({
+    currentTab: state.currentTab,
+    setCurrentTab: state.setCurrentTab,
+  }));
+
+  const setTabWrapper = (newTab: BuilderTab) => {
+    setCurrentTab(newTab);
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
 
   return (
     <div className="flex h-full items-center">
-      <Link
+      <button
         className={cn(
           "flex h-full w-[130px] items-center justify-center px-lg text-center uppercase opacity-60 transition-all duration-500",
           "font-bold hover:opacity-90",
-          pathname.includes("/generate") && "text-primary opacity-100",
+          currentTab === "GENERATE" && "text-primary opacity-100",
         )}
-        href={`/builder/${formId}/generate`}
+        onClick={() => setTabWrapper("GENERATE")}
       >
         Generate
-      </Link>
-      <Link
+      </button>
+      <button
         className={cn(
           "flex h-full w-[130px] items-center justify-center px-lg text-center uppercase opacity-60 transition-all duration-500",
           "font-bold hover:opacity-90",
-          pathname.includes("/design") && "text-primary opacity-100",
+          currentTab === "DESIGN" && "text-primary opacity-100",
         )}
-        href={`/builder/${formId}/design`}
+        onClick={() => setTabWrapper("DESIGN")}
       >
         Design
-      </Link>
-      <Link
+      </button>
+      <button
         className={cn(
           "flex h-full w-[130px] items-center justify-center px-lg text-center uppercase opacity-60 transition-all duration-500",
           "font-bold hover:opacity-90",
-          pathname.includes("/preview") && "text-primary opacity-100",
+          currentTab === "PREVIEW" && "text-primary opacity-100",
         )}
-        href={`/builder/${formId}/preview`}
+        onClick={() => setTabWrapper("PREVIEW")}
       >
         Preview
-      </Link>
-      <Link
+      </button>
+      <button
         className={cn(
           "flex h-full w-[130px] items-center justify-center px-lg text-center uppercase opacity-60 transition-all duration-500",
           "font-bold hover:opacity-90",
-          pathname.includes("/publish") && "text-primary opacity-100",
+          currentTab === "PUBLISH" && "text-primary opacity-100",
         )}
-        href={`/builder/${formId}/publish`}
+        onClick={() => setTabWrapper("PUBLISH")}
       >
         Publish
-      </Link>
+      </button>
     </div>
   );
 };

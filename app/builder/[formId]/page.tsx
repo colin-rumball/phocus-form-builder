@@ -1,5 +1,15 @@
-import { redirect } from "next/navigation";
+import FormBuilder from "@/components/form-builder";
+import Page from "@/components/ui/page";
+import { type Id } from "@/convex/_generated/dataModel";
 
-export default function FormIdPage({ params }: { params: { formId: string } }) {
-  redirect(`/builder/${params.formId}/generate`);
+export default async function BuilderPage({
+  params,
+}: {
+  params: { formId: string };
+}) {
+  return (
+    <Page className="">
+      <FormBuilder formId={params.formId as Id<"forms">} />
+    </Page>
+  );
 }

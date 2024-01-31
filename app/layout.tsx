@@ -28,11 +28,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning className="h-full">
       <head></head>
-      <body
-        className={`font-sans ${catamaran.variable} relative overflow-x-hidden`}
-      >
+      <body className={`font-sans ${catamaran.variable} relative h-full`}>
         <NextTopLoader />
         <Providers>
           <Header />

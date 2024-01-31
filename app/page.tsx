@@ -3,7 +3,7 @@ import Section from "@/components/ui/section";
 
 export default async function HomePage() {
   return (
-    <Page className="gap-xl">
+    <Page className="h-full gap-xl">
       <Section>Home Page!</Section>
     </Page>
   );
