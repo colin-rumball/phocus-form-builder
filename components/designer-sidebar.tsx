@@ -1,50 +1,65 @@
 import { cn } from "@/lib/utils";
-import { type ComponentPropsWithoutRef } from "react";
+import { ReactNode, type ComponentPropsWithoutRef } from "react";
 import { type FormElement, FormElements } from "./form-elements";
 import { Button } from "./ui/button";
 import { useDraggable } from "@dnd-kit/core";
 import { useDesigner } from "@/lib/hooks/useDesigner";
 import FormElementInspector from "./form-element-inspector";
 import Headline from "./ui/headline";
+import { Separator } from "./ui/separator";
 
 type DesignerSidebarProps = ComponentPropsWithoutRef<"div">;
 
 const DesignerSidebar = ({ className }: DesignerSidebarProps) => {
   const { selectedElement } = useDesigner();
   return (
-    <aside
-      className={cn(
-        "left-0 flex w-[400px] flex-col overflow-y-auto bg-background",
-        className,
-      )}
-    >
-      {!selectedElement && (
-        <div className="flex flex-col">
-          <Headline as="h3">Layout Elements</Headline>
-          <div className="grid grid-cols-1 place-items-center gap-2 md:grid-cols-2">
-            <SidebarBtnElement formElement={FormElements.TitleField} />
-            <SidebarBtnElement formElement={FormElements.SubtitleField} />
-            <SidebarBtnElement formElement={FormElements.ParagraphField} />
-            <SidebarBtnElement formElement={FormElements.SeparatorField} />
-            <SidebarBtnElement formElement={FormElements.SpacerField} />
+    <aside className={cn("left-0 flex w-[400px] flex-col", className)}>
+      <div className="fixed my-4 ml-4 overflow-y-auto rounded-md bg-background p-lg">
+        {!selectedElement && (
+          <div className="flex flex-col">
+            <SidebarSection title="Layout Elements">
+              <SidebarBtnElement formElement={FormElements.TitleField} />
+              <SidebarBtnElement formElement={FormElements.SubtitleField} />
+              <SidebarBtnElement formElement={FormElements.ParagraphField} />
+              <SidebarBtnElement formElement={FormElements.SeparatorField} />
+              <SidebarBtnElement formElement={FormElements.SpacerField} />
+            </SidebarSection>
+
+            <SidebarSection title="Form Elements">
+              <SidebarBtnElement formElement={FormElements.TextField} />
+              <SidebarBtnElement formElement={FormElements.TextAreaField} />
+              <SidebarBtnElement formElement={FormElements.NumberField} />
+              <SidebarBtnElement formElement={FormElements.DateField} />
+              <SidebarBtnElement formElement={FormElements.SelectField} />
+              <SidebarBtnElement formElement={FormElements.CheckboxField} />
+              <SidebarBtnElement formElement={FormElements.OpenAIField} />
+            </SidebarSection>
           </div>
-          <div className="grid grid-cols-1 place-items-center gap-2 md:grid-cols-2">
-            <SidebarBtnElement formElement={FormElements.TextField} />
-            <SidebarBtnElement formElement={FormElements.TextAreaField} />
-            <SidebarBtnElement formElement={FormElements.NumberField} />
-            <SidebarBtnElement formElement={FormElements.DateField} />
-            <SidebarBtnElement formElement={FormElements.SelectField} />
-            <SidebarBtnElement formElement={FormElements.CheckboxField} />
-            <SidebarBtnElement formElement={FormElements.OpenAIField} />
-          </div>
-        </div>
-      )}
-      {selectedElement && <FormElementInspector element={selectedElement} />}
+        )}
+        {selectedElement && <FormElementInspector element={selectedElement} />}
+      </div>
     </aside>
   );
 };
 
 export default DesignerSidebar;
+
+const SidebarSection = ({
+  title,
+  children,
+}: {
+  title: string;
+  children: ReactNode;
+}) => {
+  return (
+    <div className="mb-4 flex flex-col">
+      <Headline as="h3">{title}</Headline>
+      <div className="grid grid-cols-1 place-items-center gap-2 md:grid-cols-2">
+        {children}
+      </div>
+    </div>
+  );
+};
 
 const SidebarBtnElement = ({ formElement }: { formElement: FormElement }) => {
   const { icon: Icon, label } = formElement.designerButton;

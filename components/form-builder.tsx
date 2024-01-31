@@ -140,7 +140,7 @@ const FormBuilder = ({ formId }: { formId: Id<"forms"> }) => {
             )}
           </div>
         </nav>
-        <div className="relative mt-[80px] flex w-full flex-grow items-center justify-center overflow-y-auto bg-accent bg-[url(/svg/graph-paper.svg)] dark:bg-[url(/svg/graph-paper-dark.svg)]">
+        <div className="relative mt-[80px] flex h-full w-full flex-grow items-center justify-center overflow-y-auto bg-accent bg-[url(/svg/graph-paper.svg)] dark:bg-[url(/svg/graph-paper-dark.svg)]">
           <Designer />
         </div>
       </div>
