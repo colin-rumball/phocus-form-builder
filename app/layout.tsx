@@ -40,6 +40,7 @@ export default function RootLayout({
           <Toaster />
           <Footer />
         </Providers>
+        {/* TODO: enable analytics */}
         {/* <Analytics /> */}
         <TailwindIndicator />
       </body>

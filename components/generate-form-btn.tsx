@@ -1,3 +1,5 @@
+"use client";
+
 import { api } from "@/convex/_generated/api";
 import { useDesigner } from "@/lib/hooks/useDesigner";
 import { cn } from "@/lib/utils";

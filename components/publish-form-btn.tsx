@@ -85,7 +85,7 @@ const PublishFormBtn = ({ formId }: { formId: Id<"forms"> }) => {
               startTransition(publishForm);
             }}
           >
-            Proceed {loading && <FaSpinner />}
+            Proceed {loading && <FaSpinner className="animate-spin" />}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
