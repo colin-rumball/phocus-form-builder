@@ -1,20 +1,21 @@
 import { cn } from "@/lib/utils";
-import { ReactNode, type ComponentPropsWithoutRef } from "react";
+import { type ReactNode, type ComponentPropsWithoutRef } from "react";
 import { type FormElement, FormElements } from "./form-elements";
 import { Button } from "./ui/button";
 import { useDraggable } from "@dnd-kit/core";
 import { useDesigner } from "@/lib/hooks/useDesigner";
 import FormElementInspector from "./form-element-inspector";
 import Headline from "./ui/headline";
-import { Separator } from "./ui/separator";
 
 type DesignerSidebarProps = ComponentPropsWithoutRef<"div">;
 
 const DesignerSidebar = ({ className }: DesignerSidebarProps) => {
   const { selectedElement } = useDesigner();
   return (
-    <aside className={cn("left-0 flex w-[400px] flex-col", className)}>
-      <div className="fixed my-4 ml-4 overflow-y-auto rounded-md bg-background p-lg">
+    <aside
+      className={cn("sticky top-[150px] flex h-full w-[400px]", className)}
+    >
+      <div className="my-4 ml-4 overflow-y-auto rounded-md bg-background p-lg">
         {!selectedElement && (
           <div className="flex flex-col">
             <SidebarSection title="Layout Elements">
