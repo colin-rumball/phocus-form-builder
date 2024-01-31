@@ -1,3 +1,5 @@
+"use client";
+
 import { cn } from "@/lib/utils";
 import { type ReactNode, type ComponentPropsWithoutRef } from "react";
 import { type FormElement, FormElements } from "./form-elements";
@@ -11,9 +13,15 @@ type DesignerSidebarProps = ComponentPropsWithoutRef<"div">;
 
 const DesignerSidebar = ({ className }: DesignerSidebarProps) => {
   const { selectedElement } = useDesigner();
+
   return (
     <aside
-      className={cn("sticky top-[150px] flex h-full w-[400px]", className)}
+      className={cn(
+        "sticky flex h-full w-[400px] transition-all duration-500 ease-out",
+        window.scrollY === 0 && "top-0",
+        window.scrollY !== 0 && "top-[150px]",
+        className,
+      )}
     >
       <div className="my-4 ml-4 overflow-y-auto rounded-md bg-background p-lg">
         {!selectedElement && (

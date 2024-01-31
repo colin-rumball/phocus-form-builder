@@ -42,7 +42,7 @@ const Header = forwardRef<HTMLDivElement, HeaderProps>(({ className }, ref) => {
         prevScrollPos = currentScrollPos;
       } else if (
         currentScrollPos > 70 &&
-        currentScrollPos > prevScrollPos + 80
+        currentScrollPos > prevScrollPos + 60
       ) {
         setVisible(false);
         prevScrollPos = currentScrollPos;
