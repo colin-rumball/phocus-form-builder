@@ -47,7 +47,7 @@ import { LuView } from "react-icons/lu";
 
 const FormCardList = () => {
   return (
-    <div className="my-xl">
+    <div className="py-xl">
       <FormCards />
     </div>
   );

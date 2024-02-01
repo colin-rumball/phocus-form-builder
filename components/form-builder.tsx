@@ -46,6 +46,7 @@ const FormBuilder = ({ formId }: { formId: Id<"forms"> }) => {
 
   useEffect(() => {
     setSelectedElement(null);
+    window.scrollTo({ top: 0 });
   }, []);
 
   useEffect(() => {

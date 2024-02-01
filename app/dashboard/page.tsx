@@ -7,11 +7,6 @@ import { Separator } from "@/components/ui/separator";
 export default function DashboardPage() {
   return (
     <Page className="gap-xl">
-      <Section bleed className="bg-accent py-xl">
-        <div className="container">
-          <Headline as="h1">Dashboard</Headline>
-        </div>
-      </Section>
       <FormCardList />
     </Page>
   );
