@@ -27,7 +27,7 @@ export type DesignerState = {
   ) => void;
 
   savedAt: Date | null;
-  setSavedAt: (date: Date) => void;
+  setSavedAt: (date: Date | null) => void;
 
   unsavedChanges: boolean;
   setUnsavedChanges: (unsavedChanges: boolean) => void;
@@ -38,8 +38,11 @@ const useDesigner = create<DesignerState>()(
     persist(
       (set) => ({
         elements: [],
-        setElements: (_elements, setUnsaved = true) =>
-          set(() => ({ unsavedChanges: setUnsaved, elements: _elements })),
+        setElements: (_elements, setUnsaved = true) => {
+          set(() => {
+            return { unsavedChanges: setUnsaved, elements: _elements };
+          });
+        },
         addElement: (index, element, setUnsaved = true) => {
           set((state) => {
             const newElements = [...state.elements];

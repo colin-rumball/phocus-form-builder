@@ -50,6 +50,7 @@ export const update = mutation({
 
     const updatedForm = await ctx.db.patch(id, {
       ...data,
+      updatedAt: Date.now(),
     });
 
     return updatedForm;
@@ -183,6 +184,7 @@ export const create = zMutation({
       submissions: 0,
       content: "",
       shareURL: "",
+      updatedAt: Date.now(),
     });
 
     if (!form) {

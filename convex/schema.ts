@@ -17,6 +17,7 @@ export default defineSchema({
     visits: v.number(),
     submissions: v.number(),
     shareURL: v.string(),
+    updatedAt: v.optional(v.number()),
   }).index("by_authorId", ["authorId"]),
   submissions: defineTable({
     formId: v.id("forms"),

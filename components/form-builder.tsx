@@ -35,11 +35,18 @@ import FormPublisher from "./form-publisher";
 
 const FormBuilder = ({ formId }: { formId: Id<"forms"> }) => {
   const form = useQuery(api.forms.get, { id: formId });
-  const { setElements, setSelectedElement } = useDesigner((state) => ({
-    setElements: state.setElements,
-    setSelectedElement: state.setSelectedElement,
-  }));
+  const { setElements, setSelectedElement, setSavedAt } = useDesigner(
+    (state) => ({
+      setElements: state.setElements,
+      setSelectedElement: state.setSelectedElement,
+      setSavedAt: state.setSavedAt,
+    }),
+  );
   const currentTab = useBuilderTabs((state) => state.currentTab);
+
+  useEffect(() => {
+    setSelectedElement(null);
+  }, []);
 
   useEffect(() => {
     if (form) {
@@ -47,10 +54,10 @@ const FormBuilder = ({ formId }: { formId: Id<"forms"> }) => {
         // TODO: handle parsing errors
         const JsonElements = JSON.parse(form.content) as FormElementInstance[];
         setElements(JsonElements, false);
-        // setSelectedElement(null);
       } else {
-        setElements([]);
+        setElements([], false);
       }
+      setSavedAt(form.updatedAt ? new Date(form.updatedAt) : null);
     }
   }, [form, setSelectedElement, setElements]);
 
