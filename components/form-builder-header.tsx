@@ -20,7 +20,10 @@ const FormBuilderHeader = ({ form }: { form: Doc<"forms"> }) => {
         !visible && "-translate-y-header duration-500",
       )}
     >
-      <Link href={"/dashboard"} className="flex items-center space-x-2 text-lg">
+      <Link
+        href={"/dashboard"}
+        className="mx-lg flex items-center space-x-2 text-lg"
+      >
         <MdOutlineKeyboardDoubleArrowLeft />
         <span>Dashboard</span>
       </Link>
