@@ -22,6 +22,9 @@ import { type Id } from "@/convex/_generated/dataModel";
 import { api } from "@/convex/_generated/api";
 import Headline from "./headline";
 import useHeader from "@/lib/hooks/useHeader";
+import useDesigner from "@/lib/hooks/useDesigner";
+import { formatDistance } from "date-fns";
+import { Badge } from "./badge";
 
 type HeaderProps = ComponentPropsWithRef<"header">;
 
@@ -87,16 +90,31 @@ const BuilderHeaderContent = () => {
 };
 
 const FormHeaderInfo = () => {
+  const { savedAt, unsavedChanges } = useDesigner((state) => ({
+    savedAt: state.savedAt,
+    unsavedChanges: state.unsavedChanges,
+  }));
   const params = useParams();
   const form = useQuery(api.forms.get, { id: params.formId as Id<"forms"> });
+
+  const badgeText = unsavedChanges
+    ? `Form unsaved`
+    : ` Form saved ${formatDistance(savedAt, Date.now(), { addSuffix: true })}`;
 
   return (
     <div className="absolute inset-y-0 left-1/2 flex -translate-x-1/2 flex-col items-center justify-evenly">
       {!form && <FaSpinner className="h-5 w-7 animate-spin" />}
       {!!form && (
-        <div className="text-center">
+        <div className={cn("text-center")}>
           <Headline as="h3">{form?.name}</Headline>
-          <span>All changes saved at</span>
+          <Badge
+            variant={"destructive"}
+            className={cn(
+              unsavedChanges ? "text-destructive-foreground" : "text-green-700",
+            )}
+          >
+            {badgeText}
+          </Badge>
         </div>
       )}
     </div>

@@ -47,7 +47,7 @@ const FormBuilder = ({ formId }: { formId: Id<"forms"> }) => {
         // TODO: handle parsing errors
         const JsonElements = JSON.parse(form.content) as FormElementInstance[];
         setElements(JsonElements, false);
-        setSelectedElement(null);
+        // setSelectedElement(null);
       } else {
         setElements([]);
       }

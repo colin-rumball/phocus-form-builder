@@ -26,6 +26,9 @@ export type DesignerState = {
     setUnsaved?: boolean,
   ) => void;
 
+  savedAt: Date;
+  setSavedAt: (date: Date) => void;
+
   unsavedChanges: boolean;
   setUnsavedChanges: (unsavedChanges: boolean) => void;
 };
@@ -67,6 +70,8 @@ const useDesigner = create<DesignerState>()(
             return { unsavedChanges: setUnsaved, elements: newElements };
           });
         },
+        savedAt: new Date(),
+        setSavedAt: (date) => set(() => ({ savedAt: date })),
         unsavedChanges: false,
         setUnsavedChanges: (unsavedChanges) => set(() => ({ unsavedChanges })),
       }),

@@ -10,22 +10,20 @@ import { FaSpinner } from "react-icons/fa";
 import { HiCheck, HiSaveAs } from "react-icons/hi";
 import { toast } from "./ui/use-toast";
 import { Button } from "./ui/button";
-import { CiSquareAlert } from "react-icons/ci";
 
 const SaveFormBtn = ({ formId }: { formId: string }) => {
-  const { elements, unsavedChanges, setUnsavedChanges } = useDesigner(
-    (state) => ({
+  const { elements, unsavedChanges, setUnsavedChanges, setSavedAt } =
+    useDesigner((state) => ({
       elements: state.elements,
       unsavedChanges: state.unsavedChanges,
       setUnsavedChanges: state.setUnsavedChanges,
-    }),
-  );
+      setSavedAt: state.setSavedAt,
+    }));
   const [loading, startTransition] = useTransition();
   const updateForm = useMutation(api.forms.update);
 
   const postFormContent = async () => {
     try {
-      setUnsavedChanges(false);
       const JsonElements = JSON.stringify(elements);
       await updateForm({
         id: formId as Id<"forms">,
@@ -33,6 +31,8 @@ const SaveFormBtn = ({ formId }: { formId: string }) => {
           content: JsonElements,
         },
       });
+      setUnsavedChanges(false);
+      setSavedAt(new Date());
       toast({
         title: "Success",
         description: "Your form has been saved",
