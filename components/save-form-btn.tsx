@@ -10,13 +10,21 @@ import { FaSpinner } from "react-icons/fa";
 import { HiCheck, HiSaveAs } from "react-icons/hi";
 import { toast } from "./ui/use-toast";
 import { Button } from "./ui/button";
+import {
+  Tooltip,
+  TooltipProvider,
+  TooltipTrigger,
+  TooltipContent,
+} from "./ui/tooltip";
+import { formatDistance } from "date-fns";
 
 const SaveFormBtn = ({ formId }: { formId: string }) => {
-  const { elements, unsavedChanges, setUnsavedChanges, setSavedAt } =
+  const { elements, unsavedChanges, setUnsavedChanges, savedAt, setSavedAt } =
     useDesigner((state) => ({
       elements: state.elements,
       unsavedChanges: state.unsavedChanges,
       setUnsavedChanges: state.setUnsavedChanges,
+      savedAt: state.savedAt,
       setSavedAt: state.setSavedAt,
     }));
   const [loading, startTransition] = useTransition();
@@ -62,22 +70,36 @@ const SaveFormBtn = ({ formId }: { formId: string }) => {
           <span>CHANGES</span>
         </div>
       )}
-      <Button
-        className={cn(
-          "gap-2 opacity-100 transition-all",
-          !unsavedChanges && "bg-green-700 hover:bg-green-500",
-        )}
-        variant={"default"}
-        disabled={loading}
-        onClick={() => {
-          startTransition(postFormContent);
-        }}
-      >
-        {!unsavedChanges && <HiCheck className="h-4 w-4" />}
-        {unsavedChanges && !loading && <HiSaveAs className="h-4 w-4" />}
-        <span>{btnText}</span>
-        {loading && <FaSpinner className="animate-spin" />}
-      </Button>
+      <TooltipProvider delayDuration={300}>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button
+              className={cn(
+                "gap-2 opacity-100 transition-all",
+                !unsavedChanges && "bg-green-700 hover:bg-green-500",
+              )}
+              variant={"default"}
+              disabled={loading}
+              onClick={() => {
+                startTransition(postFormContent);
+              }}
+            >
+              {!unsavedChanges && <HiCheck className="h-4 w-4" />}
+              {unsavedChanges && !loading && <HiSaveAs className="h-4 w-4" />}
+              <span>{btnText}</span>
+              {loading && <FaSpinner className="animate-spin" />}
+            </Button>
+          </TooltipTrigger>
+          {savedAt !== null && (
+            <TooltipContent side="bottom" className="mx-2">
+              <p>
+                Form last saved{" "}
+                {formatDistance(savedAt, Date.now(), { addSuffix: true })}
+              </p>
+            </TooltipContent>
+          )}
+        </Tooltip>
+      </TooltipProvider>
     </div>
   );
 };

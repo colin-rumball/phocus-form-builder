@@ -90,31 +90,15 @@ const BuilderHeaderContent = () => {
 };
 
 const FormHeaderInfo = () => {
-  const { savedAt, unsavedChanges } = useDesigner((state) => ({
-    savedAt: state.savedAt,
-    unsavedChanges: state.unsavedChanges,
-  }));
   const params = useParams();
   const form = useQuery(api.forms.get, { id: params.formId as Id<"forms"> });
-
-  const badgeText = unsavedChanges
-    ? `Form unsaved`
-    : ` Form saved ${formatDistance(savedAt, Date.now(), { addSuffix: true })}`;
 
   return (
     <div className="absolute inset-y-0 left-1/2 flex -translate-x-1/2 flex-col items-center justify-evenly">
       {!form && <FaSpinner className="h-5 w-7 animate-spin" />}
       {!!form && (
         <div className={cn("text-center")}>
-          <Headline as="h3">{form?.name}</Headline>
-          <Badge
-            variant={"destructive"}
-            className={cn(
-              unsavedChanges ? "text-destructive-foreground" : "text-green-700",
-            )}
-          >
-            {badgeText}
-          </Badge>
+          <Headline as="h2">{form?.name}</Headline>
         </div>
       )}
     </div>
