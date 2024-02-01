@@ -1,4 +1,3 @@
-import { DesignerContextProvider } from "../contexts/designer-context";
 import ConvexProvider from "./convex-provider";
 import { ThemeProvider } from "./theme-provider";
 import { ClerkProvider } from "@clerk/nextjs";
@@ -16,9 +15,7 @@ const Providers = ({ children }: ProvidersProps) => {
       disableTransitionOnChange
     >
       <ClerkProvider publishableKey="pk_test_ZGlzY3JldGUtZ29sZGZpc2gtNjcuY2xlcmsuYWNjb3VudHMuZGV2JA">
-        <ConvexProvider>
-          <DesignerContextProvider>{children}</DesignerContextProvider>
-        </ConvexProvider>
+        <ConvexProvider>{children}</ConvexProvider>
       </ClerkProvider>
     </ThemeProvider>
   );
