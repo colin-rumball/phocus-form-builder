@@ -252,3 +252,50 @@ export const stats = query({
     };
   },
 });
+
+export const deleteForm = mutation({
+  args: { id: v.id("forms") },
+  handler: async (ctx, { id }) => {
+    const clerkId = await getClerkId(ctx);
+
+    if (!clerkId) {
+      // TODO: error handling
+      // throw new ConvexError("you must be logged in to create a form");
+      return null;
+    }
+
+    const user = await ctx.db
+      .query("users")
+      .withIndex("by_clerkId", (q) => q.eq("clerkId", clerkId))
+      .first();
+
+    if (!user) {
+      throw new ConvexError("No user found");
+    }
+
+    const form = await ctx.db.get(id);
+
+    if (!form) {
+      throw new ConvexError("No form found");
+    }
+
+    if (form.authorId !== user._id) {
+      throw new ConvexError("You do not have permission to delete this form");
+    }
+
+    const submissions = await ctx.db
+      .query("submissions")
+      .withIndex("by_formId", (q) => q.eq("formId", id))
+      .collect();
+
+    await Promise.all(
+      submissions.map(async (submission) => {
+        await ctx.db.delete(submission._id);
+      }),
+    );
+
+    await ctx.db.delete(id);
+
+    return true;
+  },
+});

@@ -12,12 +12,7 @@ export default function DashboardPage() {
           <Headline as="h1">Dashboard</Headline>
         </div>
       </Section>
-      <Section>
-        <Separator className="my-lg" />
-        <Headline as="h2">Your forms</Headline>
-        <Separator className="my-lg" />
-        <FormCardList />
-      </Section>
+      <FormCardList />
     </Page>
   );
 }
