@@ -1,16 +1,80 @@
 "use client";
 
-import { DesignerContext } from "@/components/contexts/designer-context";
-import { useContext } from "react";
+import { type FormElementInstance } from "@/components/form-elements";
+import { create } from "zustand";
+import { devtools, persist } from "zustand/middleware";
 
-export const useDesigner = () => {
-  const context = useContext(DesignerContext);
+export type DesignerState = {
+  elements: FormElementInstance[];
+  setElements: (_elements: FormElementInstance[], setUnsaved?: boolean) => void;
+  addElement: (
+    index: number,
+    element: FormElementInstance,
+    setUnsaved?: boolean,
+  ) => void;
+  removeElement: (id: string) => void;
 
-  if (!context) {
-    throw new Error(
-      "useDesigner must be used within a DesignerContextProvider",
-    );
-  }
+  selectedElement: FormElementInstance | null;
+  setSelectedElement: (
+    elements: FormElementInstance | null,
+    setUnsaved?: boolean,
+  ) => void;
 
-  return context;
+  updateElement: (
+    id: string,
+    element: FormElementInstance,
+    setUnsaved?: boolean,
+  ) => void;
+
+  unsavedChanges: boolean;
+  setUnsavedChanges: (unsavedChanges: boolean) => void;
 };
+
+const useDesigner = create<DesignerState>()(
+  devtools(
+    persist(
+      (set) => ({
+        elements: [],
+        setElements: (_elements, setUnsaved = true) =>
+          set(() => ({ unsavedChanges: setUnsaved, elements: _elements })),
+        addElement: (index, element, setUnsaved = true) => {
+          set((state) => {
+            const newElements = [...state.elements];
+            newElements.splice(index, 0, element);
+            return { unsavedChanges: setUnsaved, elements: newElements };
+          });
+        },
+        removeElement: (id, setUnsaved = true) => {
+          set((state) => {
+            const newElements = [...state.elements];
+            const index = newElements.findIndex((e) => e.id === id);
+            if (index !== -1) {
+              newElements.splice(index, 1);
+            }
+            return { unsavedChanges: setUnsaved, elements: newElements };
+          });
+        },
+        selectedElement: null,
+        setSelectedElement: (element) =>
+          set(() => ({ selectedElement: element })),
+        updateElement: (id, element, setUnsaved = true) => {
+          set((state) => {
+            const newElements = [...state.elements];
+            const index = newElements.findIndex((e) => e.id === id);
+            if (index !== -1) {
+              newElements[index] = element;
+            }
+            return { unsavedChanges: setUnsaved, elements: newElements };
+          });
+        },
+        unsavedChanges: false,
+        setUnsavedChanges: (unsavedChanges) => set(() => ({ unsavedChanges })),
+      }),
+      {
+        name: "designer-storage",
+      },
+    ),
+  ),
+);
+
+export default useDesigner;

@@ -14,7 +14,7 @@ import {
   type FormElementInstance,
   FormElements,
 } from "./form-elements";
-import { useDesigner } from "@/lib/hooks/useDesigner";
+import useDesigner from "@/lib/hooks/useDesigner";
 import short from "short-uuid";
 import { BiSolidTrash } from "react-icons/bi";
 import { Button } from "./ui/button";
@@ -240,7 +240,13 @@ const DesignerElementWrapper = ({
 }: {
   element: FormElementInstance;
 }) => {
-  const { removeElement, selectedElement, setSelectedElement } = useDesigner();
+  const { removeElement, selectedElement, setSelectedElement } = useDesigner(
+    (state) => ({
+      removeElement: state.removeElement,
+      selectedElement: state.selectedElement,
+      setSelectedElement: state.setSelectedElement,
+    }),
+  );
   const [mouseOver, setMouseOver] = useState(false);
 
   const topHalf = useDroppable({

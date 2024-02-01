@@ -29,7 +29,7 @@ import { Separator } from "../ui/separator";
 import { Button } from "../ui/button";
 import { AiOutlineClose, AiOutlinePlus } from "react-icons/ai";
 import { toast } from "../ui/use-toast";
-import { useDesigner } from "@/lib/hooks/useDesigner";
+import useDesigner from "@/lib/hooks/useDesigner";
 import {
   type ElementsType,
   type FormElementInstance,
@@ -151,7 +151,10 @@ function PropertiesComponent({
   element: FormElementInstance;
 }) {
   const elementTyped = elementInstance as CustomInstance;
-  const { updateElement, setSelectedElement } = useDesigner();
+  const { updateElement, setSelectedElement } = useDesigner((state) => ({
+    updateElement: state.updateElement,
+    setSelectedElement: state.setSelectedElement,
+  }));
   const form = useForm<propertiesFormSchemaType>({
     resolver: zodResolver(propertiesSchema),
     mode: "onSubmit",

@@ -12,7 +12,7 @@ import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
-import { useDesigner } from "@/lib/hooks/useDesigner";
+import useDesigner from "@/lib/hooks/useDesigner";
 import {
   Form,
   FormControl,
@@ -127,7 +127,9 @@ const FormComponent = ({
 
 const PropertiesComponent = ({ element }: { element: FormElementInstance }) => {
   const elementTyped = element as CustomInstance;
-  const { updateElement } = useDesigner();
+  const { updateElement } = useDesigner((state) => ({
+    updateElement: state.updateElement,
+  }));
   const form = useForm<z.infer<typeof propertiesSchema>>({
     resolver: zodResolver(propertiesSchema),
     mode: "onBlur",

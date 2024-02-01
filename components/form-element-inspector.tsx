@@ -4,7 +4,7 @@ import { type FormElementInstance, FormElements } from "./form-elements";
 import Headline from "./ui/headline";
 import { Button } from "./ui/button";
 import { AiOutlineClose } from "react-icons/ai";
-import { useDesigner } from "@/lib/hooks/useDesigner";
+import useDesigner from "@/lib/hooks/useDesigner";
 import { Separator } from "./ui/separator";
 
 type FormElementInspectorProps = ComponentPropsWithoutRef<"div"> & {
@@ -15,7 +15,9 @@ const FormElementInspector = ({
   className,
   element,
 }: FormElementInspectorProps) => {
-  const { setSelectedElement } = useDesigner();
+  const { setSelectedElement } = useDesigner((state) => ({
+    setSelectedElement: state.setSelectedElement,
+  }));
 
   if (!element) return null;
   const PropertiesForm = FormElements[element.type].propertiesComponent;

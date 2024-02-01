@@ -2,22 +2,30 @@
 
 import { api } from "@/convex/_generated/api";
 import { type Id } from "@/convex/_generated/dataModel";
-import { useDesigner } from "@/lib/hooks/useDesigner";
+import useDesigner from "@/lib/hooks/useDesigner";
 import { cn } from "@/lib/utils";
 import { useMutation } from "convex/react";
 import { useTransition } from "react";
 import { FaSpinner } from "react-icons/fa";
-import { HiSaveAs } from "react-icons/hi";
+import { HiCheck, HiSaveAs } from "react-icons/hi";
 import { toast } from "./ui/use-toast";
 import { Button } from "./ui/button";
+import { CiSquareAlert } from "react-icons/ci";
 
 const SaveFormBtn = ({ formId }: { formId: string }) => {
-  const { elements } = useDesigner();
+  const { elements, unsavedChanges, setUnsavedChanges } = useDesigner(
+    (state) => ({
+      elements: state.elements,
+      unsavedChanges: state.unsavedChanges,
+      setUnsavedChanges: state.setUnsavedChanges,
+    }),
+  );
   const [loading, startTransition] = useTransition();
   const updateForm = useMutation(api.forms.update);
 
-  const updateFormContent = async () => {
+  const postFormContent = async () => {
     try {
+      setUnsavedChanges(false);
       const JsonElements = JSON.stringify(elements);
       await updateForm({
         id: formId as Id<"forms">,
@@ -39,18 +47,38 @@ const SaveFormBtn = ({ formId }: { formId: string }) => {
     }
   };
 
+  const btnText = unsavedChanges ? "Save" : "Saved";
+
   return (
-    <Button
-      className={cn("gap-2")}
-      disabled={loading}
-      onClick={() => {
-        startTransition(updateFormContent);
-      }}
+    <div
+      className={cn(
+        "flex h-full items-center gap p-lg transition-all duration-1000",
+        unsavedChanges && "bg-destructive/50",
+      )}
     >
-      <HiSaveAs className="h-4 w-4" />
-      <span>Save</span>
-      {loading && <FaSpinner className="animate-spin" />}
-    </Button>
+      {unsavedChanges && (
+        <div className="flex flex-col font-bold leading-tight text-primary opacity-100">
+          <span>UNSAVED</span>
+          <span>CHANGES</span>
+        </div>
+      )}
+      <Button
+        className={cn(
+          "gap-2 opacity-100 transition-all",
+          !unsavedChanges && "bg-green-700 hover:bg-green-500",
+        )}
+        variant={"default"}
+        disabled={loading}
+        onClick={() => {
+          startTransition(postFormContent);
+        }}
+      >
+        {!unsavedChanges && <HiCheck className="h-4 w-4" />}
+        {unsavedChanges && !loading && <HiSaveAs className="h-4 w-4" />}
+        <span>{btnText}</span>
+        {loading && <FaSpinner className="animate-spin" />}
+      </Button>
+    </div>
   );
 };
 

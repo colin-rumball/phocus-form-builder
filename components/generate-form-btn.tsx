@@ -1,7 +1,7 @@
 "use client";
 
 import { api } from "@/convex/_generated/api";
-import { useDesigner } from "@/lib/hooks/useDesigner";
+import useDesigner from "@/lib/hooks/useDesigner";
 import { cn } from "@/lib/utils";
 import { useAction } from "convex/react";
 import { useTransition, useState } from "react";
@@ -26,7 +26,9 @@ const GenerateFormBtn = () => {
   const [userInput, setUserInput] = useState("");
   const [dialogOpen, setDialogOpen] = useState(false);
   const generate = useAction(api.openai.generate);
-  const { setElements } = useDesigner();
+  const { setElements } = useDesigner((state) => ({
+    setElements: state.setElements,
+  }));
 
   const generateForm = async () => {
     const rawResponse = await generate({

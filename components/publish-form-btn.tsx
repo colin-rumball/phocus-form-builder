@@ -1,6 +1,6 @@
 import { api } from "@/convex/_generated/api";
 import { type Id } from "@/convex/_generated/dataModel";
-import { useDesigner } from "@/lib/hooks/useDesigner";
+import useDesigner from "@/lib/hooks/useDesigner";
 import { cn } from "@/lib/utils";
 import { useMutation } from "convex/react";
 import { useTransition } from "react";
@@ -21,7 +21,9 @@ import { toast } from "./ui/use-toast";
 import { Button } from "./ui/button";
 
 const PublishFormBtn = ({ formId }: { formId: Id<"forms"> }) => {
-  const { elements } = useDesigner();
+  const { elements } = useDesigner((state) => ({
+    elements: state.elements,
+  }));
   const [loading, startTransition] = useTransition();
   const updateForm = useMutation(api.forms.update);
 

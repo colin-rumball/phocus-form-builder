@@ -9,7 +9,7 @@ import {
   CardTitle,
 } from "./ui/card";
 import { api } from "@/convex/_generated/api";
-import { useDesigner } from "@/lib/hooks/useDesigner";
+import useDesigner from "@/lib/hooks/useDesigner";
 import { useAction } from "convex/react";
 import { type FormElementInstance } from "./form-elements";
 import { Button } from "./ui/button";
@@ -25,7 +25,9 @@ const FormGenerator = ({ className }: FormGeneratorProps) => {
   const [generating, startTransition] = useTransition();
   const [userInput, setUserInput] = useState("");
   const generate = useAction(api.openai.generate);
-  const { setElements } = useDesigner();
+  const { setElements } = useDesigner((state) => ({
+    setElements: state.setElements,
+  }));
 
   const generateForm = async () => {
     const rawResponse = await generate({

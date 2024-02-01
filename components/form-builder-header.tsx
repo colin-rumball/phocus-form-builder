@@ -15,7 +15,7 @@ const FormBuilderHeader = ({ form }: { form: Doc<"forms"> }) => {
   return (
     <nav
       className={cn(
-        "fixed inset-x-0 top-header z-30 flex h-[80px] items-center justify-between gap-3 border-b-2 bg-background p-4 transition-transform",
+        "fixed inset-x-0 top-header z-30 flex h-[80px] items-center justify-between gap-3 border-b-2 bg-background transition-transform",
         visible && "duration-300",
         !visible && "-translate-y-header duration-500",
       )}
@@ -25,9 +25,7 @@ const FormBuilderHeader = ({ form }: { form: Doc<"forms"> }) => {
         <span>Dashboard</span>
       </Link>
       <BuilderTabs formId={form._id} />
-      <div className="flex items-center gap-2">
-        {!form.published && <SaveFormBtn formId={form._id} />}
-      </div>
+      {!form.published && <SaveFormBtn formId={form._id} />}
     </nav>
   );
 };
@@ -49,7 +47,7 @@ const BuilderTabs = ({ formId }: { formId: string }) => {
   };
 
   return (
-    <div className="flex h-full items-center">
+    <div className="absolute inset-y-0 left-1/2 flex h-full -translate-x-1/2 items-center">
       <button
         className={cn(
           "flex h-full w-[130px] items-center justify-center px-lg text-center uppercase opacity-60 transition-all duration-500",

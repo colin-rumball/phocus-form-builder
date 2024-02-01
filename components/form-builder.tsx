@@ -13,7 +13,7 @@ import {
   useSensors,
 } from "@dnd-kit/core";
 import DragOverlayWrapper from "./drag-overlay-wrapper";
-import { useDesigner } from "@/lib/hooks/useDesigner";
+import useDesigner from "@/lib/hooks/useDesigner";
 import { type FormElementInstance } from "./form-elements";
 import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
@@ -35,7 +35,10 @@ import FormPublisher from "./form-publisher";
 
 const FormBuilder = ({ formId }: { formId: Id<"forms"> }) => {
   const form = useQuery(api.forms.get, { id: formId });
-  const { setElements, setSelectedElement } = useDesigner();
+  const { setElements, setSelectedElement } = useDesigner((state) => ({
+    setElements: state.setElements,
+    setSelectedElement: state.setSelectedElement,
+  }));
   const currentTab = useBuilderTabs((state) => state.currentTab);
 
   useEffect(() => {
@@ -43,7 +46,7 @@ const FormBuilder = ({ formId }: { formId: Id<"forms"> }) => {
       if (form.content !== "") {
         // TODO: handle parsing errors
         const JsonElements = JSON.parse(form.content) as FormElementInstance[];
-        setElements(JsonElements);
+        setElements(JsonElements, false);
         setSelectedElement(null);
       } else {
         setElements([]);

@@ -5,16 +5,16 @@ import { type ReactNode, type ComponentPropsWithoutRef } from "react";
 import { type FormElement, FormElements } from "./form-elements";
 import { Button } from "./ui/button";
 import { useDraggable } from "@dnd-kit/core";
-import { useDesigner } from "@/lib/hooks/useDesigner";
 import FormElementInspector from "./form-element-inspector";
 import Headline from "./ui/headline";
 import useHeader from "@/lib/hooks/useHeader";
+import useDesigner from "@/lib/hooks/useDesigner";
 
 type DesignerSidebarProps = ComponentPropsWithoutRef<"div">;
 
 const DesignerSidebar = ({ className }: DesignerSidebarProps) => {
   const visible = useHeader((state) => state.visible);
-  const { selectedElement } = useDesigner();
+  const selectedElement = useDesigner((state) => state.selectedElement);
 
   return (
     <aside

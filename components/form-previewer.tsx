@@ -1,4 +1,4 @@
-import { useDesigner } from "@/lib/hooks/useDesigner";
+import useDesigner from "@/lib/hooks/useDesigner";
 import { cn } from "@/lib/utils";
 import { type ComponentPropsWithoutRef } from "react";
 import { FormElements } from "./form-elements";
@@ -6,7 +6,9 @@ import { FormElements } from "./form-elements";
 type FormPreviewerProps = ComponentPropsWithoutRef<"div">;
 
 const FormPreviewer = ({ className }: FormPreviewerProps) => {
-  const { elements } = useDesigner();
+  const { elements } = useDesigner((state) => ({
+    elements: state.elements,
+  }));
   return (
     <div
       className={cn(
