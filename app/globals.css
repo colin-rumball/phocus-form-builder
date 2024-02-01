@@ -5,11 +5,17 @@
 @layer base {
   :root {
     /* VARIABLES */
-    --spring-wood: 246 247 240;
     --lemon-grass: 197 206 181;
     --red-damask: 210 88 66;
     --teak: 84 67 46;
-    --kelp: 66 66 54;
+
+    --spring-wood: 246 247 240; /*white F6F7F0*/
+    --kelp: 66 66 54; /*black 424236*/
+    --peach: 239 99 103; /**/
+    --dark-blue: 50 67 147; /**/
+    --light-blue: 48 131 189; /*3083BD*/
+    --cyan: 31 228 250; /**/
+    --orange: 250 130 63; /*FA823F*/
 
     --header-height: 70px;
     --radius: 0.5rem;
@@ -24,11 +30,11 @@
     --popover: var(--spring-wood);
     --popover-foreground: var(--kelp);
 
-    --primary: var(--red-damask);
+    --primary: var(--orange);
     --primary-foreground: var(--spring-wood);
 
-    --secondary: var(--lemon-grass);
-    --secondary-foreground: var(--teak);
+    --secondary: var(--light-blue);
+    --secondary-foreground: var(--spring-wood);
 
     --muted: var(--lemon-grass);
     --muted-foreground: var(--kelp);
@@ -36,7 +42,7 @@
     --accent: var(--lemon-grass);
     --accent-foreground: var(--teak);
 
-    --destructive: 230 120 88;
+    --destructive: var(--red-damask);
     --destructive-foreground: var(--spring-wood);
 
     --border: var(--kelp);

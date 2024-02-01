@@ -158,13 +158,13 @@ const FormBuilder = ({ formId }: { formId: Id<"forms"> }) => {
         className={cn(
           "fixed inset-x-0 bottom-0 top-0 -z-50 transition-all",
           currentTab === "GENERATE" &&
-            "bg-accent bg-[url(/svg/topography.svg)]",
+            "bg-accent bg-[url(/svg/subtle-prism.svg)]",
           currentTab === "DESIGN" &&
-            "bg-accent bg-[url(/svg/graph-paper.svg)] dark:bg-[url(/svg/graph-paper-dark.svg)]",
+            "bg-accent bg-[url(/svg/subtle-prism.svg)] dark:bg-[url(/svg/subtle-prism.svg)]",
           currentTab === "PREVIEW" &&
-            "bg-accent bg-[url(/svg/graph-paper.svg)] dark:bg-[url(/svg/graph-paper-dark.svg)]",
+            "bg-accent bg-[url(/svg/subtle-prism.svg)] dark:bg-[url(/svg/subtle-prism.svg)]",
           currentTab === "PUBLISH" &&
-            "bg-accent bg-[url(/svg/graph-paper.svg)] dark:bg-[url(/svg/graph-paper-dark.svg)]",
+            "bg-accent bg-[url(/svg/subtle-prism.svg)] dark:bg-[url(/svg/subtle-prism.svg)]",
         )}
       />
       <DragOverlayWrapper />

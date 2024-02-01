@@ -8,7 +8,7 @@ import {
   useEffect,
 } from "react";
 import Image from "next/image";
-import HeaderLogoImg from "@/public/images/header-logo.png";
+import HeaderLogoImg from "@/public/images/logo-header.png";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { Link } from "../ui/link";
 import { useParams, usePathname } from "next/navigation";
@@ -22,9 +22,6 @@ import { type Id } from "@/convex/_generated/dataModel";
 import { api } from "@/convex/_generated/api";
 import Headline from "./headline";
 import useHeader from "@/lib/hooks/useHeader";
-import useDesigner from "@/lib/hooks/useDesigner";
-import { formatDistance } from "date-fns";
-import { Badge } from "./badge";
 
 type HeaderProps = ComponentPropsWithRef<"header">;
 
@@ -160,13 +157,16 @@ const SiteHeaderContent = () => {
 };
 
 const Logo = () => (
-  <Link variant={"image"} href={"/"}>
+  <Link variant={"image"} href={"/"} className="flex items-center">
     <Image
       src={HeaderLogoImg}
       alt="Formulate Logo"
       className="h-[50px] w-auto py-2 sm:h-[70px]"
       priority
     />
+    <Headline as="h2" className="">
+      Formulate
+    </Headline>
   </Link>
 );
 
@@ -175,7 +175,7 @@ const Nav = ({ sideMenu = false }) => {
   return (
     <nav
       className={cn(
-        "h-full flex-1 space-x-8 text-lg opacity-80",
+        "mx-xl flex h-full flex-1 items-center justify-end space-x-8 text-lg",
         sideMenu
           ? "flex flex-col text-xl lg:hidden"
           : "hidden items-center lg:flex",
@@ -188,6 +188,7 @@ const Nav = ({ sideMenu = false }) => {
               key={href}
               href={href}
               variant={pathName === href ? "active" : "default"}
+              className="rounded-md px-3 py-1 text-lg no-underline transition-colors duration-300 hover:bg-secondary hover:text-primary-foreground hover:shadow-md lg:rounded-lg lg:transition-colors lg:duration-300 lg:hover:bg-secondary lg:hover:text-primary-foreground lg:hover:shadow-lg"
             >
               {label}
             </Link>

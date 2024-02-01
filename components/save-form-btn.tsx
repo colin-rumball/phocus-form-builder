@@ -61,11 +61,11 @@ const SaveFormBtn = ({ formId }: { formId: string }) => {
     <div
       className={cn(
         "flex h-full items-center gap p-lg transition-all duration-1000",
-        unsavedChanges && "bg-destructive/50",
+        unsavedChanges && "bg-destructive/60",
       )}
     >
       {unsavedChanges && (
-        <div className="flex flex-col font-bold leading-tight text-primary opacity-100">
+        <div className="flex flex-col font-bold leading-tight text-destructive-foreground opacity-100">
           <span>UNSAVED</span>
           <span>CHANGES</span>
         </div>
@@ -78,7 +78,7 @@ const SaveFormBtn = ({ formId }: { formId: string }) => {
                 "gap-2 opacity-100 transition-all",
                 !unsavedChanges && "bg-green-700 hover:bg-green-500",
               )}
-              variant={"default"}
+              variant={"secondary"}
               disabled={loading}
               onClick={() => {
                 startTransition(postFormContent);
