@@ -42,7 +42,10 @@ const FormBuilder = ({ formId }: { formId: Id<"forms"> }) => {
       setSavedAt: state.setSavedAt,
     }),
   );
-  const currentTab = useBuilderTabs((state) => state.currentTab);
+  const { currentTab, setCurrentTab } = useBuilderTabs((state) => ({
+    currentTab: state.currentTab,
+    setCurrentTab: state.setCurrentTab,
+  }));
 
   useEffect(() => {
     setSelectedElement(null);
@@ -55,8 +58,10 @@ const FormBuilder = ({ formId }: { formId: Id<"forms"> }) => {
         // TODO: handle parsing errors
         const JsonElements = JSON.parse(form.content) as FormElementInstance[];
         setElements(JsonElements, false);
+        setCurrentTab("DESIGN");
       } else {
         setElements([], false);
+        setCurrentTab("GENERATE");
       }
       setSavedAt(form.updatedAt ? new Date(form.updatedAt) : null);
     }
