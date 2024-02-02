@@ -7,6 +7,13 @@ import SaveFormBtn from "./save-form-btn";
 import { Link } from "./ui/link";
 import { MdOutlineKeyboardDoubleArrowLeft } from "react-icons/md";
 import useBuilderTabs, { type BuilderTab } from "@/lib/hooks/useBuilderTabs";
+import useDesigner from "@/lib/hooks/useDesigner";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "./ui/tooltip";
 
 const FormBuilderHeader = ({ form }: { form: Doc<"forms"> }) => {
   const { visible } = useHeader((state) => ({
@@ -36,6 +43,8 @@ const FormBuilderHeader = ({ form }: { form: Doc<"forms"> }) => {
 export default FormBuilderHeader;
 
 const BuilderTabs = ({ formId }: { formId: string }) => {
+  const elements = useDesigner((state) => state.elements);
+
   const { currentTab, setCurrentTab } = useBuilderTabs((state) => ({
     currentTab: state.currentTab,
     setCurrentTab: state.setCurrentTab,
@@ -81,16 +90,30 @@ const BuilderTabs = ({ formId }: { formId: string }) => {
       >
         Preview
       </button>
-      <button
-        className={cn(
-          "flex h-full w-[130px] items-center justify-center px-lg text-center uppercase opacity-60 transition-all duration-500",
-          "font-bold hover:opacity-90",
-          currentTab === "PUBLISH" && "text-primary opacity-100",
-        )}
-        onClick={() => setTabWrapper("PUBLISH")}
-      >
-        Publish
-      </button>
+      <TooltipProvider delayDuration={300}>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <button
+              className={cn(
+                "flex h-full w-[130px] items-center justify-center px-lg text-center uppercase opacity-60 transition-all duration-500",
+                "font-bold hover:opacity-90",
+                currentTab === "PUBLISH" && "text-primary opacity-100",
+                elements.length === 0 && "cursor-not-allowed",
+              )}
+              disabled={elements.length === 0}
+              onClick={() => setTabWrapper("PUBLISH")}
+            >
+              Publish
+            </button>
+          </TooltipTrigger>
+          {elements.length === 0 && (
+            <TooltipContent side="bottom" className="mx-2">
+              <p>Can't publish an empty form</p>
+            </TooltipContent>
+          )}
+          {elements.length !== 0 && <TooltipContent className="" />}
+        </Tooltip>
+      </TooltipProvider>
     </div>
   );
 };
