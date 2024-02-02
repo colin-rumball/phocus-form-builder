@@ -58,7 +58,8 @@ const FormBuilder = ({ formId }: { formId: Id<"forms"> }) => {
         // TODO: handle parsing errors
         const JsonElements = JSON.parse(form.content) as FormElementInstance[];
         setElements(JsonElements, false);
-        setCurrentTab("DESIGN");
+        if (JsonElements.length > 0 && currentTab === "GENERATE")
+          setCurrentTab("DESIGN");
       } else {
         setElements([], false);
         setCurrentTab("GENERATE");
