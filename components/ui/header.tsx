@@ -16,12 +16,13 @@ import { Button } from "./button";
 import { IoCloseOutline } from "react-icons/io5";
 import { SignInButton, UserButton } from "@clerk/nextjs";
 import ThemeSwitcher from "../theme-switcher";
-import { useConvexAuth, useQuery } from "convex/react";
+import { useConvexAuth, useMutation, useQuery } from "convex/react";
 import { FaRegUser, FaSpinner } from "react-icons/fa";
 import { type Id } from "@/convex/_generated/dataModel";
 import { api } from "@/convex/_generated/api";
 import Headline from "./headline";
 import useHeader from "@/lib/hooks/useHeader";
+import { Input } from "./input";
 
 type HeaderProps = ComponentPropsWithRef<"header">;
 
@@ -57,7 +58,7 @@ const Header = forwardRef<HTMLDivElement, HeaderProps>(({ className }, ref) => {
       <header
         ref={ref}
         className={cn(
-          "fixed z-header flex h-header w-full justify-center bg-primary px-lg text-primary-foreground transition-transform",
+          "fixed z-header flex h-header w-lvw justify-center bg-primary px-lg text-primary-foreground transition-transform",
           visible
             ? "duration-300"
             : "pointer-events-none -translate-y-full duration-500",
@@ -89,13 +90,43 @@ const BuilderHeaderContent = () => {
 const FormHeaderInfo = () => {
   const params = useParams();
   const form = useQuery(api.forms.get, { id: params.formId as Id<"forms"> });
+  const [nameInput, setNameInput] = useState("");
+  const updateForm = useMutation(api.forms.update);
+
+  useEffect(() => {
+    if (!form) return;
+    setNameInput(form.name);
+  }, [form]);
+
+  const onNameChanged = async (newName?: string) => {
+    if (!form) return;
+    if (newName === "") setNameInput(form.name);
+    if (newName === form.name) return;
+
+    await updateForm({
+      id: form._id as Id<"forms">,
+      data: { name: newName },
+    });
+  };
 
   return (
-    <div className="absolute inset-y-0 left-1/2 flex -translate-x-1/2 flex-col items-center justify-evenly">
+    <div className="absolute inset-y-0 left-1/2 flex w-full -translate-x-1/2 flex-col items-center justify-evenly">
       {!form && <FaSpinner className="h-5 w-7 animate-spin" />}
       {!!form && (
-        <div className={cn("text-center")}>
-          <Headline as="h2">{form?.name}</Headline>
+        <div
+          className={cn(
+            "hidden w-full max-w-[300px] text-center md:block lg:max-w-[460px] xl:max-w-[700px] 2xl:max-w-[900px]",
+          )}
+        >
+          <Input
+            value={nameInput}
+            onChange={(e) => setNameInput(e.target.value)}
+            onBlur={() => onNameChanged(nameInput)}
+            className={cn(
+              "mx-0 ml-0 h-full w-full truncate rounded-none border-none bg-transparent px-0 py-0 text-center text-background focus-visible:border-0 focus-visible:ring-0 focus-visible:ring-offset-0",
+              "text-heading font-medium leading-heading",
+            )}
+          />
         </div>
       )}
     </div>

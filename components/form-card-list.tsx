@@ -44,6 +44,8 @@ import {
   AlertDialogTrigger,
 } from "./ui/alert-dialog";
 import { LuView } from "react-icons/lu";
+import { Input } from "./ui/input";
+import { useRef, useState } from "react";
 
 const FormCardList = () => {
   return (
@@ -127,19 +129,31 @@ const FormCard = ({
   _creationTime: number;
   updatedAt?: number;
 }) => {
+  const [nameInput, setNameInput] = useState(name);
   const deleteForm = useMutation(api.forms.deleteForm);
+  const updateForm = useMutation(api.forms.update);
 
   const onDeleteClicked = async () => {
     await deleteForm({ id: _id as Id<"forms"> });
+  };
+
+  const onNameChanged = async (newName: string) => {
+    if (newName === "") setNameInput(name);
+    if (newName === name) return;
+
+    await updateForm({ id: _id as Id<"forms">, data: { name: newName } });
   };
 
   return (
     <Card className="h-[190px]">
       <CardHeader>
         <CardTitle className="flex items-center justify-between">
-          <span className="truncate font-bold">{name}</span>
-          {/* {published && <Badge variant={"default"}>published</Badge>}
-          {!published && <Badge variant={"destructive"}>draft</Badge>} */}
+          <Input
+            value={nameInput}
+            onChange={(e) => setNameInput(e.target.value)}
+            onBlur={() => onNameChanged(nameInput)}
+            className="ml-0 mr-5 h-6 truncate rounded-none border-none px-0 py-0 text-lg focus-visible:ring-foreground"
+          />
           <AlertDialog>
             <DropdownMenu>
               <DropdownMenuTrigger>
