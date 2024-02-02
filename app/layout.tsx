@@ -30,7 +30,9 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning className="h-full">
       <head></head>
-      <body className={`font-sans ${catamaran.variable} relative h-full`}>
+      <body
+        className={`font-sans ${catamaran.variable} relative h-full overflow-x-hidden`}
+      >
         <NextTopLoader />
         <Providers>
           <Header />
