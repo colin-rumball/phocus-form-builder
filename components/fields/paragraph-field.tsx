@@ -39,12 +39,15 @@ const propertiesSchema = z.object({
 });
 
 const DesignerComponent = ({ element }: { element: FormElementInstance }) => {
-  const elementTyped = element as CustomInstance;
-  const { text } = elementTyped.extraAttributes;
+  const { selectedElement } = useDesigner((state) => ({
+    selectedElement: state.selectedElement,
+  }));
   return (
-    <div className="flex w-full flex-col gap-2">
-      <Label className="text-muted-foreground">Paragraph Field</Label>
-      <p>{text}</p>
+    <div className="flex h-auto w-full flex-col gap-2">
+      {selectedElement === element && (
+        <Label className="text-muted-foreground">Paragraph Field</Label>
+      )}
+      <FormComponent element={element} />
     </div>
   );
 };

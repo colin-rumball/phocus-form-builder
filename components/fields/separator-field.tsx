@@ -9,14 +9,20 @@ import {
 import { Label } from "../ui/label";
 import { RiSeparator } from "react-icons/ri";
 import { Separator } from "../ui/separator";
+import useDesigner from "@/lib/hooks/useDesigner";
 
 const type: ElementsType = "SeparatorField";
 
 const DesignerComponent = ({ element }: { element: FormElementInstance }) => {
+  const { selectedElement } = useDesigner((state) => ({
+    selectedElement: state.selectedElement,
+  }));
   return (
-    <div className="flex w-full flex-col gap-2">
-      <Label className="text-muted-foreground">Separator Field</Label>
-      <Separator />
+    <div className="my-2 flex h-auto w-full flex-col gap-2">
+      {selectedElement === element && (
+        <Label className="text-muted-foreground">Separator Field</Label>
+      )}
+      <FormComponent element={element} />
     </div>
   );
 };

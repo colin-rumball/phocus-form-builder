@@ -34,12 +34,15 @@ type CustomInstance = FormElementInstance & {
 };
 
 const DesignerComponent = ({ element }: { element: FormElementInstance }) => {
-  const elementTyped = element as CustomInstance;
-  const { subtitle } = elementTyped.extraAttributes;
+  const { selectedElement } = useDesigner((state) => ({
+    selectedElement: state.selectedElement,
+  }));
   return (
-    <div className="flex w-full flex-col gap-2">
-      <Label className="text-muted-foreground">Subtitle Field</Label>
-      <p className="text-lg">{subtitle}</p>
+    <div className="flex h-auto w-full flex-col gap-2">
+      {selectedElement === element && (
+        <Label className="text-muted-foreground">Subtitle Field</Label>
+      )}
+      <FormComponent element={element} />
     </div>
   );
 };

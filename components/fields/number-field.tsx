@@ -31,7 +31,7 @@ import { Bs123 } from "react-icons/bs";
 const type: ElementsType = "NumberField";
 
 const extraAttributes = {
-  label: "Number Field",
+  label: "Number Field Label",
   helperText: "Helper text",
   required: false,
   placeholder: "",
@@ -51,7 +51,7 @@ const DesignerComponent = ({ element }: { element: FormElementInstance }) => {
         {label}
         {required && "*"}
       </Label>
-      <Input type="number" readOnly disabled placeholder={placeholder} />
+      <Input type="number" readOnly placeholder={placeholder} />
       {helperText && (
         <p className="text-[0.8rem] text-muted-foreground">{helperText}</p>
       )}

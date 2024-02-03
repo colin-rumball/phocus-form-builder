@@ -30,7 +30,7 @@ import { cn } from "@/lib/utils";
 const type: ElementsType = "TextField";
 
 const extraAttributes = {
-  label: "Text Field",
+  label: "Text Field Label",
   helperText: "Helper text",
   required: false,
   placeholder: "Value here...",
@@ -52,12 +52,12 @@ const DesignerComponent = ({ element }: { element: FormElementInstance }) => {
   const { label, placeholder, required, helperText } =
     elementTyped.extraAttributes;
   return (
-    <div className="flex w-full flex-col gap-2">
+    <div className="flex h-auto w-full flex-col gap-2">
       <Label>
         {label}
         {required && "*"}
       </Label>
-      <Input readOnly disabled placeholder={placeholder} />
+      <Input readOnly placeholder={placeholder} />
       {helperText && (
         <p className="text-[0.8rem] text-muted-foreground">{helperText}</p>
       )}

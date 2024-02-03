@@ -15,7 +15,6 @@ import {
 } from "./form-elements";
 import useDesigner from "@/lib/hooks/useDesigner";
 import short from "short-uuid";
-import { BiSolidTrash } from "react-icons/bi";
 import { Button } from "./ui/button";
 import {
   Dialog,
@@ -26,13 +25,21 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "./ui/dialog";
-import { FaPlus, FaSpinner } from "react-icons/fa";
+import { FaSpinner } from "react-icons/fa";
 import { Textarea } from "./ui/textarea";
 import { api } from "@/convex/_generated/api";
 import { useAction } from "convex/react";
 import FormGenerator from "./form-generator";
 import { SiOpenai } from "react-icons/si";
 import DesignerDrawer from "./designer-drawer";
+import { PiDotsSixBold } from "react-icons/pi";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "./ui/dropdown-menu";
+import { BsThreeDotsVertical } from "react-icons/bs";
 
 type DesignerProps = ComponentPropsWithoutRef<"div">;
 
@@ -172,7 +179,7 @@ const Designer = ({ className }: DesignerProps) => {
   return (
     <div className={cn("flex h-full w-full", className)}>
       <div
-        className="w-full p-4"
+        className="h-full w-full p-4 transition-all"
         onClick={(e) => {
           e.stopPropagation();
           if (selectedElement) setSelectedElement(null);
@@ -191,7 +198,7 @@ const Designer = ({ className }: DesignerProps) => {
             </p>
           )}
           {elements.length > 0 && (
-            <div className="flex w-full flex-col gap-1 p-1">
+            <div className="flex w-full flex-col gap-0 p-1">
               {elements.map((element: FormElementInstance) => {
                 return (
                   <DesignerElementWrapper key={element.id} element={element} />
@@ -199,7 +206,12 @@ const Designer = ({ className }: DesignerProps) => {
               })}
             </div>
           )}
-          <div className="my-6 flex items-center space-x-4">
+          <div
+            className={cn(
+              "my-6 flex items-center space-x-4",
+              droppable.active && "hidden",
+            )}
+          >
             <DesignerDrawer />
 
             {elements.length !== 0 && (
@@ -261,7 +273,6 @@ const DesignerElementWrapper = ({
       setSelectedElement: state.setSelectedElement,
     }),
   );
-  const [mouseOver, setMouseOver] = useState(false);
 
   const topHalf = useDroppable({
     id: element.id + "-top-half",
@@ -271,7 +282,6 @@ const DesignerElementWrapper = ({
       isTopHalfDesignerElement: true,
     },
   });
-
   const bottomHalf = useDroppable({
     id: element.id + "-bottom-half",
     data: {
@@ -289,79 +299,90 @@ const DesignerElementWrapper = ({
       isDesignerElement: true,
     },
   });
+  if (draggable.isDragging)
+    return <div className="relative m-2 h-8 rounded-md bg-accent"></div>;
 
-  if (draggable.isDragging) return null;
-
+  const isSelectedElement = selectedElement === element;
   const DesignerElement = FormElements[element.type].designerComponent;
   return (
     <div
-      ref={draggable.setNodeRef}
-      {...draggable.attributes}
-      {...draggable.listeners}
-      onMouseEnter={() => {
-        setMouseOver(true);
-      }}
-      onMouseLeave={() => {
-        setMouseOver(false);
-      }}
       onClick={(e) => {
         e.stopPropagation();
         setSelectedElement(element);
       }}
       className={cn(
-        "relative m-2 flex h-[120px] cursor-grab flex-col rounded-md text-foreground ring-1 ring-inset ring-accent active:cursor-grabbing",
+        "relative m-2 flex h-auto flex-col rounded-md text-foreground",
       )}
     >
-      <div
-        ref={topHalf.setNodeRef}
-        className={cn(
-          "absolute inset-x-0 top-0 h-1/2 rounded-t-md",
-          // topHalf.isOver && "bg-primary/20",
-        )}
-      />
-      <div
-        ref={bottomHalf.setNodeRef}
-        className={cn(
-          "absolute inset-x-0 bottom-0 h-1/2 rounded-b-md",
-          // bottomHalf.isOver && "bg-primary/20",
-        )}
-      />
-      {topHalf.isOver && (
-        <div className="absolute top-0 h-[7px] w-full rounded-md rounded-b-none bg-primary" />
-      )}
-      <div
-        className={cn(
-          "pointer-events-none flex h-[120px] w-full items-center rounded-md bg-accent/40 px-4 py-2 opacity-100 transition-opacity",
-          selectedElement === element && "ring-1 ring-primary",
-          mouseOver && "opacity-30",
-        )}
-      >
-        <DesignerElement element={element} />
-      </div>
-      {bottomHalf.isOver && (
-        <div className="absolute bottom-0 h-[7px] w-full rounded-md rounded-t-none bg-primary" />
-      )}
-      {mouseOver && (
+      {!isSelectedElement && (
         <>
-          <div className="absolute inset-0 flex items-center justify-center">
-            <p className="text-center text-muted-foreground">
-              Click for properties or drag to move
-            </p>
-          </div>
-          <div className="absolute right-0 h-full">
-            <Button
-              variant={"outline"}
-              className="flex h-full justify-center rounded-md rounded-l-none border bg-destructive text-destructive-foreground"
-              onClick={(e) => {
-                e.stopPropagation();
-                removeElement(element.id);
-              }}
-            >
-              <BiSolidTrash className="h-6 w-6" />
-            </Button>
-          </div>
+          <div
+            ref={topHalf.setNodeRef}
+            className={cn(
+              "absolute inset-x-0 top-0 h-1/2 rounded-t-md",
+              topHalf.isOver && "bg-primary/20",
+            )}
+          />
+          <div
+            ref={bottomHalf.setNodeRef}
+            className={cn(
+              "absolute inset-x-0 bottom-0 h-1/2 rounded-b-md",
+              // bottomHalf.isOver && "bg-primary/20",
+            )}
+          />
+          {topHalf.isOver && (
+            <div className="absolute top-0 h-[7px] w-full rounded-md rounded-b-none bg-primary" />
+          )}
+          {bottomHalf.isOver && (
+            <div className="absolute bottom-0 h-[7px] w-full rounded-md rounded-t-none bg-primary" />
+          )}
         </>
       )}
+
+      <div
+        className={cn(
+          "flex h-full w-full flex-col items-center rounded-md px-4 py-2 transition-all",
+          isSelectedElement && "bg-accent ring-1 ring-foreground",
+        )}
+      >
+        <div
+          className={cn(
+            "relative m-0 flex h-0 w-full items-center justify-end overflow-hidden transition-all",
+            isSelectedElement && "mb-2 h-7",
+          )}
+        >
+          <div
+            ref={draggable.setNodeRef}
+            {...draggable.attributes}
+            {...draggable.listeners}
+            className="absolute left-1/2 -translate-x-1/2 cursor-grab active:cursor-grabbing"
+          >
+            <PiDotsSixBold className="h-7 w-7" />
+          </div>
+          <DropdownMenu>
+            <DropdownMenuTrigger>
+              <BsThreeDotsVertical className="h-5 w-5" />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              {/* <DropdownMenuItem className="" onClick={() => {
+                setSelectedElement(element);
+              }}>
+                Move up
+              </DropdownMenuItem> */}
+              <DropdownMenuItem
+                className="text-destructive focus:bg-destructive focus:text-destructive-foreground"
+                onClick={() => {
+                  removeElement(element.id);
+                  setSelectedElement(null);
+                }}
+              >
+                Delete field
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+        <DesignerElement element={element} />
+      </div>
     </div>
   );
 };

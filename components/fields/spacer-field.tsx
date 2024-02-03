@@ -39,19 +39,28 @@ const propertiesSchema = z.object({
 });
 
 const DesignerComponent = ({ element }: { element: FormElementInstance }) => {
+  const { selectedElement } = useDesigner((state) => ({
+    selectedElement: state.selectedElement,
+  }));
   const elementTyped = element as CustomInstance;
   const { height } = elementTyped.extraAttributes;
   return (
     <div className="flex w-full flex-col items-center gap-2">
-      <Label className="text-muted-foreground">Spacer Field: {height}px</Label>
+      {selectedElement === element && (
+        <>
+          <Label className="text-muted-foreground">
+            Spacer Field: {height}px
+          </Label>
+        </>
+      )}
       <LuSeparatorHorizontal className="h-8 w-8" />
+      <FormComponent element={element} />
     </div>
   );
 };
 
 const FormComponent = ({ element }: FormElementFormComponentProps) => {
   const elementTyped = element as CustomInstance;
-
   const { height } = elementTyped.extraAttributes;
   return <div style={{ height }} className="w-full" />;
 };

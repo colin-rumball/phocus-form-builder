@@ -33,7 +33,7 @@ import { Slider } from "../ui/slider";
 const type: ElementsType = "TextAreaField";
 
 const extraAttributes = {
-  label: "Text Area Field",
+  label: "Text Area Field Label",
   helperText: "Helper text",
   required: false,
   placeholder: "Value here...",
@@ -62,7 +62,7 @@ const DesignerComponent = ({ element }: { element: FormElementInstance }) => {
         {label}
         {required && "*"}
       </Label>
-      <Textarea rows={1} readOnly disabled placeholder={placeholder} />
+      <Textarea rows={rows} readOnly placeholder={placeholder} />
       {helperText && (
         <p className="text-[0.8rem] text-muted-foreground">{helperText}</p>
       )}
