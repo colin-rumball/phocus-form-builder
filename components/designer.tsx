@@ -7,7 +7,6 @@ import {
   useTransition,
   useRef,
 } from "react";
-import DesignerSidebar from "./designer-sidebar";
 import { useDndMonitor, useDraggable, useDroppable } from "@dnd-kit/core";
 import {
   type ElementsType,
@@ -32,21 +31,8 @@ import { Textarea } from "./ui/textarea";
 import { api } from "@/convex/_generated/api";
 import { useAction } from "convex/react";
 import FormGenerator from "./form-generator";
-import { CiSquarePlus } from "react-icons/ci";
 import { SiOpenai } from "react-icons/si";
-import {
-  Drawer,
-  DrawerClose,
-  DrawerContent,
-  DrawerDescription,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-} from "./ui/drawer";
-import { IoCloseSharp } from "react-icons/io5";
 import DesignerDrawer from "./designer-drawer";
-import useDrawer from "@/lib/hooks/useDrawer";
 
 type DesignerProps = ComponentPropsWithoutRef<"div">;
 
@@ -64,11 +50,6 @@ const Designer = ({ className }: DesignerProps) => {
   const selectedIndex = useRef(0);
   const [dialogOpen, setDialogOpen] = useState(false);
   const generate = useAction(api.openai.generate);
-
-  const { drawerVisible, setDrawerVisible } = useDrawer((state) => ({
-    drawerVisible: state.visible,
-    setDrawerVisible: state.setVisible,
-  }));
 
   const droppable = useDroppable({
     id: "designer-drop-area",
@@ -219,25 +200,7 @@ const Designer = ({ className }: DesignerProps) => {
             </div>
           )}
           <div className="my-6 flex items-center space-x-4">
-            <Drawer open={drawerVisible} onOpenChange={setDrawerVisible}>
-              <DrawerTrigger asChild>
-                <Button
-                  variant={"secondary"}
-                  className="h-auto rounded-full p-3"
-                >
-                  <FaPlus className="h-7 w-7" />
-                </Button>
-              </DrawerTrigger>
-              <DrawerContent>
-                <DrawerHeader>
-                  <DrawerClose>
-                    <IoCloseSharp className="absolute right-4 top-4 h-7 w-7" />
-                  </DrawerClose>
-                </DrawerHeader>
-                <DesignerDrawer />
-                <DrawerFooter></DrawerFooter>
-              </DrawerContent>
-            </Drawer>
+            <DesignerDrawer />
 
             {elements.length !== 0 && (
               <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>

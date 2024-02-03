@@ -1,7 +1,6 @@
 "use client";
 
-import { type Doc } from "@/convex/_generated/dataModel";
-import useHeader from "@/lib/hooks/useHeader";
+import { type Id } from "@/convex/_generated/dataModel";
 import { cn } from "@/lib/utils";
 import SaveFormBtn from "./save-form-btn";
 import { Link } from "./ui/link";
@@ -9,38 +8,41 @@ import { MdOutlineKeyboardDoubleArrowLeft } from "react-icons/md";
 import useBuilderTabs, { type BuilderTab } from "@/lib/hooks/useBuilderTabs";
 import useDesigner from "@/lib/hooks/useDesigner";
 import PublishFormBtn from "./publish-form-btn";
+import { useParams } from "next/navigation";
+import { useQuery } from "convex/react";
+import { api } from "@/convex/_generated/api";
 
-const FormBuilderHeader = ({ form }: { form: Doc<"forms"> }) => {
-  const { visible } = useHeader((state) => ({
-    visible: state.visible,
-  }));
+const FormBuilderHeader = () => {
+  const params = useParams();
+  const form = useQuery(api.forms.get, { id: params.formId as Id<"forms"> });
+
   return (
-    <nav
+    <div
       className={cn(
-        "fixed inset-x-0 top-header z-30 flex h-[80px] items-center justify-between gap-3 border-b-2 bg-background transition-transform",
-        visible && "duration-300",
-        !visible && "-translate-y-header duration-500",
+        "relative flex h-[80px] w-full items-center justify-between gap-3 border-b-2 bg-background transition-transform",
       )}
     >
       <Link
         href={"/dashboard"}
-        className="mx-lg flex items-center space-x-2 text-lg"
+        className="mx-lg flex items-center space-x-2 text-lg text-foreground"
       >
         <MdOutlineKeyboardDoubleArrowLeft />
         <span>Dashboard</span>
       </Link>
-      <BuilderTabs formId={form._id} />
-      <div className="mr-lg flex h-full items-center gap-2">
-        <SaveFormBtn formId={form._id} />
-        <PublishFormBtn formId={form._id} />
-      </div>
-    </nav>
+      <BuilderTabs />
+      {!!form && (
+        <div className="mr-lg flex h-full items-center gap-2">
+          <SaveFormBtn formId={form._id} />
+          <PublishFormBtn formId={form._id} />
+        </div>
+      )}
+    </div>
   );
 };
 
 export default FormBuilderHeader;
 
-const BuilderTabs = ({ formId }: { formId: string }) => {
+const BuilderTabs = () => {
   const { elements } = useDesigner((state) => ({
     elements: state.elements,
   }));
@@ -58,7 +60,7 @@ const BuilderTabs = ({ formId }: { formId: string }) => {
   };
 
   return (
-    <div className="absolute inset-y-0 left-1/2 flex h-full -translate-x-1/2 items-center">
+    <div className="absolute inset-y-0 left-1/2 flex h-full -translate-x-1/2 items-center px-xl text-foreground">
       <button
         className={cn(
           "flex h-full w-[130px] items-center justify-center px-lg text-center uppercase opacity-60 transition-all duration-500",

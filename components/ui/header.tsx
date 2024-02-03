@@ -23,7 +23,7 @@ import { api } from "@/convex/_generated/api";
 import Headline from "./headline";
 import useHeader from "@/lib/hooks/useHeader";
 import { Input } from "./input";
-import useDrawer from "@/lib/hooks/useDrawer";
+import FormBuilderHeader from "../form-builder-header";
 
 type HeaderProps = ComponentPropsWithRef<"header">;
 
@@ -33,14 +33,10 @@ const Header = forwardRef<HTMLDivElement, HeaderProps>(({ className }, ref) => {
     headerVisible: state.visible,
     setHeaderVisible: state.setVisible,
   }));
-  const { drawerVisible } = useDrawer((state) => ({
-    drawerVisible: state.visible,
-  }));
 
   useEffect(() => {
     let prevScrollPos = window.scrollY;
     const handleScroll = () => {
-      if (drawerVisible) return;
       const currentScrollPos = window.scrollY;
 
       if (currentScrollPos < prevScrollPos) {
@@ -63,15 +59,20 @@ const Header = forwardRef<HTMLDivElement, HeaderProps>(({ className }, ref) => {
       <header
         ref={ref}
         className={cn(
-          "fixed z-header flex h-header w-lvw justify-center bg-primary px-lg text-primary-foreground transition-transform",
+          "sticky top-0 z-header flex w-lvw bg-primary text-primary-foreground transition-transform",
           headerVisible
             ? "duration-300"
-            : "pointer-events-none -translate-y-full duration-500",
+            : "pointer-events-none -translate-y-header duration-500",
           className,
         )}
       >
-        {!pathname.includes("/builder") && <SiteHeaderContent />}
-        {pathname.includes("/builder") && <BuilderHeaderContent />}
+        <div className="flex w-full flex-col">
+          <div className="flex h-header justify-center px-xl">
+            {!pathname.includes("/builder") && <SiteHeaderContent />}
+            {pathname.includes("/builder") && <BuilderHeaderContent />}
+          </div>
+          {pathname.includes("/builder") && <FormBuilderHeader />}
+        </div>
       </header>
       <div className={cn("h-header")} />
     </>
@@ -128,7 +129,7 @@ const FormHeaderInfo = () => {
             onChange={(e) => setNameInput(e.target.value)}
             onBlur={() => onNameChanged(nameInput)}
             className={cn(
-              "mx-0 ml-0 h-full w-full truncate rounded-none border-none bg-transparent px-0 py-0 text-center text-background focus-visible:border-0 focus-visible:ring-0 focus-visible:ring-offset-0",
+              "mx-0 ml-0 h-full w-full truncate rounded-none border-none bg-transparent px-0 py-0 text-center text-background focus-visible:border-0 focus-visible:bg-background focus-visible:text-foreground focus-visible:ring-0 focus-visible:ring-offset-0",
               "text-heading font-medium leading-heading",
             )}
           />

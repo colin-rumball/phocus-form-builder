@@ -7,32 +7,56 @@ import { Button } from "./ui/button";
 import Headline from "./ui/headline";
 import useDesigner from "@/lib/hooks/useDesigner";
 import short from "short-uuid";
-import { DrawerClose } from "./ui/drawer";
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTrigger,
+} from "./ui/drawer";
+import { FaPlus } from "react-icons/fa";
+import { IoCloseSharp } from "react-icons/io5";
 
 type DesignerDrawerProps = ComponentPropsWithoutRef<"div">;
 
 const DesignerDrawer = ({ className }: DesignerDrawerProps) => {
   return (
-    <div className={cn("flex h-full px-8", className)}>
-      <div className="flex flex-col">
-        <DrawerSection title="Layout Elements">
-          <DrawerBtnElement formElement={FormElements.TitleField} />
-          <DrawerBtnElement formElement={FormElements.SubtitleField} />
-          <DrawerBtnElement formElement={FormElements.ParagraphField} />
-          <DrawerBtnElement formElement={FormElements.SeparatorField} />
-          <DrawerBtnElement formElement={FormElements.SpacerField} />
-        </DrawerSection>
+    <Drawer>
+      <DrawerTrigger asChild>
+        <Button variant={"secondary"} className="h-auto rounded-full p-3">
+          <FaPlus className="h-7 w-7" />
+        </Button>
+      </DrawerTrigger>
+      <DrawerContent>
+        <DrawerHeader>
+          <DrawerClose>
+            <IoCloseSharp className="absolute right-4 top-4 h-7 w-7" />
+          </DrawerClose>
+        </DrawerHeader>
+        <div className={cn("flex h-full px-8", className)}>
+          <div className="flex flex-col">
+            <DrawerSection title="Layout Elements">
+              <DrawerBtnElement formElement={FormElements.TitleField} />
+              <DrawerBtnElement formElement={FormElements.SubtitleField} />
+              <DrawerBtnElement formElement={FormElements.ParagraphField} />
+              <DrawerBtnElement formElement={FormElements.SeparatorField} />
+              <DrawerBtnElement formElement={FormElements.SpacerField} />
+            </DrawerSection>
 
-        <DrawerSection title="Form Elements">
-          <DrawerBtnElement formElement={FormElements.TextField} />
-          <DrawerBtnElement formElement={FormElements.TextAreaField} />
-          <DrawerBtnElement formElement={FormElements.NumberField} />
-          <DrawerBtnElement formElement={FormElements.DateField} />
-          <DrawerBtnElement formElement={FormElements.SelectField} />
-          <DrawerBtnElement formElement={FormElements.CheckboxField} />
-        </DrawerSection>
-      </div>
-    </div>
+            <DrawerSection title="Form Elements">
+              <DrawerBtnElement formElement={FormElements.TextField} />
+              <DrawerBtnElement formElement={FormElements.TextAreaField} />
+              <DrawerBtnElement formElement={FormElements.NumberField} />
+              <DrawerBtnElement formElement={FormElements.DateField} />
+              <DrawerBtnElement formElement={FormElements.SelectField} />
+              <DrawerBtnElement formElement={FormElements.CheckboxField} />
+            </DrawerSection>
+          </div>
+        </div>
+        <DrawerFooter></DrawerFooter>
+      </DrawerContent>
+    </Drawer>
   );
 };
 

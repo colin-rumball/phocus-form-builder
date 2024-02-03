@@ -26,7 +26,7 @@ export default async function BuilderLayout({
 
   return (
     <>
-      <FormBuilderHeader form={form} />
+      {/* <FormBuilderHeader form={form} /> */}
       <div className="mt-[80px] h-full w-full">{children}</div>
     </>
   );

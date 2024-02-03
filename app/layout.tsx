@@ -28,17 +28,19 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" suppressHydrationWarning className="h-full">
+    <html lang="en" suppressHydrationWarning>
       <head></head>
       <body
-        className={`font-sans ${catamaran.variable} relative h-full overflow-x-hidden`}
+        className={`font-sans ${catamaran.variable} relative h-full min-h-screen overflow-x-hidden`}
       >
         <NextTopLoader />
         <Providers>
-          <Header />
-          {children}
-          <Toaster />
-          <Footer />
+          <div className="relative flex min-h-screen flex-col">
+            <Header />
+            {children}
+            <Toaster />
+            <Footer />
+          </div>
         </Providers>
         {/* TODO: enable analytics */}
         {/* <Analytics /> */}
