@@ -50,6 +50,7 @@ const FormBuilder = ({ formId }: { formId: Id<"forms"> }) => {
   useEffect(() => {
     setSelectedElement(null);
     window.scrollTo({ top: 0 });
+    setCurrentTab("DESIGN");
   }, []);
 
   useEffect(() => {
@@ -58,11 +59,8 @@ const FormBuilder = ({ formId }: { formId: Id<"forms"> }) => {
         // TODO: handle parsing errors
         const JsonElements = JSON.parse(form.content) as FormElementInstance[];
         setElements(JsonElements, false);
-        if (JsonElements.length > 0 && currentTab === "GENERATE")
-          setCurrentTab("DESIGN");
       } else {
         setElements([], false);
-        setCurrentTab("GENERATE");
       }
       setSavedAt(form.updatedAt ? new Date(form.updatedAt) : null);
     }
@@ -145,10 +143,6 @@ const FormBuilder = ({ formId }: { formId: Id<"forms"> }) => {
   return (
     <DndContext sensors={sensors}>
       <div className={cn("relative h-full w-full")}>
-        <AnimatedTab myTab="GENERATE">
-          <FormGenerator />
-        </AnimatedTab>
-
         <AnimatedTab myTab="DESIGN">
           <Designer />
         </AnimatedTab>
@@ -156,21 +150,13 @@ const FormBuilder = ({ formId }: { formId: Id<"forms"> }) => {
         <AnimatedTab myTab="PREVIEW">
           <FormPreviewer />
         </AnimatedTab>
-
-        <AnimatedTab myTab="PUBLISH">
-          <FormPublisher formId={form._id} />
-        </AnimatedTab>
       </div>
       <div
         className={cn(
           "fixed inset-x-0 bottom-0 top-0 -z-50 transition-all",
-          currentTab === "GENERATE" &&
-            "bg-accent bg-[url(/svg/subtle-prism.svg)]",
           currentTab === "DESIGN" &&
             "bg-accent bg-[url(/svg/subtle-prism.svg)] dark:bg-[url(/svg/subtle-prism.svg)]",
           currentTab === "PREVIEW" &&
-            "bg-accent bg-[url(/svg/subtle-prism.svg)] dark:bg-[url(/svg/subtle-prism.svg)]",
-          currentTab === "PUBLISH" &&
             "bg-accent bg-[url(/svg/subtle-prism.svg)] dark:bg-[url(/svg/subtle-prism.svg)]",
         )}
       />

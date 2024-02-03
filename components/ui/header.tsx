@@ -23,29 +23,34 @@ import { api } from "@/convex/_generated/api";
 import Headline from "./headline";
 import useHeader from "@/lib/hooks/useHeader";
 import { Input } from "./input";
+import useDrawer from "@/lib/hooks/useDrawer";
 
 type HeaderProps = ComponentPropsWithRef<"header">;
 
 const Header = forwardRef<HTMLDivElement, HeaderProps>(({ className }, ref) => {
   const pathname = usePathname();
-  const { visible, setVisible } = useHeader((state) => ({
-    visible: state.visible,
-    setVisible: state.setVisible,
+  const { headerVisible, setHeaderVisible } = useHeader((state) => ({
+    headerVisible: state.visible,
+    setHeaderVisible: state.setVisible,
+  }));
+  const { drawerVisible } = useDrawer((state) => ({
+    drawerVisible: state.visible,
   }));
 
   useEffect(() => {
     let prevScrollPos = window.scrollY;
     const handleScroll = () => {
+      if (drawerVisible) return;
       const currentScrollPos = window.scrollY;
 
       if (currentScrollPos < prevScrollPos) {
-        setVisible(true);
+        setHeaderVisible(true);
         prevScrollPos = currentScrollPos;
       } else if (
         currentScrollPos > 70 &&
         currentScrollPos > prevScrollPos + 60
       ) {
-        setVisible(false);
+        setHeaderVisible(false);
         prevScrollPos = currentScrollPos;
       }
     };
@@ -59,7 +64,7 @@ const Header = forwardRef<HTMLDivElement, HeaderProps>(({ className }, ref) => {
         ref={ref}
         className={cn(
           "fixed z-header flex h-header w-lvw justify-center bg-primary px-lg text-primary-foreground transition-transform",
-          visible
+          headerVisible
             ? "duration-300"
             : "pointer-events-none -translate-y-full duration-500",
           className,

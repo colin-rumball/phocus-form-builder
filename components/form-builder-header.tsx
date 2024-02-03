@@ -8,12 +8,7 @@ import { Link } from "./ui/link";
 import { MdOutlineKeyboardDoubleArrowLeft } from "react-icons/md";
 import useBuilderTabs, { type BuilderTab } from "@/lib/hooks/useBuilderTabs";
 import useDesigner from "@/lib/hooks/useDesigner";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "./ui/tooltip";
+import PublishFormBtn from "./publish-form-btn";
 
 const FormBuilderHeader = ({ form }: { form: Doc<"forms"> }) => {
   const { visible } = useHeader((state) => ({
@@ -35,7 +30,10 @@ const FormBuilderHeader = ({ form }: { form: Doc<"forms"> }) => {
         <span>Dashboard</span>
       </Link>
       <BuilderTabs formId={form._id} />
-      {!form.published && <SaveFormBtn formId={form._id} />}
+      <div className="mr-lg flex h-full items-center gap-2">
+        <SaveFormBtn formId={form._id} />
+        <PublishFormBtn formId={form._id} />
+      </div>
     </nav>
   );
 };
@@ -43,8 +41,9 @@ const FormBuilderHeader = ({ form }: { form: Doc<"forms"> }) => {
 export default FormBuilderHeader;
 
 const BuilderTabs = ({ formId }: { formId: string }) => {
-  const elements = useDesigner((state) => state.elements);
-
+  const { elements } = useDesigner((state) => ({
+    elements: state.elements,
+  }));
   const { currentTab, setCurrentTab } = useBuilderTabs((state) => ({
     currentTab: state.currentTab,
     setCurrentTab: state.setCurrentTab,
@@ -64,16 +63,6 @@ const BuilderTabs = ({ formId }: { formId: string }) => {
         className={cn(
           "flex h-full w-[130px] items-center justify-center px-lg text-center uppercase opacity-60 transition-all duration-500",
           "font-bold hover:opacity-90",
-          currentTab === "GENERATE" && "text-primary opacity-100",
-        )}
-        onClick={() => setTabWrapper("GENERATE")}
-      >
-        Generate
-      </button>
-      <button
-        className={cn(
-          "flex h-full w-[130px] items-center justify-center px-lg text-center uppercase opacity-60 transition-all duration-500",
-          "font-bold hover:opacity-90",
           currentTab === "DESIGN" && "text-primary opacity-100",
         )}
         onClick={() => setTabWrapper("DESIGN")}
@@ -85,35 +74,13 @@ const BuilderTabs = ({ formId }: { formId: string }) => {
           "flex h-full w-[130px] items-center justify-center px-lg text-center uppercase opacity-60 transition-all duration-500",
           "font-bold hover:opacity-90",
           currentTab === "PREVIEW" && "text-primary opacity-100",
+          elements.length === 0 && "cursor-not-allowed",
         )}
         onClick={() => setTabWrapper("PREVIEW")}
+        disabled={elements.length === 0}
       >
         Preview
       </button>
-      <TooltipProvider delayDuration={300}>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <button
-              className={cn(
-                "flex h-full w-[130px] items-center justify-center px-lg text-center uppercase opacity-60 transition-all duration-500",
-                "font-bold hover:opacity-90",
-                currentTab === "PUBLISH" && "text-primary opacity-100",
-                elements.length === 0 && "cursor-not-allowed",
-              )}
-              disabled={elements.length === 0}
-              onClick={() => setTabWrapper("PUBLISH")}
-            >
-              Publish
-            </button>
-          </TooltipTrigger>
-          {elements.length === 0 && (
-            <TooltipContent side="bottom" className="mx-2">
-              <p>Can't publish an empty form</p>
-            </TooltipContent>
-          )}
-          {elements.length !== 0 && <TooltipContent className="" />}
-        </Tooltip>
-      </TooltipProvider>
     </div>
   );
 };

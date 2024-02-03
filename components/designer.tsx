@@ -25,11 +25,28 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
+  DialogTrigger,
 } from "./ui/dialog";
-import { FaSpinner } from "react-icons/fa";
+import { FaPlus, FaSpinner } from "react-icons/fa";
 import { Textarea } from "./ui/textarea";
 import { api } from "@/convex/_generated/api";
 import { useAction } from "convex/react";
+import FormGenerator from "./form-generator";
+import { CiSquarePlus } from "react-icons/ci";
+import { SiOpenai } from "react-icons/si";
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "./ui/drawer";
+import { IoCloseSharp } from "react-icons/io5";
+import DesignerDrawer from "./designer-drawer";
+import useDrawer from "@/lib/hooks/useDrawer";
 
 type DesignerProps = ComponentPropsWithoutRef<"div">;
 
@@ -43,10 +60,15 @@ const Designer = ({ className }: DesignerProps) => {
   } = useDesigner();
 
   const [generating, startTransition] = useTransition();
-  const [userInput, setUserInput] = useState("");
+  const [openAIUserInput, setOpenAIUserInput] = useState("");
   const selectedIndex = useRef(0);
   const [dialogOpen, setDialogOpen] = useState(false);
   const generate = useAction(api.openai.generate);
+
+  const { drawerVisible, setDrawerVisible } = useDrawer((state) => ({
+    drawerVisible: state.visible,
+    setDrawerVisible: state.setVisible,
+  }));
 
   const droppable = useDroppable({
     id: "designer-drop-area",
@@ -57,9 +79,10 @@ const Designer = ({ className }: DesignerProps) => {
 
   const generateFormElements = async () => {
     const rawResponse = await generate({
-      messageBody: userInput,
+      messageBody: openAIUserInput,
     });
 
+    setOpenAIUserInput("");
     setDialogOpen(false);
 
     if (rawResponse === null) {
@@ -167,35 +190,6 @@ const Designer = ({ className }: DesignerProps) => {
 
   return (
     <div className={cn("flex h-full w-full", className)}>
-      <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="flex flex-col gap-3 p-4">
-          <DialogHeader>
-            <DialogTitle>Generate Elements Using AI</DialogTitle>
-            <DialogDescription>
-              Describe the elements you're trying to add and we'll generate it
-              for you.
-            </DialogDescription>
-          </DialogHeader>
-          <Textarea
-            rows={5}
-            onChange={(e) => setUserInput(e.target.value)}
-            value={userInput}
-          />
-          <DialogFooter>
-            <Button
-              className="gap-2"
-              disabled={generating}
-              onClick={(e) => {
-                e.preventDefault();
-                startTransition(generateFormElements);
-              }}
-            >
-              Generate {generating && <FaSpinner className="animate-spin" />}
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-      <DesignerSidebar />
       <div
         className="w-full p-4"
         onClick={(e) => {
@@ -206,19 +200,14 @@ const Designer = ({ className }: DesignerProps) => {
         <div
           ref={droppable.setNodeRef}
           className={cn(
-            "m-auto flex h-full max-w-[920px] flex-1 flex-grow flex-col items-center justify-start overflow-y-auto rounded-xl bg-background",
-            droppable.isOver && "ring-4 ring-primary/70",
+            "m-auto flex h-full max-w-[920px] flex-col items-center overflow-y-auto rounded-xl bg-background",
           )}
         >
+          {elements.length === 0 && <FormGenerator />}
           {!droppable.isOver && elements.length === 0 && (
             <p className="flex flex-grow items-center text-xl font-bold text-muted-foreground">
-              Drop here
+              Or add form fields manually
             </p>
-          )}
-          {droppable.isOver && elements.length === 0 && (
-            <div className="w-full p-4">
-              <div className="h-[120px] rounded-md bg-primary/20"></div>
-            </div>
           )}
           {elements.length > 0 && (
             <div className="flex w-full flex-col gap-1 p-1">
@@ -229,6 +218,68 @@ const Designer = ({ className }: DesignerProps) => {
               })}
             </div>
           )}
+          <div className="my-6 flex items-center space-x-4">
+            <Drawer open={drawerVisible} onOpenChange={setDrawerVisible}>
+              <DrawerTrigger asChild>
+                <Button
+                  variant={"secondary"}
+                  className="h-auto rounded-full p-3"
+                >
+                  <FaPlus className="h-7 w-7" />
+                </Button>
+              </DrawerTrigger>
+              <DrawerContent>
+                <DrawerHeader>
+                  <DrawerClose>
+                    <IoCloseSharp className="absolute right-4 top-4 h-7 w-7" />
+                  </DrawerClose>
+                </DrawerHeader>
+                <DesignerDrawer />
+                <DrawerFooter></DrawerFooter>
+              </DrawerContent>
+            </Drawer>
+
+            {elements.length !== 0 && (
+              <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+                <DialogTrigger asChild>
+                  <Button
+                    variant={"default"}
+                    className="flex h-auto space-x-3 rounded-full p-3"
+                  >
+                    <SiOpenai className="h-7 w-7" />
+                    <span>Add using AI</span>
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="flex flex-col gap-3 p-4">
+                  <DialogHeader>
+                    <DialogTitle>Generate Elements Using AI</DialogTitle>
+                    <DialogDescription>
+                      Describe the elements you're trying to add and we'll
+                      generate it for you.
+                    </DialogDescription>
+                  </DialogHeader>
+                  <Textarea
+                    rows={5}
+                    onChange={(e) => setOpenAIUserInput(e.target.value)}
+                    value={openAIUserInput}
+                  />
+                  <DialogFooter>
+                    <Button
+                      className="gap-2"
+                      disabled={generating}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        startTransition(generateFormElements);
+                      }}
+                    >
+                      Generate{" "}
+                      {generating && <FaSpinner className="animate-spin" />}
+                    </Button>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
+            )}
+          </div>
         </div>
       </div>
     </div>
@@ -295,7 +346,7 @@ const DesignerElementWrapper = ({
         setSelectedElement(element);
       }}
       className={cn(
-        "relative flex h-[120px] cursor-grab flex-col rounded-md text-foreground ring-1 ring-inset ring-accent active:cursor-grabbing",
+        "relative m-2 flex h-[120px] cursor-grab flex-col rounded-md text-foreground ring-1 ring-inset ring-accent active:cursor-grabbing",
       )}
     >
       <div

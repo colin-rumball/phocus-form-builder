@@ -60,12 +60,11 @@ const SaveFormBtn = ({ formId }: { formId: string }) => {
   return (
     <div
       className={cn(
-        "flex h-full items-center gap p-lg transition-all duration-1000",
-        unsavedChanges && "bg-destructive/60",
+        "flex h-full items-center gap px-2 transition-all duration-1000",
       )}
     >
       {unsavedChanges && (
-        <div className="flex flex-col font-bold leading-tight text-destructive-foreground opacity-100">
+        <div className="flex flex-col font-bold leading-tight text-destructive opacity-100">
           <span>UNSAVED</span>
           <span>CHANGES</span>
         </div>

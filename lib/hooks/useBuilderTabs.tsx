@@ -1,12 +1,10 @@
 import { create } from "zustand";
 import { devtools, persist } from "zustand/middleware";
 
-export type BuilderTab = "GENERATE" | "DESIGN" | "PREVIEW" | "PUBLISH";
+export type BuilderTab = "DESIGN" | "PREVIEW";
 export const tabMap: Record<BuilderTab, number> = {
-  GENERATE: 0,
-  DESIGN: 1,
-  PREVIEW: 2,
-  PUBLISH: 3,
+  DESIGN: 0,
+  PREVIEW: 1,
 };
 
 interface TabState {
@@ -18,7 +16,7 @@ const useBuilderTabs = create<TabState>()(
   devtools(
     persist(
       (set) => ({
-        currentTab: "GENERATE",
+        currentTab: "DESIGN",
         setCurrentTab: (_newTab) => set(() => ({ currentTab: _newTab })),
       }),
       {
