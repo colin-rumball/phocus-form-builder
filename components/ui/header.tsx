@@ -66,8 +66,7 @@ const Header = forwardRef<HTMLDivElement, HeaderProps>(({ className }, ref) => {
       >
         <div className="flex w-full flex-col">
           <div className="flex h-header justify-center px-xl">
-            {!pathname.includes("/builder") && <SiteHeaderContent />}
-            {pathname.includes("/builder") && <BuilderHeaderContent />}
+            <ConditionalContent />
           </div>
           {pathname.includes("/builder") && <FormBuilderHeader />}
         </div>
@@ -78,6 +77,20 @@ const Header = forwardRef<HTMLDivElement, HeaderProps>(({ className }, ref) => {
 
 export default Header;
 
+const ConditionalContent = () => {
+  const pathname = usePathname();
+
+  if (pathname.includes("/builder")) {
+    return <BuilderHeaderContent />;
+  }
+
+  if (pathname.includes("/submit")) {
+    return <SubmitHeaderContent />;
+  }
+
+  return <SiteHeaderContent />;
+};
+
 const BuilderHeaderContent = () => {
   return (
     <div className="relative flex w-full items-center justify-between">
@@ -86,6 +99,17 @@ const BuilderHeaderContent = () => {
         <FormHeaderInfo />
       </div>
       <UserOptions />
+    </div>
+  );
+};
+
+const SubmitHeaderContent = () => {
+  return (
+    <div className="container flex h-full w-full items-center justify-end">
+      <div className="absolute inset-0 left-1/2 flex w-full -translate-x-1/2 items-center justify-center">
+        <Logo />
+      </div>
+      <ThemeSwitcher />
     </div>
   );
 };
