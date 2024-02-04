@@ -13,6 +13,7 @@ export type DesignerState = {
     setUnsaved?: boolean,
   ) => void;
   removeElement: (id: string) => void;
+  moveElement: (id: string, newIndex: number, setUnsaved?: boolean) => void;
 
   selectedElement: FormElementInstance | null;
   setSelectedElement: (
@@ -56,6 +57,20 @@ const useDesigner = create<DesignerState>()(
             const index = newElements.findIndex((e) => e.id === id);
             if (index !== -1) {
               newElements.splice(index, 1);
+            }
+            return { unsavedChanges: setUnsaved, elements: newElements };
+          });
+        },
+        moveElement: (id, newIndex, setUnsaved = true) => {
+          set((state) => {
+            const newElements = [...state.elements];
+            const index = newElements.findIndex((e) => e.id === id);
+            if (index !== -1) {
+              const [removed] = newElements.splice(index, 1);
+              if (index < newIndex) newIndex--;
+              if (removed) {
+                newElements.splice(newIndex, 0, removed);
+              }
             }
             return { unsavedChanges: setUnsaved, elements: newElements };
           });

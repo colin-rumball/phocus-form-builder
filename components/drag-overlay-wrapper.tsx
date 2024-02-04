@@ -45,7 +45,7 @@ const DragOverlayWrapper = () => {
       const DesignerElementComponent =
         FormElements[element.type].designerComponent;
       node = (
-        <div className="pointer-events-none flex h-[120px] w-full rounded-md border bg-accent px-4 py-2 opacity-80">
+        <div className="pointer-events-none flex h-[140px] w-[260px] overflow-y-hidden rounded-md border bg-accent px-4 py-2 opacity-80">
           <DesignerElementComponent element={element} />
         </div>
       );

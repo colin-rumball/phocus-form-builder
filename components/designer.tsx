@@ -39,11 +39,17 @@ type DesignerProps = ComponentPropsWithoutRef<"div">;
 const Designer = ({ className }: DesignerProps) => {
   const {
     elements,
-    removeElement,
     addElement,
     selectedElement,
     setSelectedElement,
-  } = useDesigner();
+    moveElement,
+  } = useDesigner((state) => ({
+    elements: state.elements,
+    addElement: state.addElement,
+    selectedElement: state.selectedElement,
+    setSelectedElement: state.setSelectedElement,
+    moveElement: state.moveElement,
+  }));
 
   const [generating, startTransition] = useTransition();
   const [openAIUserInput, setOpenAIUserInput] = useState("");
@@ -93,9 +99,8 @@ const Designer = ({ className }: DesignerProps) => {
     onDragEnd: ({ active, over }) => {
       if (!active || !over) return;
 
-      const isDesignerBtnElement = !!active.data?.current?.isDesignerBtnElement;
-      const isDroppingOverDesignerDropArea =
-        !!over.data?.current?.isDesignerDropArea;
+      //const isDesignerBtnElement = !!active.data?.current?.isDesignerBtnElement;
+      //const isDroppingOverDesignerDropArea = !!over.data?.current?.isDesignerDropArea;
       const isDroppingOverDesignerElementTopHalf =
         !!over.data?.current?.isTopHalfDesignerElement;
       const isDroppingOverDesignerElementBottomHalf =
@@ -104,39 +109,39 @@ const Designer = ({ className }: DesignerProps) => {
         isDroppingOverDesignerElementTopHalf ||
         isDroppingOverDesignerElementBottomHalf;
 
-      if (isDesignerBtnElement) {
-        // New element from sidebar
-        const type = active.data.current?.type as ElementsType;
+      // if (isDesignerBtnElement) {
+      //   // New element from
+      //   const type = active.data.current?.type as ElementsType;
 
-        const newElement = FormElements[type].construct(generateId());
-        if (isDroppingOverDesignerDropArea) {
-          // add to the bottom
-          if (type !== "OpenAIField") {
-            addElement(elements.length, newElement);
-            return;
-          } else {
-            setDialogOpen(true);
-            selectedIndex.current = elements.length;
-            return;
-          }
-        } else {
-          // add in place of another element
-          if (isDroppingOverDesignerElement) {
-            let newElementIndex = elements.findIndex(
-              (e) => e.id === over.data.current?.elementId,
-            );
-            if (newElementIndex === -1) throw new Error("Element not found");
-            if (isDroppingOverDesignerElementBottomHalf) newElementIndex += 1;
-            if (type !== "OpenAIField") {
-              addElement(newElementIndex, newElement);
-            } else {
-              setDialogOpen(true);
-              selectedIndex.current = newElementIndex;
-            }
-            return;
-          }
-        }
-      }
+      //   const newElement = FormElements[type].construct(generateId());
+      //   if (isDroppingOverDesignerDropArea) {
+      //     // add to the bottom
+      //     if (type !== "OpenAIField") {
+      //       addElement(elements.length, newElement);
+      //       return;
+      //     } else {
+      //       setDialogOpen(true);
+      //       selectedIndex.current = elements.length;
+      //       return;
+      //     }
+      //   } else {
+      //     // add in place of another element
+      //     if (isDroppingOverDesignerElement) {
+      //       let newElementIndex = elements.findIndex(
+      //         (e) => e.id === over.data.current?.elementId,
+      //       );
+      //       if (newElementIndex === -1) throw new Error("Element not found");
+      //       if (isDroppingOverDesignerElementBottomHalf) newElementIndex += 1;
+      //       if (type !== "OpenAIField") {
+      //         addElement(newElementIndex, newElement);
+      //       } else {
+      //         setDialogOpen(true);
+      //         selectedIndex.current = newElementIndex;
+      //       }
+      //       return;
+      //     }
+      //   }
+      // }
 
       const isDesignerElement = !!active.data?.current?.isDesignerElement;
 
@@ -150,9 +155,8 @@ const Designer = ({ className }: DesignerProps) => {
         const activeElement = elements[activeElementIndex];
         if (!activeElement) throw new Error("Active element not found");
 
-        removeElement(activeElement.id);
-
         if (isDroppingOverDesignerElement) {
+          // Dropping over another element
           const overId = over.data.current?.elementId as string;
           const overElementIndex = elements.findIndex((e) => e.id === overId);
 
@@ -161,18 +165,19 @@ const Designer = ({ className }: DesignerProps) => {
 
           let newElementIndex = overElementIndex;
           if (isDroppingOverDesignerElementBottomHalf) newElementIndex += 1;
-          addElement(newElementIndex, activeElement);
+          moveElement(activeElement.id, newElementIndex);
         } else {
-          addElement(elements.length, activeElement);
+          // Dropping over the drop area
+          // moveElement(activeElement.id, elements.length);
         }
       }
     },
   });
 
   return (
-    <div className={cn("flex h-full w-full", className)}>
+    <div className={cn("my-lg flex h-full w-full", className)}>
       <div
-        className="h-full w-full p-4 transition-all"
+        className="h-full w-full transition-all"
         onClick={(e) => {
           e.stopPropagation();
           if (selectedElement) setSelectedElement(null);
@@ -310,7 +315,7 @@ const DesignerElementWrapper = ({
             ref={topHalf.setNodeRef}
             className={cn(
               "absolute inset-x-0 top-0 h-1/2 rounded-t-md",
-              topHalf.isOver && "bg-primary/20",
+              // topHalf.isOver && "bg-primary/20",
             )}
           />
           <div
