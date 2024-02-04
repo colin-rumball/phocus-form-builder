@@ -47,25 +47,24 @@ const FormElementInspector = ({
         <SheetHeader>
           <SheetTitle>Form Element Properties</SheetTitle>
           <Separator />
-          <SheetDescription>
-            <div className={cn("my-4 flex flex-col gap-6", className)}>
-              <PropertiesForm element={element} />
-
-              <Button
-                className="flex w-full justify-center gap-2 text-center"
-                variant={"destructive"}
-                onClick={() => {
-                  removeElement(element.id);
-                  setSheetOpen(false);
-                  setSelectedElement(null);
-                }}
-              >
-                <HiTrash className="h-5 w-5" />
-                <span>Delete Form Element</span>
-              </Button>
-            </div>
-          </SheetDescription>
+          <SheetDescription></SheetDescription>
         </SheetHeader>
+        <div className={cn("my-4 flex flex-col gap-6", className)}>
+          <PropertiesForm element={element} />
+
+          <Button
+            className="flex w-full justify-center gap-2 text-center"
+            variant={"destructive"}
+            onClick={() => {
+              removeElement(element.id);
+              setSheetOpen(false);
+              setSelectedElement(null);
+            }}
+          >
+            <HiTrash className="h-5 w-5" />
+            <span>Delete Form Element</span>
+          </Button>
+        </div>
       </SheetContent>
     </Sheet>
   );
