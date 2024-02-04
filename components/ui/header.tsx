@@ -72,7 +72,6 @@ const Header = forwardRef<HTMLDivElement, HeaderProps>(({ className }, ref) => {
           {pathname.includes("/builder") && <FormBuilderHeader />}
         </div>
       </header>
-      <div className={cn("h-header")} />
     </>
   );
 });
