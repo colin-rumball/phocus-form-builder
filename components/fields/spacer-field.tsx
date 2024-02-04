@@ -23,6 +23,7 @@ import {
 } from "../ui/form";
 import { LuHeading1, LuSeparatorHorizontal } from "react-icons/lu";
 import { Slider } from "../ui/slider";
+import { cn } from "@/lib/utils";
 
 const type: ElementsType = "SpacerField";
 
@@ -44,16 +45,21 @@ const DesignerComponent = ({ element }: { element: FormElementInstance }) => {
   }));
   const elementTyped = element as CustomInstance;
   const { height } = elementTyped.extraAttributes;
+  const isSelected = selectedElement === element;
   return (
-    <div className="flex w-full flex-col items-center gap-2">
-      {selectedElement === element && (
-        <>
-          <Label className="text-muted-foreground">
-            Spacer Field: {height}px
-          </Label>
-        </>
+    <div className="flex h-full w-full flex-col items-center justify-center gap-2">
+      {isSelected && (
+        <Label className="mb-24 text-muted-foreground">
+          Spacer Field: {height}px
+        </Label>
       )}
-      <LuSeparatorHorizontal className="h-8 w-8" />
+      <div
+        className={cn(
+          "pointer-events-none absolute inset-0 flex select-none items-center justify-center transition-all",
+        )}
+      >
+        <LuSeparatorHorizontal className="h-8 w-8" />
+      </div>
       <FormComponent element={element} />
     </div>
   );

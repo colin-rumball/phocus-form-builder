@@ -28,7 +28,6 @@ import {
 import { Separator } from "../ui/separator";
 import { Button } from "../ui/button";
 import { AiOutlineClose, AiOutlinePlus } from "react-icons/ai";
-import { toast } from "../ui/use-toast";
 import useDesigner from "@/lib/hooks/useDesigner";
 import {
   type ElementsType,
@@ -40,7 +39,7 @@ import {
 const type: ElementsType = "SelectField";
 
 const extraAttributes = {
-  label: "Select field",
+  label: "Select Field Label",
   helperText: "Helper text",
   required: false,
   placeHolder: "Value here...",
@@ -176,16 +175,16 @@ function PropertiesComponent({
       ...elementTyped,
       extraAttributes: { ...data },
     });
-
-    toast({
-      title: "Success",
-      description: "Properties saved successfully",
-    });
+    console.log("SAVED");
   };
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(applyChanges)} className="space-y-3">
+      <form
+        onBlur={form.handleSubmit(applyChanges)}
+        onSubmit={form.handleSubmit(applyChanges)}
+        className="space-y-3"
+      >
         <FormField
           control={form.control}
           name="label"
@@ -330,10 +329,6 @@ function PropertiesComponent({
             </FormItem>
           )}
         />
-        <Separator />
-        <Button className="w-full" type="submit">
-          Save
-        </Button>
       </form>
     </Form>
   );

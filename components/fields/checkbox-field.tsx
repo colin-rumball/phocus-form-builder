@@ -30,7 +30,7 @@ import { Checkbox } from "../ui/checkbox";
 const type: ElementsType = "CheckboxField";
 
 const extraAttributes = {
-  label: "Checkbox Field",
+  label: "Checkbox field label",
   helperText: "Helper text",
   required: false,
 };
@@ -50,17 +50,17 @@ const DesignerComponent = ({ element }: { element: FormElementInstance }) => {
   const { label, required, helperText } = elementTyped.extraAttributes;
   const id = `checkbox-${element.id}`;
   return (
-    <div className="flex space-x-2">
-      <Checkbox id={id} />
-      <div className="grid gap-1.5">
+    <div className="flex w-full flex-col items-start space-x-2">
+      <div className="pointer-events-none flex items-center gap-2">
+        <Checkbox id={id} className="" />
         <Label htmlFor={id}>
           {label}
           {required && "*"}
         </Label>
-        {helperText && (
-          <p className="text-[0.8rem] text-muted-foreground">{helperText}</p>
-        )}
       </div>
+      {helperText && (
+        <p className="text-[0.8rem] text-muted-foreground">{helperText}</p>
+      )}
     </div>
   );
 };
