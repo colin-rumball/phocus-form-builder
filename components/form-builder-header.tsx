@@ -11,6 +11,7 @@ import PublishFormBtn from "./publish-form-btn";
 import { useParams } from "next/navigation";
 import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
+import { ImSpinner2 } from "react-icons/im";
 
 const FormBuilderHeader = () => {
   const params = useParams();
@@ -29,11 +30,18 @@ const FormBuilderHeader = () => {
         <MdOutlineKeyboardDoubleArrowLeft />
         <span>Dashboard</span>
       </Link>
-      <BuilderTabs />
-      {!!form && (
-        <div className="mr-lg flex h-full items-center gap-2">
-          <SaveFormBtn formId={form._id} />
-          <PublishFormBtn formId={form._id} />
+      {form && !form.published && (
+        <>
+          <BuilderTabs />
+          <div className="mr-lg flex h-full items-center gap-2">
+            <SaveFormBtn formId={form._id} />
+            <PublishFormBtn formId={form._id} />
+          </div>
+        </>
+      )}
+      {!form && (
+        <div className="absolute inset-x-0 flex w-full justify-center">
+          <ImSpinner2 className="h-12 w-12 animate-spin text-foreground" />
         </div>
       )}
     </div>

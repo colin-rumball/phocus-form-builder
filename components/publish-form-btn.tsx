@@ -3,7 +3,7 @@ import { type Id } from "@/convex/_generated/dataModel";
 import useDesigner from "@/lib/hooks/useDesigner";
 import { cn } from "@/lib/utils";
 import { useMutation } from "convex/react";
-import { useTransition } from "react";
+import { useState, useTransition } from "react";
 import { FaSpinner } from "react-icons/fa";
 import { MdOutlinePublish } from "react-icons/md";
 import {
@@ -24,6 +24,7 @@ const PublishFormBtn = ({ formId }: { formId: Id<"forms"> }) => {
   const { elements } = useDesigner((state) => ({
     elements: state.elements,
   }));
+  const [dialogOpen, setDialogOpen] = useState(false);
   const [loading, startTransition] = useTransition();
   const updateForm = useMutation(api.forms.update);
 
@@ -36,6 +37,7 @@ const PublishFormBtn = ({ formId }: { formId: Id<"forms"> }) => {
           published: true,
         },
       });
+      setDialogOpen(false);
       toast({
         title: "Success",
         description: "Your form has been published!",
@@ -51,9 +53,10 @@ const PublishFormBtn = ({ formId }: { formId: Id<"forms"> }) => {
   };
 
   return (
-    <AlertDialog>
+    <AlertDialog open={dialogOpen} onOpenChange={setDialogOpen}>
       <AlertDialogTrigger asChild>
         <Button
+          disabled={elements.length === 0 || loading}
           className={cn(
             "w-full gap-2 bg-gradient-to-r from-indigo-400 to-secondary text-white",
           )}
