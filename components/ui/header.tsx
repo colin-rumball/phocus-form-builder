@@ -60,9 +60,7 @@ const Header = forwardRef<HTMLDivElement, HeaderProps>(({ className }, ref) => {
         ref={ref}
         className={cn(
           "sticky top-0 z-header flex w-lvw bg-primary text-primary-foreground transition-transform",
-          headerVisible
-            ? "duration-300"
-            : "pointer-events-none -translate-y-header duration-500",
+          headerVisible ? "duration-300" : "-translate-y-header duration-500",
           className,
         )}
       >
