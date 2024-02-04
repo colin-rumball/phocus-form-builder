@@ -1,6 +1,6 @@
 "use client";
 
-import { cn } from "@/lib/utils";
+import { cn, generateId } from "@/lib/utils";
 import { type ReactNode, type ComponentPropsWithoutRef } from "react";
 import { type FormElement, FormElements } from "./form-elements";
 import { Button } from "./ui/button";
@@ -87,9 +87,7 @@ const DrawerBtnElement = ({ formElement }: { formElement: FormElement }) => {
   const { icon: Icon, label } = formElement.designerButton;
 
   const onClick = () => {
-    const newElement = FormElements[formElement.type].construct(
-      short.generate(),
-    );
+    const newElement = FormElements[formElement.type].construct(generateId());
     addElement(elements.length, newElement);
   };
 

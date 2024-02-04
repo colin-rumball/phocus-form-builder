@@ -2,7 +2,7 @@
 
 import { api } from "@/convex/_generated/api";
 import useDesigner from "@/lib/hooks/useDesigner";
-import { cn } from "@/lib/utils";
+import { cn, generateId } from "@/lib/utils";
 import { useAction } from "convex/react";
 import { useTransition, useState } from "react";
 import { FaSpinner } from "react-icons/fa";
@@ -18,7 +18,6 @@ import {
   DialogTitle,
 } from "./ui/dialog";
 import { Textarea } from "./ui/textarea";
-import short from "short-uuid";
 import { Button } from "./ui/button";
 
 const GenerateFormBtn = () => {
@@ -50,7 +49,7 @@ const GenerateFormBtn = () => {
       const newElements = jsonResponse.elements;
 
       newElements.forEach((element) => {
-        element.id = short.generate();
+        element.id = generateId();
       });
 
       setElements(newElements);

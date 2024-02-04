@@ -1,4 +1,4 @@
-import { cn } from "@/lib/utils";
+import { cn, generateId } from "@/lib/utils";
 import { useState, useTransition, type ComponentPropsWithoutRef } from "react";
 import {
   Card,
@@ -14,7 +14,6 @@ import { type FormElementInstance } from "./form-elements";
 import { Button } from "./ui/button";
 import { FaSpinner } from "react-icons/fa";
 import { Textarea } from "./ui/textarea";
-import short from "short-uuid";
 import useBuilderTabs from "@/lib/hooks/useBuilderTabs";
 
 type FormGeneratorProps = ComponentPropsWithoutRef<"div">;
@@ -49,7 +48,7 @@ const FormGenerator = ({ className }: FormGeneratorProps) => {
       const newElements = jsonResponse.elements;
 
       newElements.forEach((element) => {
-        element.id = short.generate();
+        element.id = generateId();
       });
 
       setElements(newElements);

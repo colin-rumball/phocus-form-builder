@@ -1,6 +1,6 @@
 "use client";
 
-import { cn } from "@/lib/utils";
+import { cn, generateId } from "@/lib/utils";
 import {
   useState,
   type ComponentPropsWithoutRef,
@@ -14,7 +14,6 @@ import {
   FormElements,
 } from "./form-elements";
 import useDesigner from "@/lib/hooks/useDesigner";
-import short from "short-uuid";
 import { Button } from "./ui/button";
 import {
   Dialog,
@@ -33,22 +32,6 @@ import FormGenerator from "./form-generator";
 import { SiOpenai } from "react-icons/si";
 import DesignerDrawer from "./designer-drawer";
 import { PiDotsSixBold } from "react-icons/pi";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "./ui/dropdown-menu";
-import { BsThreeDotsVertical } from "react-icons/bs";
-import { HiOutlineCog8Tooth, HiTrash } from "react-icons/hi2";
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "./ui/sheet";
 import FormElementInspector from "./form-element-inspector";
 
 type DesignerProps = ComponentPropsWithoutRef<"div">;
@@ -95,7 +78,7 @@ const Designer = ({ className }: DesignerProps) => {
       const newElements = jsonResponse.elements;
 
       newElements.forEach((element, index) => {
-        element.id = short.generate();
+        element.id = generateId();
         addElement(elements.length + index, element);
       });
     } catch (e) {
@@ -125,7 +108,7 @@ const Designer = ({ className }: DesignerProps) => {
         // New element from sidebar
         const type = active.data.current?.type as ElementsType;
 
-        const newElement = FormElements[type].construct(short.generate());
+        const newElement = FormElements[type].construct(generateId());
         if (isDroppingOverDesignerDropArea) {
           // add to the bottom
           if (type !== "OpenAIField") {
