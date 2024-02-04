@@ -113,12 +113,12 @@ const FormHeaderInfo = () => {
   };
 
   return (
-    <div className="absolute inset-y-0 left-1/2 flex w-full -translate-x-1/2 flex-col items-center justify-evenly">
+    <div className="pointer-events-none absolute inset-y-0 left-1/2 flex w-full -translate-x-1/2 flex-col items-center justify-evenly">
       {!form && <FaSpinner className="h-5 w-7 animate-spin" />}
       {!!form && (
         <div
           className={cn(
-            "hidden w-full max-w-[300px] text-center md:block lg:max-w-[460px] xl:max-w-[700px] 2xl:max-w-[900px]",
+            "pointer-events-auto hidden w-full max-w-[300px] text-center md:block lg:max-w-[460px] xl:max-w-[700px] 2xl:max-w-[900px]",
           )}
         >
           <Input
