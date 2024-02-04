@@ -84,7 +84,7 @@ const BuilderTabs = () => {
           "flex h-full w-[130px] items-center justify-center px-lg text-center uppercase opacity-60 transition-all duration-500",
           "font-bold hover:opacity-90",
           currentTab === "PREVIEW" && "text-primary opacity-100",
-          elements.length === 0 && "cursor-not-allowed",
+          elements.length === 0 && "pointer-events-none select-none opacity-20",
         )}
         onClick={() => setTabWrapper("PREVIEW")}
         disabled={elements.length === 0}
