@@ -116,6 +116,7 @@ const FormCard = ({
   published,
   visits,
   submissions,
+  content,
   _id,
   _creationTime,
   updatedAt,
@@ -125,13 +126,35 @@ const FormCard = ({
   published: boolean;
   visits: number;
   submissions: number;
+  content: string;
   _id: string;
   _creationTime: number;
   updatedAt?: number;
 }) => {
   const [nameInput, setNameInput] = useState(name);
+  const createForm = useMutation(api.forms.create);
   const deleteForm = useMutation(api.forms.deleteForm);
   const updateForm = useMutation(api.forms.update);
+
+  const onDuplicateClicked = async () => {
+    const formId = await createForm({
+      name: `${name} (copy)`,
+      description: description,
+    });
+
+    if (!formId) {
+      console.error("Failed to duplicate form");
+      return;
+    }
+
+    await updateForm({
+      id: formId,
+      data: {
+        content: content,
+        published: false,
+      },
+    });
+  };
 
   const onDeleteClicked = async () => {
     await deleteForm({ id: _id as Id<"forms"> });
@@ -162,8 +185,19 @@ const FormCard = ({
               <DropdownMenuContent>
                 <DropdownMenuLabel>{name}</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem className="text-destructive focus:bg-destructive focus:text-destructive-foreground">
-                  <AlertDialogTrigger>Delete form</AlertDialogTrigger>
+                <DropdownMenuItem
+                  className="cursor-pointer"
+                  onClick={onDuplicateClicked}
+                >
+                  Duplicate
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  asChild
+                  className="cursor-pointer text-destructive focus:bg-destructive focus:text-destructive-foreground"
+                >
+                  <AlertDialogTrigger className="w-full">
+                    Delete form
+                  </AlertDialogTrigger>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
