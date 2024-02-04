@@ -40,6 +40,16 @@ import {
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
 import { BsThreeDotsVertical } from "react-icons/bs";
+import { HiOutlineCog8Tooth, HiTrash } from "react-icons/hi2";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "./ui/sheet";
+import FormElementInspector from "./form-element-inspector";
 
 type DesignerProps = ComponentPropsWithoutRef<"div">;
 
@@ -86,7 +96,7 @@ const Designer = ({ className }: DesignerProps) => {
 
       newElements.forEach((element, index) => {
         element.id = short.generate();
-        addElement(selectedIndex.current + index, element);
+        addElement(elements.length + index, element);
       });
     } catch (e) {
       console.log("Error parsing openai response", rawResponse);
@@ -188,10 +198,10 @@ const Designer = ({ className }: DesignerProps) => {
         <div
           ref={droppable.setNodeRef}
           className={cn(
-            "m-auto flex h-full max-w-[920px] flex-col items-center overflow-y-auto rounded-xl bg-background",
+            "m-auto flex h-full max-w-[620px] flex-col items-center overflow-y-auto rounded-xl bg-background",
           )}
         >
-          {elements.length === 0 && <FormGenerator />}
+          {elements.length === 0 && <FormGenerator className="mt-16" />}
           {!droppable.isOver && elements.length === 0 && (
             <p className="flex flex-grow items-center text-xl font-bold text-muted-foreground">
               Or add form fields manually
@@ -266,13 +276,10 @@ const DesignerElementWrapper = ({
 }: {
   element: FormElementInstance;
 }) => {
-  const { removeElement, selectedElement, setSelectedElement } = useDesigner(
-    (state) => ({
-      removeElement: state.removeElement,
-      selectedElement: state.selectedElement,
-      setSelectedElement: state.setSelectedElement,
-    }),
-  );
+  const { selectedElement, setSelectedElement } = useDesigner((state) => ({
+    selectedElement: state.selectedElement,
+    setSelectedElement: state.setSelectedElement,
+  }));
 
   const topHalf = useDroppable({
     id: element.id + "-top-half",
@@ -302,7 +309,7 @@ const DesignerElementWrapper = ({
   if (draggable.isDragging)
     return <div className="relative m-2 h-8 rounded-md bg-accent"></div>;
 
-  const isSelectedElement = selectedElement === element;
+  const isSelectedElement = selectedElement?.id === element.id;
   const DesignerElement = FormElements[element.type].designerComponent;
   return (
     <div
@@ -359,27 +366,9 @@ const DesignerElementWrapper = ({
           >
             <PiDotsSixBold className="h-7 w-7" />
           </div>
-          <DropdownMenu>
-            <DropdownMenuTrigger>
-              <BsThreeDotsVertical className="h-5 w-5" />
-            </DropdownMenuTrigger>
-            <DropdownMenuContent>
-              {/* <DropdownMenuItem className="" onClick={() => {
-                setSelectedElement(element);
-              }}>
-                Move up
-              </DropdownMenuItem> */}
-              <DropdownMenuItem
-                className="text-destructive focus:bg-destructive focus:text-destructive-foreground"
-                onClick={() => {
-                  removeElement(element.id);
-                  setSelectedElement(null);
-                }}
-              >
-                Delete field
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          {!!selectedElement && (
+            <FormElementInspector element={selectedElement} />
+          )}
         </div>
         <DesignerElement element={element} />
       </div>
