@@ -53,6 +53,7 @@ const DesignerDrawer = ({ className }: DesignerDrawerProps) => {
               <DrawerBtnElement formElement={FormElements.DateField} />
               <DrawerBtnElement formElement={FormElements.SelectField} />
               <DrawerBtnElement formElement={FormElements.SingleSelectField} />
+              <DrawerBtnElement formElement={FormElements.MultiSelectField} />
               <DrawerBtnElement formElement={FormElements.CheckboxField} />
             </DrawerSection>
           </div>
@@ -77,7 +78,7 @@ const DrawerSection = ({
       <Headline as="h3" className="">
         {title}
       </Headline>
-      <div className="flex items-center gap-2">{children}</div>
+      <div className="flex flex-wrap items-center gap-2">{children}</div>
     </div>
   );
 };

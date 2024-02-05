@@ -6,7 +6,6 @@ import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
-import { RxDropdownMenu } from "react-icons/rx";
 import {
   Form,
   FormControl,
@@ -18,13 +17,6 @@ import {
 } from "../ui/form";
 import { Switch } from "../ui/switch";
 import { cn } from "@/lib/utils";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../ui/select";
 import { Separator } from "../ui/separator";
 import { Button } from "../ui/button";
 import { AiOutlineClose, AiOutlinePlus } from "react-icons/ai";
@@ -35,13 +27,14 @@ import {
   type SubmitFunction,
   type FormElement,
 } from "../form-elements";
-import { MdOutlineRadioButtonChecked } from "react-icons/md";
 import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
+import { GoCheckbox } from "react-icons/go";
+import { Checkbox } from "../ui/checkbox";
 
-const type: ElementsType = "SingleSelectField";
+const type: ElementsType = "MultiSelectField";
 
 const extraAttributes = {
-  label: "Single Select Field Label",
+  label: "Multi Select Field Label",
   helperText: "Helper text",
   required: false,
   placeHolder: "Value here...",
@@ -80,7 +73,7 @@ function FormComponent({
 }) {
   const elementTyped = element as CustomInstance;
 
-  const [value, setValue] = useState(defaultValue ?? "");
+  const [value, setValue] = useState<string[]>([]);
   const [error, setError] = useState(false);
 
   useEffect(() => {
@@ -90,31 +83,48 @@ function FormComponent({
   const { label, required, placeHolder, helperText, options } =
     elementTyped.extraAttributes;
   return (
-    <div className="flex w-full flex-col gap-2">
+    <div
+      className="flex w-full flex-col gap-2"
+      onBlur={() => {
+        if (!submitValue) return;
+        const valid = MultiSelectFieldFormElement.validate(
+          elementTyped,
+          value.join(","),
+        );
+        setError(!valid);
+        submitValue(elementTyped.id, value.join(","));
+      }}
+    >
       <Label className={cn(error && "text-red-500")}>
         {label}
         {required && "*"}
       </Label>
-      <RadioGroup
+      <div
         className="grid grid-cols-2"
-        onValueChange={(value) => {
-          setValue(value);
-          if (!submitValue) return;
-          const valid = SingleSelectFieldFormElement.validate(
-            elementTyped,
-            value,
-          );
-          setError(!valid);
-          submitValue(elementTyped.id, value);
-        }}
+        // onValueChange={(value) => {
+        //   setValue(value);
+        //   if (!submitValue) return;
+
+        //   submitValue(elementTyped.id, value);
+        // }}
       >
         {options.map((option, index) => (
           <div className="flex items-center space-x-2" key={index}>
-            <RadioGroupItem value={option} id={option} />
+            <Checkbox
+              value={option}
+              id={option}
+              onCheckedChange={(state) => {
+                if (state) {
+                  setValue([...value, option]);
+                } else {
+                  setValue(value.filter((v) => v !== option));
+                }
+              }}
+            />
             <Label htmlFor={option}>{option}</Label>
           </div>
         ))}
-      </RadioGroup>
+      </div>
       {helperText && (
         <p
           className={cn(
@@ -246,10 +256,7 @@ function PropertiesComponent({
                   className="gap-2"
                   onClick={(e) => {
                     e.preventDefault(); // avoid submit
-                    form.setValue(
-                      "options",
-                      field.value.concat("New option" + field.value.length),
-                    );
+                    form.setValue("options", field.value.concat("New option"));
                   }}
                 >
                   <AiOutlinePlus />
@@ -322,7 +329,7 @@ function PropertiesComponent({
   );
 }
 
-export const SingleSelectFieldFormElement: FormElement = {
+export const MultiSelectFieldFormElement: FormElement = {
   type,
   construct: (id: string) => ({
     id,
@@ -330,8 +337,8 @@ export const SingleSelectFieldFormElement: FormElement = {
     extraAttributes,
   }),
   designerButton: {
-    icon: MdOutlineRadioButtonChecked,
-    label: "Single Select",
+    icon: GoCheckbox,
+    label: "Multi Select",
   },
   designerComponent: DesignerComponent,
   formComponent: FormComponent,
