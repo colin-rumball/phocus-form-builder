@@ -48,6 +48,7 @@ const DesignerDrawer = ({ className }: DesignerDrawerProps) => {
               <DrawerBtnElement formElement={FormElements.TextField} />
               <DrawerBtnElement formElement={FormElements.TextAreaField} />
               <DrawerBtnElement formElement={FormElements.NumberField} />
+              <DrawerBtnElement formElement={FormElements.PhoneNumberField} />
               <DrawerBtnElement formElement={FormElements.DateField} />
               <DrawerBtnElement formElement={FormElements.SelectField} />
               <DrawerBtnElement formElement={FormElements.CheckboxField} />
@@ -95,11 +96,13 @@ const DrawerBtnElement = ({ formElement }: { formElement: FormElement }) => {
     <DrawerClose asChild>
       <Button
         variant={"outline"}
-        className={cn("flex h-[120px] w-[120px] flex-col gap-2")}
+        className={cn(
+          "flex h-[120px] w-[120px] flex-col items-center justify-center gap-2",
+        )}
         onClick={onClick}
       >
         <Icon className="h-8 w-8 text-primary" />
-        <p className="">{label}</p>
+        <p className="whitespace-break-spaces text-center">{label}</p>
       </Button>
     </DrawerClose>
   );

@@ -3,6 +3,7 @@ import { DateFieldFormElement } from "./fields/date-field";
 import { NumberFieldFormElement } from "./fields/number-field";
 import { OpenAIFieldFormElement } from "./fields/openai-field";
 import { ParagraphFieldFormElement } from "./fields/paragraph-field";
+import { PhoneNumberFieldFormElement } from "./fields/phone-number-field";
 import { SelectFieldFormElement } from "./fields/select-field";
 import { SeparatorFieldFormElement } from "./fields/separator-field";
 import { SpacerFieldFormElement } from "./fields/spacer-field";
@@ -19,6 +20,7 @@ export type ElementsType =
   | "SeparatorField"
   | "SpacerField"
   | "NumberField"
+  | "PhoneNumberField"
   | "TextAreaField"
   | "DateField"
   | "SelectField"
@@ -69,6 +71,7 @@ export const FormElements: FormElementsType = {
   SeparatorField: SeparatorFieldFormElement,
   SpacerField: SpacerFieldFormElement,
   NumberField: NumberFieldFormElement,
+  PhoneNumberField: PhoneNumberFieldFormElement,
   TextAreaField: TextAreaFieldFormElement,
   DateField: DateFieldFormElement,
   SelectField: SelectFieldFormElement,
