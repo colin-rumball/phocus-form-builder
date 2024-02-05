@@ -175,7 +175,6 @@ function PropertiesComponent({
       ...elementTyped,
       extraAttributes: { ...data },
     });
-    console.log("SAVED");
   };
 
   return (

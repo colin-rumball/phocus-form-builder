@@ -228,7 +228,7 @@ const PropertiesComponent = ({ element }: { element: FormElementInstance }) => {
           control={form.control}
           name="rows"
           render={({ field }) => (
-            <FormItem>
+            <FormItem className="my-4">
               <FormLabel>Rows {field.value}</FormLabel>
               <FormControl>
                 <Slider

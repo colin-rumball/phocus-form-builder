@@ -27,6 +27,7 @@ const SaveFormBtn = ({ formId }: { formId: string }) => {
       savedAt: state.savedAt,
       setSavedAt: state.setSavedAt,
     }));
+  const { clear } = useDesigner.temporal.getState();
   const [loading, startTransition] = useTransition();
   const updateForm = useMutation(api.forms.update);
 
@@ -39,8 +40,9 @@ const SaveFormBtn = ({ formId }: { formId: string }) => {
           content: JsonElements,
         },
       });
-      setUnsavedChanges(false);
+      if (unsavedChanges) setUnsavedChanges(false);
       setSavedAt(new Date());
+      clear();
       toast({
         title: "Success",
         description: "Your form has been saved",
@@ -78,7 +80,7 @@ const SaveFormBtn = ({ formId }: { formId: string }) => {
                 !unsavedChanges && "bg-green-700 hover:bg-green-500",
               )}
               variant={"secondary"}
-              disabled={loading}
+              disabled={loading || !unsavedChanges}
               onClick={() => {
                 startTransition(postFormContent);
               }}

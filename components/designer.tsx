@@ -24,7 +24,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "./ui/dialog";
-import { FaSpinner } from "react-icons/fa";
+import { FaEraser, FaSpinner } from "react-icons/fa";
 import { Textarea } from "./ui/textarea";
 import { api } from "@/convex/_generated/api";
 import { useAction } from "convex/react";
@@ -33,6 +33,17 @@ import { SiOpenai } from "react-icons/si";
 import DesignerDrawer from "./designer-drawer";
 import { PiDotsSixBold } from "react-icons/pi";
 import FormElementInspector from "./form-element-inspector";
+import { CiEraser } from "react-icons/ci";
+import { HiTrash } from "react-icons/hi2";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "./ui/tooltip";
+import { formatDistance } from "date-fns";
+import { RxReset } from "react-icons/rx";
+import { TooltipArrow } from "@radix-ui/react-tooltip";
 
 type DesignerProps = ComponentPropsWithoutRef<"div">;
 
@@ -41,19 +52,21 @@ const Designer = ({ className }: DesignerProps) => {
     elements,
     addElement,
     selectedElement,
+    removeAllElements,
     setSelectedElement,
     moveElement,
   } = useDesigner((state) => ({
     elements: state.elements,
     addElement: state.addElement,
+    removeAllElements: state.removeAllElements,
     selectedElement: state.selectedElement,
     setSelectedElement: state.setSelectedElement,
     moveElement: state.moveElement,
   }));
+  const { undo, pastStates } = useDesigner.temporal.getState();
 
   const [generating, startTransition] = useTransition();
   const [openAIUserInput, setOpenAIUserInput] = useState("");
-  const selectedIndex = useRef(0);
   const [dialogOpen, setDialogOpen] = useState(false);
   const generate = useAction(api.openai.generate);
 
@@ -211,6 +224,50 @@ const Designer = ({ className }: DesignerProps) => {
             )}
           >
             <DesignerDrawer />
+
+            {pastStates.length > 0 && (
+              <TooltipProvider delayDuration={300}>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant={"secondary"}
+                      className="h-auto rounded-full p-3"
+                      onClick={() => {
+                        undo();
+                        setSelectedElement(null);
+                      }}
+                    >
+                      <RxReset className="h-7 w-7" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent side="top">
+                    <p>Undo</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            )}
+
+            {elements.length !== 0 && (
+              <TooltipProvider delayDuration={300}>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant={"destructive"}
+                      className="h-auto rounded-full p-3"
+                      onClick={() => {
+                        setSelectedElement(null);
+                        removeAllElements();
+                      }}
+                    >
+                      <HiTrash className="h-7 w-7" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent side="top">
+                    <p>Delete all elements</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            )}
 
             {elements.length !== 0 && (
               <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>

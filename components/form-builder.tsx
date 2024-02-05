@@ -42,6 +42,7 @@ const FormBuilder = ({ formId }: { formId: Id<"forms"> }) => {
       setSavedAt: state.setSavedAt,
     }),
   );
+  const { pause, resume } = useDesigner.temporal.getState();
   const { currentTab, setCurrentTab } = useBuilderTabs((state) => ({
     currentTab: state.currentTab,
     setCurrentTab: state.setCurrentTab,
@@ -55,6 +56,7 @@ const FormBuilder = ({ formId }: { formId: Id<"forms"> }) => {
 
   useEffect(() => {
     if (form) {
+      pause();
       if (form.content !== "") {
         // TODO: handle parsing errors
         const JsonElements = JSON.parse(form.content) as FormElementInstance[];
@@ -63,6 +65,7 @@ const FormBuilder = ({ formId }: { formId: Id<"forms"> }) => {
         setElements([], false);
       }
       setSavedAt(form.updatedAt ? new Date(form.updatedAt) : null);
+      resume();
     }
   }, [form, setSelectedElement, setElements]);
 
