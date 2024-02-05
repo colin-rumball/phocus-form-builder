@@ -1,5 +1,6 @@
 import { CheckboxFieldFormElement } from "./fields/checkbox-field";
 import { DateFieldFormElement } from "./fields/date-field";
+import { EmailFieldFormElement } from "./fields/email-field";
 import { NumberFieldFormElement } from "./fields/number-field";
 import { OpenAIFieldFormElement } from "./fields/openai-field";
 import { ParagraphFieldFormElement } from "./fields/paragraph-field";
@@ -21,6 +22,7 @@ export type ElementsType =
   | "SpacerField"
   | "NumberField"
   | "PhoneNumberField"
+  | "EmailField"
   | "TextAreaField"
   | "DateField"
   | "SelectField"
@@ -72,6 +74,7 @@ export const FormElements: FormElementsType = {
   SpacerField: SpacerFieldFormElement,
   NumberField: NumberFieldFormElement,
   PhoneNumberField: PhoneNumberFieldFormElement,
+  EmailField: EmailFieldFormElement,
   TextAreaField: TextAreaFieldFormElement,
   DateField: DateFieldFormElement,
   SelectField: SelectFieldFormElement,

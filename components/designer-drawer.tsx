@@ -49,6 +49,7 @@ const DesignerDrawer = ({ className }: DesignerDrawerProps) => {
               <DrawerBtnElement formElement={FormElements.TextAreaField} />
               <DrawerBtnElement formElement={FormElements.NumberField} />
               <DrawerBtnElement formElement={FormElements.PhoneNumberField} />
+              <DrawerBtnElement formElement={FormElements.EmailField} />
               <DrawerBtnElement formElement={FormElements.DateField} />
               <DrawerBtnElement formElement={FormElements.SelectField} />
               <DrawerBtnElement formElement={FormElements.CheckboxField} />

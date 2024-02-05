@@ -1,6 +1,6 @@
 "use client";
 
-import { MdTextFields } from "react-icons/md";
+import { MdOutlineEmail, MdTextFields } from "react-icons/md";
 import {
   SubmitFunction,
   type ElementsType,
@@ -28,10 +28,10 @@ import { Switch } from "../ui/switch";
 import { cn } from "@/lib/utils";
 import { Bs123, BsPhone } from "react-icons/bs";
 
-const type: ElementsType = "PhoneNumberField";
+const type: ElementsType = "EmailField";
 
 const extraAttributes = {
-  label: "Phone Number Field Label",
+  label: "Email Field Label",
   helperText: "Helper text",
   required: false,
   placeholder: "",
@@ -85,18 +85,14 @@ const FormComponent = ({
         {required && "*"}
       </Label>
       <Input
-        type="tel"
-        pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
+        type="email"
         className={cn(error && "border-red-500")}
         placeholder={placeholder}
         onChange={(e) => {
           setValue(e.target.value);
         }}
         onBlur={(e) => {
-          const valid = PhoneNumberFieldFormElement.validate(
-            element,
-            e.target.value,
-          );
+          const valid = EmailFieldFormElement.validate(element, e.target.value);
           setError(!valid);
           if (!valid || !submitValue) return;
           submitValue(element.id, e.target.value);
@@ -247,7 +243,7 @@ const PropertiesComponent = ({ element }: { element: FormElementInstance }) => {
   );
 };
 
-export const PhoneNumberFieldFormElement: FormElement = {
+export const EmailFieldFormElement: FormElement = {
   type,
   construct: (id) => ({
     id,
@@ -255,8 +251,8 @@ export const PhoneNumberFieldFormElement: FormElement = {
     extraAttributes: extraAttributes,
   }),
   designerButton: {
-    icon: BsPhone,
-    label: "Phone Field",
+    icon: MdOutlineEmail,
+    label: "Email Input",
   },
   designerComponent: DesignerComponent,
   formComponent: FormComponent,
@@ -267,11 +263,12 @@ export const PhoneNumberFieldFormElement: FormElement = {
       return value.length > 0;
     }
 
-    // valudate value has phone number format
-    const phoneRegex =
-      /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im;
-    if (value.length > 0 && !phoneRegex.test(value)) {
-      return false;
+    if (value.length > 0) {
+      try {
+        z.string().email().parse(value);
+      } catch (error) {
+        return false;
+      }
     }
 
     return true;
