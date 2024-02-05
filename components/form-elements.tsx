@@ -7,6 +7,7 @@ import { ParagraphFieldFormElement } from "./fields/paragraph-field";
 import { PhoneNumberFieldFormElement } from "./fields/phone-number-field";
 import { SelectFieldFormElement } from "./fields/select-field";
 import { SeparatorFieldFormElement } from "./fields/separator-field";
+import { SingleSelectFieldFormElement } from "./fields/single-select-field";
 import { SpacerFieldFormElement } from "./fields/spacer-field";
 import { SubtitleFieldFormElement } from "./fields/subtitle-field";
 import { TextAreaFieldFormElement } from "./fields/text-area-field";
@@ -26,6 +27,7 @@ export type ElementsType =
   | "TextAreaField"
   | "DateField"
   | "SelectField"
+  | "SingleSelectField"
   | "CheckboxField"
   | "OpenAIField";
 
@@ -78,6 +80,7 @@ export const FormElements: FormElementsType = {
   TextAreaField: TextAreaFieldFormElement,
   DateField: DateFieldFormElement,
   SelectField: SelectFieldFormElement,
+  SingleSelectField: SingleSelectFieldFormElement,
   CheckboxField: CheckboxFieldFormElement,
   OpenAIField: OpenAIFieldFormElement,
 };
