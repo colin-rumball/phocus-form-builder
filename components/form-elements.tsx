@@ -1,6 +1,7 @@
 import { CheckboxFieldFormElement } from "./fields/checkbox-field";
 import { DateFieldFormElement } from "./fields/date-field";
 import { EmailFieldFormElement } from "./fields/email-field";
+import { ImageFieldFormElement } from "./fields/image-field";
 import { MultiSelectFieldFormElement } from "./fields/multi-select-field";
 import { NumberFieldFormElement } from "./fields/number-field";
 import { OpenAIFieldFormElement } from "./fields/openai-field";
@@ -31,6 +32,7 @@ export type ElementsType =
   | "SingleSelectField"
   | "MultiSelectField"
   | "CheckboxField"
+  | "ImageField"
   | "OpenAIField";
 
 export type FormElementFormComponentProps = {
@@ -85,5 +87,6 @@ export const FormElements: FormElementsType = {
   SingleSelectField: SingleSelectFieldFormElement,
   MultiSelectField: MultiSelectFieldFormElement,
   CheckboxField: CheckboxFieldFormElement,
+  ImageField: ImageFieldFormElement,
   OpenAIField: OpenAIFieldFormElement,
 };

@@ -5,6 +5,15 @@
 await import("./env.js");
 
 /** @type {import("next").NextConfig} */
-const config = {};
+const config = {
+  reactStrictMode: true,
+  images: {
+    domains: ["utfs.io"],
+  },
+  i18n: {
+    locales: ["en"],
+    defaultLocale: "en",
+  },
+};
 
 export default config;

@@ -42,6 +42,7 @@ const DesignerDrawer = ({ className }: DesignerDrawerProps) => {
               <DrawerBtnElement formElement={FormElements.ParagraphField} />
               <DrawerBtnElement formElement={FormElements.SeparatorField} />
               <DrawerBtnElement formElement={FormElements.SpacerField} />
+              <DrawerBtnElement formElement={FormElements.ImageField} />
             </DrawerSection>
 
             <DrawerSection title="Form Elements">
