@@ -1,18 +1,9 @@
 "use client";
 
 import { cn, generateId } from "@/lib/utils";
-import {
-  useState,
-  type ComponentPropsWithoutRef,
-  useTransition,
-  useRef,
-} from "react";
+import { useState, type ComponentPropsWithoutRef, useTransition } from "react";
 import { useDndMonitor, useDraggable, useDroppable } from "@dnd-kit/core";
-import {
-  type ElementsType,
-  type FormElementInstance,
-  FormElements,
-} from "./form-elements";
+import { type FormElementInstance, FormElements } from "./form-elements";
 import useDesigner from "@/lib/hooks/useDesigner";
 import { Button } from "./ui/button";
 import {
@@ -24,7 +15,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "./ui/dialog";
-import { FaEraser, FaSpinner } from "react-icons/fa";
 import { Textarea } from "./ui/textarea";
 import { api } from "@/convex/_generated/api";
 import { useAction } from "convex/react";
@@ -33,7 +23,6 @@ import { SiOpenai } from "react-icons/si";
 import DesignerDrawer from "./designer-drawer";
 import { PiDotsSixBold } from "react-icons/pi";
 import FormElementInspector from "./form-element-inspector";
-import { CiEraser } from "react-icons/ci";
 import { HiTrash } from "react-icons/hi2";
 import {
   Tooltip,
@@ -41,9 +30,8 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "./ui/tooltip";
-import { formatDistance } from "date-fns";
 import { RxReset } from "react-icons/rx";
-import { TooltipArrow } from "@radix-ui/react-tooltip";
+import SimpleLoadingSpinner from "./loading-icons";
 
 type DesignerProps = ComponentPropsWithoutRef<"div">;
 
@@ -303,7 +291,7 @@ const Designer = ({ className }: DesignerProps) => {
                       }}
                     >
                       Generate{" "}
-                      {generating && <FaSpinner className="animate-spin" />}
+                      {generating && <SimpleLoadingSpinner className="" />}
                     </Button>
                   </DialogFooter>
                 </DialogContent>

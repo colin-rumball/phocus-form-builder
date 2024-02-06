@@ -17,13 +17,14 @@ import { IoCloseOutline } from "react-icons/io5";
 import { SignInButton, UserButton } from "@clerk/nextjs";
 import ThemeSwitcher from "../theme-switcher";
 import { useConvexAuth, useMutation, useQuery } from "convex/react";
-import { FaRegUser, FaSpinner } from "react-icons/fa";
+import { FaRegUser } from "react-icons/fa";
 import { type Id } from "@/convex/_generated/dataModel";
 import { api } from "@/convex/_generated/api";
 import Headline from "./headline";
 import useHeader from "@/lib/hooks/useHeader";
 import { Input } from "./input";
 import FormBuilderHeader from "../form-builder-header";
+import { Skeleton } from "./skeleton";
 
 type HeaderProps = ComponentPropsWithRef<"header">;
 
@@ -138,7 +139,7 @@ const FormHeaderInfo = () => {
 
   return (
     <div className="pointer-events-none absolute inset-y-0 left-1/2 flex w-full -translate-x-1/2 flex-col items-center justify-evenly">
-      {!form && <FaSpinner className="h-5 w-7 animate-spin" />}
+      {!form && <Skeleton className="h-10 w-56" />}
       {!!form && (
         <div
           className={cn(
@@ -263,7 +264,7 @@ const UserOptions = () => {
     <div className="flex items-center space-x-lg">
       <ThemeSwitcher />
       <div className="min-w-8">
-        {isLoading && <FaSpinner className="h-5 w-7 animate-spin" />}
+        {isLoading && <Skeleton className="h-7 w-7" />}
         {!isLoading && isAuthenticated && <UserButton afterSignOutUrl="/" />}
         {!isLoading && !isAuthenticated && (
           <SignInButton>

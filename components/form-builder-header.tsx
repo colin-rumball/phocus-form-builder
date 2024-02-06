@@ -1,6 +1,6 @@
 "use client";
 
-import { type Id } from "@/convex/_generated/dataModel";
+import { type Doc, type Id } from "@/convex/_generated/dataModel";
 import { cn } from "@/lib/utils";
 import SaveFormBtn from "./save-form-btn";
 import { Link } from "./ui/link";
@@ -11,7 +11,6 @@ import PublishFormBtn from "./publish-form-btn";
 import { useParams } from "next/navigation";
 import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
-import { ImSpinner2 } from "react-icons/im";
 
 const FormBuilderHeader = () => {
   const params = useParams();
@@ -30,27 +29,18 @@ const FormBuilderHeader = () => {
         <MdOutlineKeyboardDoubleArrowLeft />
         <span>Dashboard</span>
       </Link>
-      {form && !form.published && (
-        <>
-          <BuilderTabs />
-          <div className="mr-lg flex h-full items-center gap-2">
-            <SaveFormBtn formId={form._id} />
-            <PublishFormBtn formId={form._id} />
-          </div>
-        </>
-      )}
-      {!form && (
-        <div className="absolute inset-x-0 flex w-full justify-center">
-          <ImSpinner2 className="h-12 w-12 animate-spin text-foreground" />
-        </div>
-      )}
+      <BuilderTabs form={form} />
+      <div className="mr-lg flex h-full items-center gap-2">
+        <SaveFormBtn form={form} />
+        <PublishFormBtn form={form} />
+      </div>
     </div>
   );
 };
 
 export default FormBuilderHeader;
 
-const BuilderTabs = () => {
+const BuilderTabs = ({ form }: { form?: Doc<"forms"> | null }) => {
   const { elements } = useDesigner((state) => ({
     elements: state.elements,
   }));
@@ -70,24 +60,27 @@ const BuilderTabs = () => {
   return (
     <div className="absolute inset-y-0 left-1/2 flex h-full -translate-x-1/2 items-center px-xl text-foreground">
       <button
+        disabled={!form}
         className={cn(
-          "flex h-full w-[130px] items-center justify-center px-lg text-center uppercase opacity-60 transition-all duration-500",
-          "font-bold hover:opacity-90",
-          currentTab === "DESIGN" && "text-primary opacity-100",
+          "flex h-full w-[130px] items-center justify-center px-lg text-center uppercase opacity-40 transition-all duration-100",
+          "font-bold hover:opacity-80",
+          currentTab === "DESIGN" &&
+            "font-bold text-primary-foreground opacity-100",
         )}
         onClick={() => setTabWrapper("DESIGN")}
       >
         Design
       </button>
       <button
+        disabled={!form || elements.length === 0}
         className={cn(
-          "flex h-full w-[130px] items-center justify-center px-lg text-center uppercase opacity-60 transition-all duration-500",
-          "font-bold hover:opacity-90",
-          currentTab === "PREVIEW" && "text-primary opacity-100",
+          "flex h-full w-[130px] items-center justify-center px-lg text-center uppercase opacity-40 transition-all duration-100",
+          "font-bold hover:opacity-80",
+          currentTab === "PREVIEW" &&
+            "font-bold text-primary-foreground opacity-100",
           elements.length === 0 && "pointer-events-none select-none opacity-20",
         )}
         onClick={() => setTabWrapper("PREVIEW")}
-        disabled={elements.length === 0}
       >
         Preview
       </button>

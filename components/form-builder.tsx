@@ -19,7 +19,6 @@ import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { toast } from "./ui/use-toast";
 import Section from "./ui/section";
-import { ImSpinner2 } from "react-icons/im";
 import { Input } from "./ui/input";
 import { Link } from "./ui/link";
 import { BsArrowLeft, BsArrowRight } from "react-icons/bs";
@@ -27,11 +26,10 @@ import useBuilderTabs, {
   type BuilderTab,
   tabMap,
 } from "@/lib/hooks/useBuilderTabs";
-import FormGenerator from "./form-generator";
 import { AnimatePresence, motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import FormPreviewer from "./form-previewer";
-import FormPublisher from "./form-publisher";
+import SimpleLoadingSpinner from "./loading-icons";
 
 const FormBuilder = ({ formId }: { formId: Id<"forms"> }) => {
   const form = useQuery(api.forms.get, { id: formId });
@@ -86,9 +84,9 @@ const FormBuilder = ({ formId }: { formId: Id<"forms"> }) => {
 
   if (!form) {
     return (
-      <Section className="my-xl flex justify-center">
-        <ImSpinner2 className="h-12 w-12 animate-spin" />
-      </Section>
+      <div className="flex h-full w-full flex-grow items-center justify-center">
+        <SimpleLoadingSpinner className="h-12 w-12" />
+      </div>
     );
   }
 

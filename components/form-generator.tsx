@@ -12,9 +12,9 @@ import useDesigner from "@/lib/hooks/useDesigner";
 import { useAction } from "convex/react";
 import { type FormElementInstance } from "./form-elements";
 import { Button } from "./ui/button";
-import { FaSpinner } from "react-icons/fa";
 import { Textarea } from "./ui/textarea";
 import useBuilderTabs from "@/lib/hooks/useBuilderTabs";
+import SimpleLoadingSpinner from "./loading-icons";
 
 type FormGeneratorProps = ComponentPropsWithoutRef<"div">;
 
@@ -96,7 +96,7 @@ const FormGenerator = ({ className }: FormGeneratorProps) => {
               }}
             >
               Generate form using AI{" "}
-              {generating && <FaSpinner className="animate-spin" />}
+              {generating && <SimpleLoadingSpinner className="" />}
             </Button>
           )}
         </CardFooter>

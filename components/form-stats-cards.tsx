@@ -1,9 +1,7 @@
 "use client";
 
-import { api } from "@/convex/_generated/api";
-import { Doc, type Id } from "@/convex/_generated/dataModel";
+import { type Doc } from "@/convex/_generated/dataModel";
 import { cn } from "@/lib/utils";
-import { useQuery } from "convex/react";
 import { type ReactNode, type ComponentPropsWithoutRef } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Skeleton } from "./ui/skeleton";

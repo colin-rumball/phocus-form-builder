@@ -5,7 +5,6 @@ import useDesigner from "@/lib/hooks/useDesigner";
 import { cn, generateId } from "@/lib/utils";
 import { useAction } from "convex/react";
 import { useTransition, useState } from "react";
-import { FaSpinner } from "react-icons/fa";
 import { SiOpenai } from "react-icons/si";
 import { type FormElementInstance } from "./form-elements";
 import {
@@ -19,6 +18,7 @@ import {
 } from "./ui/dialog";
 import { Textarea } from "./ui/textarea";
 import { Button } from "./ui/button";
+import SimpleLoadingSpinner from "./loading-icons";
 
 const GenerateFormBtn = () => {
   const [generating, startTransition] = useTransition();
@@ -93,7 +93,7 @@ const GenerateFormBtn = () => {
               startTransition(generateForm);
             }}
           >
-            Generate {generating && <FaSpinner className="animate-spin" />}
+            Generate {generating && <SimpleLoadingSpinner className="" />}
           </Button>
         </DialogFooter>
       </DialogContent>

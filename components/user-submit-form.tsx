@@ -4,11 +4,11 @@ import React, { useCallback, useRef, useState, useTransition } from "react";
 import { Button } from "./ui/button";
 import { HiCursorClick } from "react-icons/hi";
 import { toast } from "./ui/use-toast";
-import { ImSpinner2 } from "react-icons/im";
 import { useMutation } from "convex/react";
 import { type Id } from "@/convex/_generated/dataModel";
 import { type FormElementInstance, FormElements } from "./form-elements";
 import { api } from "@/convex/_generated/api";
+import SimpleLoadingSpinner from "./loading-icons";
 
 function UserSubmitForm({
   formId,
@@ -120,7 +120,7 @@ function UserSubmitForm({
               Submit
             </>
           )}
-          {pending && <ImSpinner2 className="animate-spin" />}
+          {pending && <SimpleLoadingSpinner className="" />}
         </Button>
       </div>
     </div>

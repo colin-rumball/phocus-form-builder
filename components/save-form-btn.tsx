@@ -1,12 +1,11 @@
 "use client";
 
 import { api } from "@/convex/_generated/api";
-import { type Id } from "@/convex/_generated/dataModel";
+import { Doc, type Id } from "@/convex/_generated/dataModel";
 import useDesigner from "@/lib/hooks/useDesigner";
 import { cn } from "@/lib/utils";
 import { useMutation } from "convex/react";
 import { useTransition } from "react";
-import { FaSpinner } from "react-icons/fa";
 import { HiCheck, HiSaveAs } from "react-icons/hi";
 import { toast } from "./ui/use-toast";
 import { Button } from "./ui/button";
@@ -17,8 +16,10 @@ import {
   TooltipContent,
 } from "./ui/tooltip";
 import { formatDistance } from "date-fns";
+import SimpleLoadingSpinner from "./loading-icons";
+import { Skeleton } from "./ui/skeleton";
 
-const SaveFormBtn = ({ formId }: { formId: string }) => {
+const SaveFormBtn = ({ form }: { form?: Doc<"forms"> | null }) => {
   const { elements, unsavedChanges, setUnsavedChanges, savedAt, setSavedAt } =
     useDesigner((state) => ({
       elements: state.elements,
@@ -33,9 +34,10 @@ const SaveFormBtn = ({ formId }: { formId: string }) => {
 
   const postFormContent = async () => {
     try {
+      if (!form) return;
       const JsonElements = JSON.stringify(elements);
       await updateForm({
-        id: formId as Id<"forms">,
+        id: form._id,
         data: {
           content: JsonElements,
         },
@@ -71,36 +73,39 @@ const SaveFormBtn = ({ formId }: { formId: string }) => {
           <span>CHANGES</span>
         </div>
       )}
-      <TooltipProvider delayDuration={300}>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Button
-              className={cn(
-                "gap-2 opacity-100 transition-all",
-                !unsavedChanges && "bg-green-700 hover:bg-green-500",
-              )}
-              variant={"secondary"}
-              disabled={loading || !unsavedChanges}
-              onClick={() => {
-                startTransition(postFormContent);
-              }}
-            >
-              {!unsavedChanges && <HiCheck className="h-4 w-4" />}
-              {unsavedChanges && !loading && <HiSaveAs className="h-4 w-4" />}
-              <span>{btnText}</span>
-              {loading && <FaSpinner className="animate-spin" />}
-            </Button>
-          </TooltipTrigger>
-          {savedAt !== null && (
-            <TooltipContent side="bottom" className="mx-2">
-              <p>
-                Form last saved{" "}
-                {formatDistance(savedAt, Date.now(), { addSuffix: true })}
-              </p>
-            </TooltipContent>
-          )}
-        </Tooltip>
-      </TooltipProvider>
+      {!form && <Skeleton className="h-8 w-28" />}
+      {!!form && (
+        <TooltipProvider delayDuration={300}>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                className={cn(
+                  "gap-2 opacity-100 transition-all",
+                  !unsavedChanges && "bg-green-600 hover:bg-green-400",
+                )}
+                variant={"secondary"}
+                disabled={loading || !unsavedChanges}
+                onClick={() => {
+                  startTransition(postFormContent);
+                }}
+              >
+                {!unsavedChanges && <HiCheck className="h-4 w-4" />}
+                {unsavedChanges && !loading && <HiSaveAs className="h-4 w-4" />}
+                <span>{btnText}</span>
+                {loading && <SimpleLoadingSpinner className="" />}
+              </Button>
+            </TooltipTrigger>
+            {savedAt !== null && (
+              <TooltipContent side="bottom" className="mx-2">
+                <p>
+                  Form last saved{" "}
+                  {formatDistance(savedAt, Date.now(), { addSuffix: true })}
+                </p>
+              </TooltipContent>
+            )}
+          </Tooltip>
+        </TooltipProvider>
+      )}
     </div>
   );
 };

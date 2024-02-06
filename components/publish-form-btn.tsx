@@ -1,10 +1,9 @@
 import { api } from "@/convex/_generated/api";
-import { type Id } from "@/convex/_generated/dataModel";
+import { Doc, type Id } from "@/convex/_generated/dataModel";
 import useDesigner from "@/lib/hooks/useDesigner";
 import { cn } from "@/lib/utils";
 import { useMutation } from "convex/react";
 import { useState, useTransition } from "react";
-import { FaSpinner } from "react-icons/fa";
 import { MdOutlinePublish } from "react-icons/md";
 import {
   AlertDialogHeader,
@@ -19,8 +18,10 @@ import {
 } from "./ui/alert-dialog";
 import { toast } from "./ui/use-toast";
 import { Button } from "./ui/button";
+import SimpleLoadingSpinner from "./loading-icons";
+import { Skeleton } from "./ui/skeleton";
 
-const PublishFormBtn = ({ formId }: { formId: Id<"forms"> }) => {
+const PublishFormBtn = ({ form }: { form?: Doc<"forms"> | null }) => {
   const { elements } = useDesigner((state) => ({
     elements: state.elements,
   }));
@@ -30,8 +31,9 @@ const PublishFormBtn = ({ formId }: { formId: Id<"forms"> }) => {
 
   const publishForm = async () => {
     try {
+      if (!form) return;
       await updateForm({
-        id: formId,
+        id: form._id,
         data: {
           content: JSON.stringify(elements),
           published: true,
@@ -53,48 +55,53 @@ const PublishFormBtn = ({ formId }: { formId: Id<"forms"> }) => {
   };
 
   return (
-    <AlertDialog open={dialogOpen} onOpenChange={setDialogOpen}>
-      <AlertDialogTrigger asChild>
-        <Button
-          disabled={elements.length === 0 || loading}
-          className={cn(
-            "w-full gap-2 bg-gradient-to-r from-indigo-400 to-secondary text-white",
-          )}
-        >
-          <MdOutlinePublish className="h-4 w-4" /> Publish
-        </Button>
-      </AlertDialogTrigger>
-      <AlertDialogContent>
-        <AlertDialogHeader>
-          <AlertDialogTitle>
-            Are you sure you want to publish this form?
-          </AlertDialogTitle>
-          <AlertDialogDescription>
-            This action cannot be undone.
-            <br />
-            Once published, you will not be able to edit this form.
-            <br />
-            <br />
-            <span className="">
-              By publishing this form you will make it available to the public
-              and you will be able to collect submissions.
-            </span>
-          </AlertDialogDescription>
-        </AlertDialogHeader>
-        <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction
-            disabled={loading}
-            onClick={(e) => {
-              e.preventDefault();
-              startTransition(publishForm);
-            }}
-          >
-            Proceed {loading && <FaSpinner className="animate-spin" />}
-          </AlertDialogAction>
-        </AlertDialogFooter>
-      </AlertDialogContent>
-    </AlertDialog>
+    <>
+      {!form && <Skeleton className="h-8 w-28" />}
+      {!!form && (
+        <AlertDialog open={dialogOpen} onOpenChange={setDialogOpen}>
+          <AlertDialogTrigger asChild>
+            <Button
+              disabled={elements.length === 0 || loading}
+              className={cn(
+                "w-full gap-2 bg-gradient-to-r from-indigo-500 to-cyan-500 text-white",
+              )}
+            >
+              <MdOutlinePublish className="h-4 w-4" /> Publish
+            </Button>
+          </AlertDialogTrigger>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>
+                Are you sure you want to publish this form?
+              </AlertDialogTitle>
+              <AlertDialogDescription>
+                This action cannot be undone.
+                <br />
+                Once published, you will not be able to edit this form.
+                <br />
+                <br />
+                <span className="">
+                  By publishing this form you will make it available to the
+                  public and you will be able to collect submissions.
+                </span>
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Cancel</AlertDialogCancel>
+              <AlertDialogAction
+                disabled={loading}
+                onClick={(e) => {
+                  e.preventDefault();
+                  startTransition(publishForm);
+                }}
+              >
+                Proceed {loading && <SimpleLoadingSpinner className="" />}
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+      )}
+    </>
   );
 };
 
