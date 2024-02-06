@@ -11,6 +11,8 @@ import PublishFormBtn from "./publish-form-btn";
 import { useParams } from "next/navigation";
 import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
+import DeleteAllBtn from "./delete-all-btn";
+import UndoBtn from "./undo-btn";
 
 const FormBuilderHeader = () => {
   const params = useParams();
@@ -34,6 +36,8 @@ const FormBuilderHeader = () => {
         </Link>
         <BuilderTabs form={form} />
         <div className="mr-lg flex h-full items-center gap-2">
+          <UndoBtn form={form} />
+          <DeleteAllBtn form={form} />
           <SaveFormBtn form={form} />
           <PublishFormBtn form={form} />
         </div>
@@ -66,7 +70,7 @@ const BuilderTabs = ({ form }: { form?: Doc<"forms"> | null }) => {
       <button
         disabled={!form}
         className={cn(
-          "tracking-headline flex h-full w-[160px] items-center justify-center px-lg text-center uppercase opacity-40 transition-all duration-300",
+          "flex h-full w-[160px] items-center justify-center px-lg text-center uppercase tracking-headline opacity-40 transition-all duration-300",
           "font-bold hover:opacity-80",
           currentTab === "DESIGN" && "font-bold opacity-100",
         )}
@@ -77,7 +81,7 @@ const BuilderTabs = ({ form }: { form?: Doc<"forms"> | null }) => {
       <button
         disabled={!form || elements.length === 0}
         className={cn(
-          "tracking-headline flex h-full w-[160px] items-center justify-center px-lg text-center uppercase opacity-40 transition-all duration-300",
+          "flex h-full w-[160px] items-center justify-center px-lg text-center uppercase tracking-headline opacity-40 transition-all duration-300",
           "font-bold hover:opacity-80",
           currentTab === "PREVIEW" && "font-bold opacity-100",
           elements.length === 0 && "pointer-events-none select-none opacity-20",

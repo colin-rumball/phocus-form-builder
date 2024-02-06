@@ -1,5 +1,5 @@
 import { api } from "@/convex/_generated/api";
-import { Doc, type Id } from "@/convex/_generated/dataModel";
+import { type Doc } from "@/convex/_generated/dataModel";
 import useDesigner from "@/lib/hooks/useDesigner";
 import { cn } from "@/lib/utils";
 import { useMutation } from "convex/react";
@@ -20,6 +20,12 @@ import { toast } from "./ui/use-toast";
 import { Button } from "./ui/button";
 import SimpleLoadingSpinner from "./loading-icons";
 import { Skeleton } from "./ui/skeleton";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "./ui/tooltip";
 
 const PublishFormBtn = ({ form }: { form?: Doc<"forms"> | null }) => {
   const { elements } = useDesigner((state) => ({
@@ -56,19 +62,28 @@ const PublishFormBtn = ({ form }: { form?: Doc<"forms"> | null }) => {
 
   return (
     <>
-      {!form && <Skeleton className="h-8 w-28" />}
+      {!form && <Skeleton className="h-10 w-12" />}
       {!!form && (
         <AlertDialog open={dialogOpen} onOpenChange={setDialogOpen}>
-          <AlertDialogTrigger asChild>
-            <Button
-              disabled={elements.length === 0 || loading}
-              className={cn(
-                "w-full gap-2 bg-gradient-to-r from-indigo-500 to-cyan-500 text-white",
-              )}
-            >
-              <MdOutlinePublish className="h-4 w-4" /> Publish
-            </Button>
-          </AlertDialogTrigger>
+          <TooltipProvider delayDuration={300}>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <AlertDialogTrigger asChild>
+                  <Button
+                    disabled={elements.length === 0 || loading}
+                    className={cn(
+                      "w-full gap-2 bg-gradient-to-r from-indigo-500 to-cyan-500 text-white",
+                    )}
+                  >
+                    <MdOutlinePublish />
+                  </Button>
+                </AlertDialogTrigger>
+              </TooltipTrigger>
+              <TooltipContent side="bottom">
+                <p>Publish</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
           <AlertDialogContent>
             <AlertDialogHeader>
               <AlertDialogTitle>

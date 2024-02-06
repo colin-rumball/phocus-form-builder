@@ -19,17 +19,25 @@ import { formatDistance } from "date-fns";
 import SimpleLoadingSpinner from "./loading-icons";
 import { Skeleton } from "./ui/skeleton";
 import { FaRegSave } from "react-icons/fa";
+import { RxReset } from "react-icons/rx";
 
-const SaveFormBtn = ({ form }: { form?: Doc<"forms"> | null }) => {
-  const { elements, unsavedChanges, setUnsavedChanges, savedAt, setSavedAt } =
-    useDesigner((state) => ({
-      elements: state.elements,
-      unsavedChanges: state.unsavedChanges,
-      setUnsavedChanges: state.setUnsavedChanges,
-      savedAt: state.savedAt,
-      setSavedAt: state.setSavedAt,
-    }));
-  const { clear } = useDesigner.temporal.getState();
+const UndoBtn = ({ form }: { form?: Doc<"forms"> | null }) => {
+  const {
+    elements,
+    unsavedChanges,
+    setUnsavedChanges,
+    savedAt,
+    setSavedAt,
+    setSelectedElement,
+  } = useDesigner((state) => ({
+    elements: state.elements,
+    unsavedChanges: state.unsavedChanges,
+    setUnsavedChanges: state.setUnsavedChanges,
+    savedAt: state.savedAt,
+    setSavedAt: state.setSavedAt,
+    setSelectedElement: state.setSelectedElement,
+  }));
+  const { undo, pastStates } = useDesigner.temporal.getState();
   const [loading, startTransition] = useTransition();
   const updateForm = useMutation(api.forms.update);
 
@@ -45,7 +53,7 @@ const SaveFormBtn = ({ form }: { form?: Doc<"forms"> | null }) => {
       });
       if (unsavedChanges) setUnsavedChanges(false);
       setSavedAt(new Date());
-      clear();
+      // clear();
       toast({
         title: "Success",
         description: "Your form has been saved",
@@ -68,27 +76,21 @@ const SaveFormBtn = ({ form }: { form?: Doc<"forms"> | null }) => {
           <Tooltip>
             <TooltipTrigger asChild>
               <Button
-                className={cn(
-                  "gap-2 opacity-100 transition-all",
-                  !unsavedChanges && "bg-green-600 hover:bg-green-300",
-                )}
+                className={cn("gap-2 opacity-100 transition-all")}
                 variant={"secondary"}
-                disabled={loading}
+                disabled={loading || pastStates.length === 0}
                 onClick={() => {
-                  startTransition(postFormContent);
+                  undo();
+                  setSelectedElement(null);
                 }}
               >
-                {!unsavedChanges && !loading && <HiCheck />}
-                {unsavedChanges && !loading && <FaRegSave />}
+                {!loading && <RxReset />}
                 {loading && <SimpleLoadingSpinner className="" />}
               </Button>
             </TooltipTrigger>
             {savedAt !== null && (
               <TooltipContent side="bottom" className="mx-2">
-                <p>
-                  Form last saved{" "}
-                  {formatDistance(savedAt, Date.now(), { addSuffix: true })}
-                </p>
+                <p>Undo</p>
               </TooltipContent>
             )}
           </Tooltip>
@@ -98,4 +100,4 @@ const SaveFormBtn = ({ form }: { form?: Doc<"forms"> | null }) => {
   );
 };
 
-export default SaveFormBtn;
+export default UndoBtn;

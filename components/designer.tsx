@@ -213,50 +213,6 @@ const Designer = ({ className }: DesignerProps) => {
           >
             <DesignerDrawer />
 
-            {pastStates.length > 0 && (
-              <TooltipProvider delayDuration={300}>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button
-                      variant={"secondary"}
-                      className="h-auto rounded-full p-3"
-                      onClick={() => {
-                        undo();
-                        setSelectedElement(null);
-                      }}
-                    >
-                      <RxReset className="h-7 w-7" />
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent side="top">
-                    <p>Undo</p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
-            )}
-
-            {elements.length !== 0 && (
-              <TooltipProvider delayDuration={300}>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button
-                      variant={"destructive"}
-                      className="h-auto rounded-full p-3"
-                      onClick={() => {
-                        setSelectedElement(null);
-                        removeAllElements();
-                      }}
-                    >
-                      <HiTrash className="h-7 w-7" />
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent side="top">
-                    <p>Delete all elements</p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
-            )}
-
             {elements.length !== 0 && (
               <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
                 <DialogTrigger asChild>
