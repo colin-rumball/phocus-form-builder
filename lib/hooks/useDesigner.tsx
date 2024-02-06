@@ -37,7 +37,7 @@ export type DesignerState = {
   setUnsavedChanges: (unsavedChanges: boolean) => void;
 };
 
-type PartialDesignerState = Pick<DesignerState, "elements" | "unsavedChanges">;
+type PartialDesignerState = Pick<DesignerState, "elements">;
 
 const useDesigner = create<DesignerState>()(
   temporal(
@@ -116,8 +116,8 @@ const useDesigner = create<DesignerState>()(
         currentState: PartialDesignerState,
       ) => shallow(pastState, currentState),
       partialize: (state) => {
-        const { elements, unsavedChanges } = state;
-        return { elements, unsavedChanges };
+        const { elements } = state;
+        return { elements };
       },
     },
   ),

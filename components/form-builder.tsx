@@ -1,6 +1,5 @@
 "use client";
 
-import { type Id } from "@/convex/_generated/dataModel";
 import { type ReactNode, useEffect, useRef, useState } from "react";
 import Headline from "./ui/headline";
 import { Button } from "./ui/button";
@@ -15,10 +14,9 @@ import {
 import DragOverlayWrapper from "./drag-overlay-wrapper";
 import useDesigner from "@/lib/hooks/useDesigner";
 import { type FormElementInstance } from "./form-elements";
-import { useQuery } from "convex/react";
-import { api } from "@/convex/_generated/api";
+import { usePreloadedQuery, type Preloaded } from "convex/react";
+import { type api } from "@/convex/_generated/api";
 import { toast } from "./ui/use-toast";
-import Section from "./ui/section";
 import { Input } from "./ui/input";
 import { Link } from "./ui/link";
 import { BsArrowLeft, BsArrowRight } from "react-icons/bs";
@@ -31,8 +29,12 @@ import { cn } from "@/lib/utils";
 import FormPreviewer from "./form-previewer";
 import SimpleLoadingSpinner from "./loading-icons";
 
-const FormBuilder = ({ formId }: { formId: Id<"forms"> }) => {
-  const form = useQuery(api.forms.get, { id: formId });
+const FormBuilder = ({
+  preloadedForm,
+}: {
+  preloadedForm: Preloaded<typeof api.forms.get>;
+}) => {
+  const form = usePreloadedQuery(preloadedForm);
   const { setElements, setSelectedElement, setSavedAt } = useDesigner(
     (state) => ({
       setElements: state.setElements,
@@ -143,7 +145,7 @@ const FormBuilder = ({ formId }: { formId: Id<"forms"> }) => {
 
   return (
     <DndContext sensors={sensors}>
-      <div className={cn("relative h-full w-full")}>
+      <div className={cn("relative h-full w-full flex-grow")}>
         <AnimatedTab myTab="DESIGN">
           <Designer />
         </AnimatedTab>
@@ -207,7 +209,7 @@ const AnimatedTab = ({
       {currentTab === myTab && (
         <motion.div
           className={cn(
-            "absolute inset-x-0",
+            "absolute inset-0",
             animating && "pointer-events-none select-none overflow-hidden",
           )}
           key={`${myTab}-TAB`}

@@ -28,7 +28,7 @@ const type: ElementsType = "TitleField";
 
 const extraAttributes = {
   title: "Title Field",
-  subtitle: undefined,
+  subtitle: "",
 };
 
 type CustomInstance = FormElementInstance & {
@@ -57,14 +57,14 @@ const FormComponent = ({ element }: FormElementFormComponentProps) => {
   return (
     <>
       <Headline as="h1">{title}</Headline>
-      {!!subtitle && <Headline as="h2">{subtitle}</Headline>}
+      {subtitle !== "" && <Headline as="h2">{subtitle}</Headline>}
     </>
   );
 };
 
 const propertiesSchema = z.object({
   title: z.string().min(2).max(50),
-  subtitle: z.string().max(50).optional(),
+  subtitle: z.string().max(50),
 });
 
 const PropertiesComponent = ({ element }: { element: FormElementInstance }) => {
@@ -77,6 +77,7 @@ const PropertiesComponent = ({ element }: { element: FormElementInstance }) => {
     mode: "onBlur",
     defaultValues: {
       title: elementTyped.extraAttributes.title,
+      subtitle: elementTyped.extraAttributes.subtitle,
     },
   });
 

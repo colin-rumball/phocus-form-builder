@@ -1,4 +1,4 @@
-import { FormElementInstance } from "@/components/form-elements";
+import { type FormElementInstance } from "@/components/form-elements";
 import Page from "@/components/ui/page";
 import UserSubmitForm from "@/components/user-submit-form";
 import { api } from "@/convex/_generated/api";
@@ -31,7 +31,7 @@ export default async function SubmitPage({
   const formContent = JSON.parse(rawFormContent) as FormElementInstance[];
 
   return (
-    <Page className="gap-xl">
+    <Page>
       <UserSubmitForm formId={params.id} content={formContent} />
     </Page>
   );

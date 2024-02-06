@@ -14,7 +14,7 @@ const config = {
       default: "1rem",
     },
     lineHeight: {
-      headline: "3.3rem",
+      headline: "3.8rem",
       heading: "3.3rem",
       lg: "1.3rem",
       default: "1.8rem",

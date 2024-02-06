@@ -5,7 +5,7 @@ import { Doc, type Id } from "@/convex/_generated/dataModel";
 import useDesigner from "@/lib/hooks/useDesigner";
 import { cn } from "@/lib/utils";
 import { useMutation } from "convex/react";
-import { useTransition } from "react";
+import { useCallback, useEffect, useState, useTransition } from "react";
 import { HiCheck, HiSaveAs } from "react-icons/hi";
 import { toast } from "./ui/use-toast";
 import { Button } from "./ui/button";
@@ -19,6 +19,7 @@ import { formatDistance } from "date-fns";
 import SimpleLoadingSpinner from "./loading-icons";
 import { Skeleton } from "./ui/skeleton";
 import { FaRegSave } from "react-icons/fa";
+import useThrottle from "@/lib/hooks/useThrottle";
 
 const SaveFormBtn = ({ form }: { form?: Doc<"forms"> | null }) => {
   const { elements, unsavedChanges, setUnsavedChanges, savedAt, setSavedAt } =
@@ -31,9 +32,10 @@ const SaveFormBtn = ({ form }: { form?: Doc<"forms"> | null }) => {
     }));
   const { clear } = useDesigner.temporal.getState();
   const [loading, startTransition] = useTransition();
+  const [delayedSave, setDelayedSave] = useState(false);
   const updateForm = useMutation(api.forms.update);
 
-  const postFormContent = async () => {
+  const postFormContent = useCallback(async () => {
     try {
       if (!form) return;
       const JsonElements = JSON.stringify(elements);
@@ -45,20 +47,32 @@ const SaveFormBtn = ({ form }: { form?: Doc<"forms"> | null }) => {
       });
       if (unsavedChanges) setUnsavedChanges(false);
       setSavedAt(new Date());
-      clear();
-      toast({
-        title: "Success",
-        description: "Your form has been saved",
-      });
+      // clear();
+      // toast({
+      //   title: "Success",
+      //   description: "Your form has been saved",
+      // });
     } catch (error) {
       toast({
         title: "Error",
-        description: "Something went wrong",
+        description: "Something went wrong while saving. Please try again.",
         variant: "destructive",
       });
       console.error(error);
     }
-  };
+    setDelayedSave(false);
+  }, [form, elements]);
+
+  const throttledSave = useThrottle(postFormContent, 500);
+
+  useEffect(() => {
+    if (unsavedChanges) {
+      setDelayedSave(true);
+      startTransition(throttledSave);
+    }
+  }, [unsavedChanges]);
+
+  const saving = loading || delayedSave;
 
   return (
     <>
@@ -73,14 +87,14 @@ const SaveFormBtn = ({ form }: { form?: Doc<"forms"> | null }) => {
                   !unsavedChanges && "bg-green-600 hover:bg-green-300",
                 )}
                 variant={"secondary"}
-                disabled={loading}
+                disabled={saving}
                 onClick={() => {
                   startTransition(postFormContent);
                 }}
               >
-                {!unsavedChanges && !loading && <HiCheck />}
-                {unsavedChanges && !loading && <FaRegSave />}
-                {loading && <SimpleLoadingSpinner className="" />}
+                {!unsavedChanges && !saving && <HiCheck />}
+                {unsavedChanges && !saving && <FaRegSave />}
+                {saving && <SimpleLoadingSpinner className="" />}
               </Button>
             </TooltipTrigger>
             {savedAt !== null && (
