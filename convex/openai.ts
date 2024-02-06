@@ -6,7 +6,7 @@ import { ConvexError, v } from "convex/values";
 import { api } from "./_generated/api";
 
 // Initialize the OpenAI client with the given API key
-const apiKey = process.env.OPENAI_API_KEY!;
+const apiKey = process.env.OPENAI_API_KEY;
 const openai = new OpenAI({ apiKey });
 
 export const generate = action({
