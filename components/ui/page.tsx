@@ -9,7 +9,7 @@ const Page = forwardRef<HTMLDivElement, Props>(
       <>
         <main
           ref={ref}
-          className={cn("h-full w-full flex-grow", className)}
+          className={cn("flex h-full w-full flex-grow flex-col", className)}
           style={style}
         >
           {children}

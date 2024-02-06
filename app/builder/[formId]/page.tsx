@@ -8,7 +8,7 @@ export default async function BuilderPage({
   params: { formId: string };
 }) {
   return (
-    <Page className="h-full w-full">
+    <Page>
       <FormBuilder formId={params.formId as Id<"forms">} />
     </Page>
   );
