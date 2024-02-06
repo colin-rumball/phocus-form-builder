@@ -27,13 +27,28 @@ import { RiFileUploadLine } from "react-icons/ri";
 import { UploadButton } from "../uploadthing";
 import { CiImageOn } from "react-icons/ci";
 import Image from "next/image";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
 
 const type: ElementsType = "ImageField";
 
-const extraAttributes = {
+type ImageFieldExtraAttributes = {
+  label: string;
+  helperText: string;
+  imageUrl: string | null;
+  size: "SMALL" | "MEDIUM" | "LARGE";
+};
+
+const extraAttributes: ImageFieldExtraAttributes = {
   label: "Image Field Label",
   helperText: "Helper text",
   imageUrl: null,
+  size: "MEDIUM",
 };
 
 type CustomInstance = FormElementInstance & {
@@ -44,33 +59,24 @@ const propertiesSchema = z.object({
   label: z.string().max(50),
   helperText: z.string().max(200),
   imageUrl: z.string().nullable(),
+  size: z.union([z.literal("SMALL"), z.literal("MEDIUM"), z.literal("LARGE")]),
 });
 
 const DesignerComponent = ({ element }: { element: FormElementInstance }) => {
+  const { selectedElement } = useDesigner((state) => ({
+    selectedElement: state.selectedElement,
+  }));
   const elementTyped = element as CustomInstance;
-  const { label, imageUrl, helperText } = elementTyped.extraAttributes;
+  const { label, imageUrl, helperText, size } = elementTyped.extraAttributes;
   return (
-    <div className="flex w-full flex-col gap-2">
-      <Label>{label}</Label>
-      {imageUrl && (
-        <Image
-          src={imageUrl}
-          className="h-auto w-full rounded-lg"
-          alt={helperText || "Uploaded Image"}
-          width={620}
-          height={500}
-        />
+    <div className="w-full">
+      {selectedElement === element && (
+        <Label className="font-headline text-muted-foreground">
+          Image Field
+        </Label>
       )}
-      {!imageUrl && (
-        <div className="flex h-40 w-full items-center justify-center rounded-lg border-2 border-dotted bg-transparent">
-          <RiFileUploadLine className="h-10 w-10" />
-        </div>
-      )}
-      {helperText && (
-        <p className={cn("text-[0.8rem] text-muted-foreground")}>
-          {helperText}
-        </p>
-      )}
+
+      <FormComponent element={element} />
     </div>
   );
 };
@@ -90,34 +96,41 @@ const FormComponent = ({
     }
   }, [isInvalid]);
 
-  const { label, helperText, imageUrl } = elementTyped.extraAttributes;
+  const { label, helperText, imageUrl, size } = elementTyped.extraAttributes;
   return (
-    <div className="flex w-full flex-col gap-2">
+    <div className="flex w-full flex-col items-center gap-2">
       <Label className={cn(error && "text-red-500")}>{label}</Label>
-      {imageUrl && (
-        <Image
-          src={imageUrl}
-          className="h-auto w-full rounded-lg"
-          alt={helperText || "Uploaded Image"}
-          width={620}
-          height={500}
-        />
-      )}
-      {!imageUrl && (
-        <div className="flex h-40 w-full items-center justify-center rounded-lg border-2 border-dotted bg-transparent">
-          <RiFileUploadLine className="h-10 w-10" />
-        </div>
-      )}
-      {helperText && (
-        <p
-          className={cn(
-            "text-[0.8rem] text-muted-foreground",
-            error && "text-red-500",
-          )}
-        >
-          {helperText}
-        </p>
-      )}
+      <div
+        className={cn(
+          "relative flex flex-col gap-2",
+          size === "SMALL" && "w-1/3",
+          size === "MEDIUM" && "w-2/3",
+          size === "LARGE" && "w-full",
+        )}
+      >
+        {imageUrl && (
+          <Image
+            src={imageUrl}
+            className="h-auto rounded-lg"
+            alt={helperText || "Uploaded Image"}
+            width={620}
+            height={300}
+          />
+        )}
+        {!imageUrl && (
+          <div className="flex h-40 w-full items-center justify-center rounded-lg border-2 border-dotted bg-transparent">
+            <RiFileUploadLine className="h-10 w-10" />
+          </div>
+        )}
+      </div>
+      <p
+        className={cn(
+          "w-full text-[0.8rem] text-muted-foreground",
+          error && "text-red-500",
+        )}
+      >
+        {helperText}
+      </p>
     </div>
   );
 };
@@ -136,6 +149,7 @@ const PropertiesComponent = ({ element }: { element: FormElementInstance }) => {
     defaultValues: {
       label: elementTyped.extraAttributes.label,
       helperText: elementTyped.extraAttributes.helperText,
+      size: elementTyped.extraAttributes.size,
     },
   });
 
@@ -211,6 +225,32 @@ const PropertiesComponent = ({ element }: { element: FormElementInstance }) => {
             }}
           />
         </div>
+        <FormField
+          control={form.control}
+          name="size"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Helper text</FormLabel>
+              <FormControl>
+                <Select onValueChange={(value) => field.onChange(value)}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Image Size" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="SMALL">Small</SelectItem>
+                    <SelectItem value="MEDIUM">Medium</SelectItem>
+                    <SelectItem value="LARGE">Large</SelectItem>
+                  </SelectContent>
+                </Select>
+              </FormControl>
+              <FormDescription>
+                The helper text of the field. <br /> It will be displayed below
+                the field.
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
         <FormField
           control={form.control}
           name="helperText"

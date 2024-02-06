@@ -1,6 +1,6 @@
 import "@/app/globals.css";
 
-import { Catamaran } from "next/font/google";
+import { Roboto, Quicksand } from "next/font/google";
 // import { Analytics } from "@vercel/analytics/react";
 import Providers from "@/components/providers/providers";
 import Header from "@/components/ui/header";
@@ -9,11 +9,18 @@ import Footer from "@/components/ui/footer";
 import { Toaster } from "@/components/ui/toaster";
 import NextTopLoader from "nextjs-toploader";
 
-const catamaran = Catamaran({
+const roboto = Roboto({
   subsets: ["latin"],
-  variable: "--font-body",
+  variable: "--font-family-body",
   fallback: ["Arial", "sans-serif"],
   weight: ["400", "500"],
+});
+
+const quicksand = Quicksand({
+  subsets: ["latin"],
+  variable: "--font-family-headline",
+  fallback: ["Arial", "sans-serif"],
+  weight: ["600", "500"],
 });
 
 export const metadata = {
@@ -31,7 +38,7 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <head></head>
       <body
-        className={`font-sans ${catamaran.variable} relative h-full min-h-screen overflow-x-hidden`}
+        className={`font-sans ${roboto.className} ${quicksand.variable} relative h-full min-h-screen overflow-x-hidden`}
       >
         <NextTopLoader />
         <Providers>

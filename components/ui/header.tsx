@@ -8,7 +8,7 @@ import {
   useEffect,
 } from "react";
 import Image from "next/image";
-import HeaderLogoImg from "@/public/images/logo-header.png";
+import HeaderLogoImg from "@/public/images/logo.png";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { Link } from "../ui/link";
 import { useParams, usePathname } from "next/navigation";
@@ -60,7 +60,7 @@ const Header = forwardRef<HTMLDivElement, HeaderProps>(({ className }, ref) => {
       <header
         ref={ref}
         className={cn(
-          "sticky top-0 z-header flex w-lvw bg-primary text-primary-foreground transition-transform",
+          "sticky top-0 z-header flex w-lvw bg-secondary text-foreground transition-transform",
           headerVisible ? "duration-300" : "-translate-y-header duration-500",
           className,
         )}
@@ -94,7 +94,7 @@ const ConditionalContent = () => {
 
 const BuilderHeaderContent = () => {
   return (
-    <div className="relative flex w-full items-center justify-between">
+    <div className="container relative flex w-full items-center justify-between">
       <Logo />
       <div className="flex flex-grow justify-center">
         <FormHeaderInfo />
@@ -107,7 +107,7 @@ const BuilderHeaderContent = () => {
 const SubmitHeaderContent = () => {
   return (
     <div className="container flex h-full w-full items-center justify-end">
-      <div className="absolute inset-0 left-1/2 flex w-full -translate-x-1/2 items-center justify-center">
+      <div className="absolute inset-y-0 left-1/2 flex -translate-x-1/2 items-center justify-center">
         <Logo />
       </div>
       <ThemeSwitcher />
@@ -151,8 +151,8 @@ const FormHeaderInfo = () => {
             onChange={(e) => setNameInput(e.target.value)}
             onBlur={() => onNameChanged(nameInput)}
             className={cn(
-              "mx-0 ml-0 h-full w-full truncate rounded-none border-none bg-transparent px-0 py-0 text-center text-background focus-visible:border-0 focus-visible:bg-background focus-visible:text-foreground focus-visible:ring-0 focus-visible:ring-offset-0",
-              "text-heading font-medium leading-heading",
+              "mx-0 ml-0 h-full w-full truncate rounded-none border-none bg-transparent px-0 py-0 text-center font-headline text-background focus-visible:border-0 focus-visible:bg-background focus-visible:text-foreground focus-visible:ring-0 focus-visible:ring-offset-0",
+              "text-heading leading-heading",
             )}
           />
         </div>
@@ -220,12 +220,12 @@ const Logo = () => (
     <Image
       src={HeaderLogoImg}
       alt="Formulate Logo"
-      className="h-[50px] w-auto py-2 sm:h-[70px]"
+      className="block h-[70px] w-auto py-2"
       priority
     />
-    <Headline as="h2" className="">
+    {/* <Headline as="h2" className="">
       Formulate
-    </Headline>
+    </Headline> */}
   </Link>
 );
 

@@ -175,7 +175,7 @@ const FormCard = ({
             value={nameInput}
             onChange={(e) => setNameInput(e.target.value)}
             onBlur={() => onNameChanged(nameInput)}
-            className="ml-0 mr-5 h-6 truncate rounded-none border-none px-0 py-0 text-lg focus-visible:ring-foreground"
+            className="ml-0 mr-5 h-6 truncate rounded-none border-none bg-card px-0 py-0 text-lg focus-visible:ring-foreground"
           />
           <AlertDialog>
             <DropdownMenu>

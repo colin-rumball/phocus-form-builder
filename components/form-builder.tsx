@@ -93,7 +93,7 @@ const FormBuilder = ({ formId }: { formId: Id<"forms"> }) => {
   // TODO: just redirect to the form page?
   if (form.published) {
     return (
-      <div className="container flex h-full w-full flex-col items-center justify-center">
+      <div className="my-xl flex h-full w-full flex-col items-center justify-center gap-xl">
         <Headline as="h1">Form Published</Headline>
         <Headline as="h2">Share this form</Headline>
         <Headline as="h3">

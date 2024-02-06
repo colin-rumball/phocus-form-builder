@@ -22,11 +22,13 @@ import {
   FormMessage,
 } from "../ui/form";
 import { LuHeading1 } from "react-icons/lu";
+import Headline from "../ui/headline";
 
 const type: ElementsType = "TitleField";
 
 const extraAttributes = {
   title: "Title Field",
+  subtitle: undefined,
 };
 
 type CustomInstance = FormElementInstance & {
@@ -40,7 +42,9 @@ const DesignerComponent = ({ element }: { element: FormElementInstance }) => {
   return (
     <div className="flex h-auto w-full flex-col justify-center gap-0">
       {selectedElement === element && (
-        <Label className="text-muted-foreground">Title Field</Label>
+        <Label className="font-headline text-muted-foreground">
+          Title Field
+        </Label>
       )}
       <FormComponent element={element} />
     </div>
@@ -49,12 +53,18 @@ const DesignerComponent = ({ element }: { element: FormElementInstance }) => {
 
 const FormComponent = ({ element }: FormElementFormComponentProps) => {
   const elementTyped = element as CustomInstance;
-  const { title } = elementTyped.extraAttributes;
-  return <p className="text-xl">{title}</p>;
+  const { title, subtitle } = elementTyped.extraAttributes;
+  return (
+    <>
+      <Headline as="h1">{title}</Headline>
+      {!!subtitle && <Headline as="h2">{subtitle}</Headline>}
+    </>
+  );
 };
 
 const propertiesSchema = z.object({
   title: z.string().min(2).max(50),
+  subtitle: z.string().max(50).optional(),
 });
 
 const PropertiesComponent = ({ element }: { element: FormElementInstance }) => {
@@ -93,6 +103,24 @@ const PropertiesComponent = ({ element }: { element: FormElementInstance }) => {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Title</FormLabel>
+              <FormControl>
+                <Input
+                  {...field}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") e.currentTarget.blur();
+                  }}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="subtitle"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Subtitle</FormLabel>
               <FormControl>
                 <Input
                   {...field}

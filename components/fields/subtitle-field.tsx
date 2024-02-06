@@ -22,6 +22,7 @@ import {
   FormMessage,
 } from "../ui/form";
 import { LuHeading2 } from "react-icons/lu";
+import Headline from "../ui/headline";
 
 const type: ElementsType = "SubtitleField";
 
@@ -50,7 +51,7 @@ const DesignerComponent = ({ element }: { element: FormElementInstance }) => {
 const FormComponent = ({ element }: FormElementFormComponentProps) => {
   const elementTyped = element as CustomInstance;
   const { subtitle } = elementTyped.extraAttributes;
-  return <p className="text-lg">{subtitle}</p>;
+  return <Headline as="h2">{subtitle}</Headline>;
 };
 
 const propertiesSchema = z.object({

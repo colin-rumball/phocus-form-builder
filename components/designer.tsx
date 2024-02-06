@@ -351,7 +351,7 @@ const DesignerElementWrapper = ({
         setSelectedElement(element);
       }}
       className={cn(
-        "relative m-2 flex h-auto flex-col rounded-md text-foreground",
+        "relative m-1 flex h-auto flex-col rounded-md text-foreground",
       )}
     >
       {!isSelectedElement && (
@@ -381,7 +381,7 @@ const DesignerElementWrapper = ({
 
       <div
         className={cn(
-          "flex h-full w-full flex-col items-center rounded-md px-4 py-2 transition-all",
+          "flex h-full w-full flex-col items-center rounded-md px-4 py-0 transition-all",
           isSelectedElement && "bg-accent ring-1 ring-foreground",
         )}
       >

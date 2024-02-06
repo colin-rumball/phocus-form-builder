@@ -16,23 +16,27 @@ const FormBuilderHeader = () => {
   const params = useParams();
   const form = useQuery(api.forms.get, { id: params.formId as Id<"forms"> });
 
+  if (form?.published) return null;
+
   return (
     <div
       className={cn(
-        "relative flex h-[80px] w-full items-center justify-between gap-3 border-b-2 bg-background transition-transform",
+        "relative h-[80px] w-full gap-3 border-b-2 bg-primary text-primary-foreground transition-transform",
       )}
     >
-      <Link
-        href={"/dashboard"}
-        className="mx-lg flex items-center space-x-2 text-lg text-foreground"
-      >
-        <MdOutlineKeyboardDoubleArrowLeft />
-        <span>Dashboard</span>
-      </Link>
-      <BuilderTabs form={form} />
-      <div className="mr-lg flex h-full items-center gap-2">
-        <SaveFormBtn form={form} />
-        <PublishFormBtn form={form} />
+      <div className="container flex h-full items-center justify-between">
+        <Link
+          href={"/dashboard"}
+          className="mx-lg flex items-center space-x-2 text-lg"
+        >
+          <MdOutlineKeyboardDoubleArrowLeft />
+          <span>Dashboard</span>
+        </Link>
+        <BuilderTabs form={form} />
+        <div className="mr-lg flex h-full items-center gap-2">
+          <SaveFormBtn form={form} />
+          <PublishFormBtn form={form} />
+        </div>
       </div>
     </div>
   );
@@ -58,14 +62,13 @@ const BuilderTabs = ({ form }: { form?: Doc<"forms"> | null }) => {
   };
 
   return (
-    <div className="absolute inset-y-0 left-1/2 flex h-full -translate-x-1/2 items-center px-xl text-foreground">
+    <div className="track absolute inset-y-0 left-1/2 flex h-full -translate-x-1/2 items-center px-xl">
       <button
         disabled={!form}
         className={cn(
-          "flex h-full w-[130px] items-center justify-center px-lg text-center uppercase opacity-40 transition-all duration-100",
+          "tracking-headline flex h-full w-[160px] items-center justify-center px-lg text-center uppercase opacity-40 transition-all duration-300",
           "font-bold hover:opacity-80",
-          currentTab === "DESIGN" &&
-            "font-bold text-primary-foreground opacity-100",
+          currentTab === "DESIGN" && "font-bold opacity-100",
         )}
         onClick={() => setTabWrapper("DESIGN")}
       >
@@ -74,10 +77,9 @@ const BuilderTabs = ({ form }: { form?: Doc<"forms"> | null }) => {
       <button
         disabled={!form || elements.length === 0}
         className={cn(
-          "flex h-full w-[130px] items-center justify-center px-lg text-center uppercase opacity-40 transition-all duration-100",
+          "tracking-headline flex h-full w-[160px] items-center justify-center px-lg text-center uppercase opacity-40 transition-all duration-300",
           "font-bold hover:opacity-80",
-          currentTab === "PREVIEW" &&
-            "font-bold text-primary-foreground opacity-100",
+          currentTab === "PREVIEW" && "font-bold opacity-100",
           elements.length === 0 && "pointer-events-none select-none opacity-20",
         )}
         onClick={() => setTabWrapper("PREVIEW")}

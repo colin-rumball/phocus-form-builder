@@ -11,7 +11,7 @@ const Headline = ({ className, children, as }: Props) => {
     <Element
       className={cn(
         "font-headline",
-        as === "h1" && "mb text-heading leading-headline md:text-headline",
+        as === "h1" && "text-heading leading-headline md:text-headline",
         as === "h2" && "text-heading font-medium leading-heading",
         (as === "h3" || as === "h4" || as === "h5") && "text-lg leading-lg",
       )}

@@ -68,7 +68,7 @@ const SaveFormBtn = ({ form }: { form?: Doc<"forms"> | null }) => {
       )}
     >
       {unsavedChanges && (
-        <div className="flex flex-col font-bold leading-tight text-destructive opacity-100">
+        <div className="flex flex-col font-bold leading-tight opacity-100">
           <span>UNSAVED</span>
           <span>CHANGES</span>
         </div>
