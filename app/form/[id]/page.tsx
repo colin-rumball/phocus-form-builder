@@ -49,7 +49,7 @@ export default async function FormPage({ params }: { params: { id: string } }) {
   }
 
   return (
-    <Page className="h-main gap-xl">
+    <Page className="gap-xl">
       <div className="border-y border-muted py-10">
         <div className="container flex justify-between">
           <Headline as="h2">{form?.name}</Headline>
