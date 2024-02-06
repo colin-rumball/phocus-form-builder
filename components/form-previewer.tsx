@@ -14,7 +14,7 @@ const FormPreviewer = ({ className }: FormPreviewerProps) => {
   return (
     <div
       className={cn(
-        "my-lg flex flex-grow flex-col items-center justify-center overflow-y-auto",
+        "flex flex-grow flex-col items-center justify-center overflow-y-auto py-xl",
         className,
       )}
     >

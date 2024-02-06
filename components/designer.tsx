@@ -131,7 +131,7 @@ const Designer = ({ className }: DesignerProps) => {
   return (
     <div
       ref={droppable.setNodeRef}
-      className={cn("my-lg flex h-full w-full", className)}
+      className={cn("flex h-full w-full py-xl", className)}
     >
       <div
         className="relative h-full w-full transition-all"
