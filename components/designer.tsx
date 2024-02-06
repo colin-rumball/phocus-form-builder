@@ -327,7 +327,9 @@ const DesignerElementWrapper = ({
             <FormElementInspector element={selectedElement} />
           )}
         </div>
-        <DesignerElement element={element} />
+        <div className="w-full">
+          <DesignerElement element={element} />
+        </div>
       </div>
     </div>
   );
