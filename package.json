@@ -7,7 +7,7 @@
     "dev": "npm-run-all --parallel dev:server dev:client",
     "dev:server": "convex dev",
     "dev:client": "next dev",
-    "build": "npx convex deploy --cmd 'npm run build'",
+    "build": "next build",
     "lint": "next lint",
     "start": "next start",
     "predev": ""
