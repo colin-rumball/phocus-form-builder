@@ -24,7 +24,13 @@ const DesignerDrawer = ({ className }: DesignerDrawerProps) => {
   return (
     <Drawer>
       <DrawerTrigger asChild>
-        <Button variant={"secondary"} className="h-auto rounded-full p-3">
+        <Button
+          variant={"secondary"}
+          className="h-auto rounded-full p-3"
+          onClick={(e) => {
+            e.stopPropagation();
+          }}
+        >
           <FaPlus className="h-7 w-7" />
         </Button>
       </DrawerTrigger>
@@ -34,7 +40,12 @@ const DesignerDrawer = ({ className }: DesignerDrawerProps) => {
             <IoCloseSharp className="absolute right-4 top-4 h-7 w-7" />
           </DrawerClose>
         </DrawerHeader>
-        <div className={cn("flex h-full px-8", className)}>
+        <div
+          className={cn("flex h-full px-8", className)}
+          onClick={(e) => {
+            e.stopPropagation();
+          }}
+        >
           <div className="flex flex-col">
             <DrawerSection title="Layout Elements">
               <DrawerBtnElement formElement={FormElements.TitleField} />
@@ -85,7 +96,8 @@ const DrawerSection = ({
 };
 
 const DrawerBtnElement = ({ formElement }: { formElement: FormElement }) => {
-  const { addElement, elements } = useDesigner((state) => ({
+  const { selectedElement, addElement, elements } = useDesigner((state) => ({
+    selectedElement: state.selectedElement,
     addElement: state.addElement,
     elements: state.elements,
   }));
@@ -93,7 +105,10 @@ const DrawerBtnElement = ({ formElement }: { formElement: FormElement }) => {
 
   const onClick = () => {
     const newElement = FormElements[formElement.type].construct(generateId());
-    addElement(elements.length, newElement);
+    const selectedIndex = selectedElement
+      ? elements.findIndex((ele) => ele.id === selectedElement.id) + 1
+      : elements.length;
+    addElement(selectedIndex, newElement);
   };
 
   return (

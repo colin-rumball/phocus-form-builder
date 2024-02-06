@@ -1,51 +1,27 @@
 "use client";
 
-import { cn, generateId } from "@/lib/utils";
-import { useState, type ComponentPropsWithoutRef, useTransition } from "react";
+import { cn } from "@/lib/utils";
+import { type ComponentPropsWithoutRef } from "react";
 import { useDndMonitor, useDraggable, useDroppable } from "@dnd-kit/core";
 import { type FormElementInstance, FormElements } from "./form-elements";
 import useDesigner from "@/lib/hooks/useDesigner";
 import { Button } from "./ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "./ui/dialog";
-import { Textarea } from "./ui/textarea";
-import { api } from "@/convex/_generated/api";
-import { useAction } from "convex/react";
 import FormGenerator from "./form-generator";
-import { SiOpenai } from "react-icons/si";
-import DesignerDrawer from "./designer-drawer";
 import { PiDotsSixBold } from "react-icons/pi";
 import FormElementInspector from "./form-element-inspector";
 import { HiTrash } from "react-icons/hi2";
-import SimpleLoadingSpinner from "./loading-icons";
+import DesignerControls from "./designer-controls";
 
 type DesignerProps = ComponentPropsWithoutRef<"div">;
 
 const Designer = ({ className }: DesignerProps) => {
-  const {
-    elements,
-    addElement,
-    selectedElement,
-    setSelectedElement,
-    moveElement,
-  } = useDesigner((state) => ({
-    elements: state.elements,
-    addElement: state.addElement,
-    selectedElement: state.selectedElement,
-    setSelectedElement: state.setSelectedElement,
-    moveElement: state.moveElement,
-  }));
-  const [generating, startTransition] = useTransition();
-  const [openAIUserInput, setOpenAIUserInput] = useState("");
-  const [dialogOpen, setDialogOpen] = useState(false);
-  const generate = useAction(api.openai.generate);
+  const { elements, selectedElement, setSelectedElement, moveElement } =
+    useDesigner((state) => ({
+      elements: state.elements,
+      selectedElement: state.selectedElement,
+      setSelectedElement: state.setSelectedElement,
+      moveElement: state.moveElement,
+    }));
 
   const droppable = useDroppable({
     id: "designer-drop-area",
@@ -53,37 +29,6 @@ const Designer = ({ className }: DesignerProps) => {
       isDesignerDropArea: true,
     },
   });
-
-  const generateFormElements = async () => {
-    const rawResponse = await generate({
-      messageBody: openAIUserInput,
-    });
-
-    setOpenAIUserInput("");
-    setDialogOpen(false);
-
-    if (rawResponse === null) {
-      console.log("No response");
-      return;
-    }
-
-    try {
-      const jsonResponse = JSON.parse(rawResponse) as {
-        elements: FormElementInstance[];
-      };
-      const newElements = jsonResponse.elements;
-
-      newElements.forEach((element, index) => {
-        element.id = generateId();
-        addElement(elements.length + index, element);
-      });
-    } catch (e) {
-      console.log("Error parsing openai response", rawResponse);
-
-      console.error(e);
-      return;
-    }
-  };
 
   useDndMonitor({
     onDragEnd: ({ active, over }) => {
@@ -155,60 +100,22 @@ const Designer = ({ className }: DesignerProps) => {
             <div className="flex w-full flex-col gap-0 p-1">
               {elements.map((element: FormElementInstance) => {
                 return (
-                  <DesignerElementWrapper key={element.id} element={element} />
+                  <>
+                    <DesignerElementWrapper
+                      key={element.id}
+                      element={element}
+                    />
+                    {selectedElement === element && (
+                      <div className="flex w-full justify-center">
+                        <DesignerControls droppable={droppable} />
+                      </div>
+                    )}
+                  </>
                 );
               })}
             </div>
           )}
-          <div
-            className={cn(
-              "my-6 flex items-center space-x-4",
-              droppable.active && "hidden",
-            )}
-          >
-            <DesignerDrawer />
-
-            {elements.length !== 0 && (
-              <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-                <DialogTrigger asChild>
-                  <Button
-                    variant={"default"}
-                    className="flex h-auto space-x-3 rounded-full p-3"
-                  >
-                    <SiOpenai className="h-7 w-7" />
-                    <span>Add using AI</span>
-                  </Button>
-                </DialogTrigger>
-                <DialogContent className="flex flex-col gap-3 p-4">
-                  <DialogHeader>
-                    <DialogTitle>Generate Elements Using AI</DialogTitle>
-                    <DialogDescription>
-                      Describe the elements you're trying to add and we'll
-                      generate it for you.
-                    </DialogDescription>
-                  </DialogHeader>
-                  <Textarea
-                    rows={5}
-                    onChange={(e) => setOpenAIUserInput(e.target.value)}
-                    value={openAIUserInput}
-                  />
-                  <DialogFooter>
-                    <Button
-                      className="gap-2"
-                      disabled={generating}
-                      onClick={(e) => {
-                        e.preventDefault();
-                        startTransition(generateFormElements);
-                      }}
-                    >
-                      Generate{" "}
-                      {generating && <SimpleLoadingSpinner className="" />}
-                    </Button>
-                  </DialogFooter>
-                </DialogContent>
-              </Dialog>
-            )}
-          </div>
+          {!selectedElement && <DesignerControls droppable={droppable} />}
         </div>
       </div>
     </div>
