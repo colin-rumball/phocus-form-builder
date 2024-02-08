@@ -42,7 +42,7 @@ import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
 const type: ElementsType = "SingleSelectField";
 
 const extraAttributes = {
-  label: "Single Select Field Label",
+  label: "Single Select Label",
   helperText: "Helper text",
   required: false,
   placeHolder: "Value here...",
@@ -68,7 +68,7 @@ const DesignerComponent = ({ element }: { element: FormElementInstance }) => {
   return (
     <div className="flex h-auto w-full flex-col justify-center gap-0">
       {selectedElement === element && (
-        <Label className="text-muted-foreground">Single Select Field</Label>
+        <Label className="text-muted-foreground">Single Select</Label>
       )}
       <FormComponent element={element} isReadOnly />
     </div>

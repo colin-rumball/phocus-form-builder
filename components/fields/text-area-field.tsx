@@ -33,7 +33,7 @@ import { Slider } from "../ui/slider";
 const type: ElementsType = "TextAreaField";
 
 const extraAttributes = {
-  label: "Text Area Field Label",
+  label: "Text Area Input Label",
   helperText: "Helper text",
   required: false,
   placeholder: "Value here...",
@@ -59,7 +59,7 @@ const DesignerComponent = ({ element }: { element: FormElementInstance }) => {
   return (
     <div className="flex h-auto w-full flex-col justify-center gap-0">
       {selectedElement === element && (
-        <Label className="text-muted-foreground">Text Area Field</Label>
+        <Label className="text-muted-foreground">Text Area Input</Label>
       )}
       <FormComponent element={element} isReadOnly />
     </div>
@@ -277,7 +277,7 @@ export const TextAreaFieldFormElement: FormElement = {
   }),
   designerButton: {
     icon: BsTextareaResize,
-    label: "Text Area Field",
+    label: "Text Area Input",
   },
   designerComponent: DesignerComponent,
   formComponent: FormComponent,

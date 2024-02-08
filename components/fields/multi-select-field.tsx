@@ -35,7 +35,7 @@ import { Checkbox } from "../ui/checkbox";
 const type: ElementsType = "MultiSelectField";
 
 const extraAttributes = {
-  label: "Multi Select Field Label",
+  label: "Multi Select Label",
   helperText: "Helper text",
   required: false,
   placeHolder: "Value here...",
@@ -61,7 +61,7 @@ const DesignerComponent = ({ element }: { element: FormElementInstance }) => {
   return (
     <div className="flex h-auto w-full flex-col justify-center gap-0">
       {selectedElement === element && (
-        <Label className="text-muted-foreground">Multi Select Field</Label>
+        <Label className="text-muted-foreground">Multi Select</Label>
       )}
       <FormComponent element={element} isReadOnly />
     </div>

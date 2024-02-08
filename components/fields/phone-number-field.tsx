@@ -31,7 +31,7 @@ import { Bs123, BsPhone } from "react-icons/bs";
 const type: ElementsType = "PhoneNumberField";
 
 const extraAttributes = {
-  label: "Phone Number Field Label",
+  label: "Phone Input Label",
   helperText: "Helper text",
   required: false,
   placeholder: "",
@@ -48,7 +48,7 @@ const DesignerComponent = ({ element }: { element: FormElementInstance }) => {
   return (
     <div className="flex h-auto w-full flex-col justify-center gap-0">
       {selectedElement === element && (
-        <Label className="text-muted-foreground">Phone Number Field</Label>
+        <Label className="text-muted-foreground">Phone Input</Label>
       )}
       <FormComponent element={element} isReadOnly />
     </div>
@@ -254,7 +254,7 @@ export const PhoneNumberFieldFormElement: FormElement = {
   }),
   designerButton: {
     icon: BsPhone,
-    label: "Phone Field",
+    label: "Phone Input",
   },
   designerComponent: DesignerComponent,
   formComponent: FormComponent,

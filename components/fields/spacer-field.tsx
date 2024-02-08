@@ -51,7 +51,7 @@ const DesignerComponent = ({ element }: { element: FormElementInstance }) => {
       {isSelected && (
         <>
           <Label className="mb-24 text-muted-foreground">
-            Spacer Field: {height}px
+            Spacer: {height}px
           </Label>
           <div
             className={cn(
@@ -136,7 +136,7 @@ export const SpacerFieldFormElement: FormElement = {
   }),
   designerButton: {
     icon: LuSeparatorHorizontal,
-    label: "Form Spacer",
+    label: "Spacer",
   },
   designerComponent: DesignerComponent,
   formComponent: FormComponent,

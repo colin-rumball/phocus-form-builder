@@ -27,8 +27,7 @@ import Headline from "../ui/headline";
 const type: ElementsType = "TitleField";
 
 const extraAttributes = {
-  title: "Title Field",
-  subtitle: "",
+  title: "Title",
 };
 
 type CustomInstance = FormElementInstance & {
@@ -42,7 +41,7 @@ const DesignerComponent = ({ element }: { element: FormElementInstance }) => {
   return (
     <div className="flex h-auto w-full flex-col justify-center gap-0">
       {selectedElement === element && (
-        <Label className="text-muted-foreground">Title Field</Label>
+        <Label className="text-muted-foreground">{extraAttributes.title}</Label>
       )}
       <FormComponent element={element} />
     </div>
@@ -55,14 +54,12 @@ const FormComponent = ({ element }: FormElementFormComponentProps) => {
   return (
     <>
       <Headline as="h1">{title}</Headline>
-      {subtitle !== "" && <Headline as="h2">{subtitle}</Headline>}
     </>
   );
 };
 
 const propertiesSchema = z.object({
   title: z.string().min(2).max(50),
-  subtitle: z.string().max(50),
 });
 
 const PropertiesComponent = ({ element }: { element: FormElementInstance }) => {
@@ -75,7 +72,6 @@ const PropertiesComponent = ({ element }: { element: FormElementInstance }) => {
     mode: "onBlur",
     defaultValues: {
       title: elementTyped.extraAttributes.title,
-      subtitle: elementTyped.extraAttributes.subtitle,
     },
   });
 
@@ -102,24 +98,6 @@ const PropertiesComponent = ({ element }: { element: FormElementInstance }) => {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Title</FormLabel>
-              <FormControl>
-                <Input
-                  {...field}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") e.currentTarget.blur();
-                  }}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="subtitle"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Subtitle</FormLabel>
               <FormControl>
                 <Input
                   {...field}

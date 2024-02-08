@@ -30,7 +30,7 @@ import { Checkbox } from "../ui/checkbox";
 const type: ElementsType = "CheckboxField";
 
 const extraAttributes = {
-  label: "Checkbox field label",
+  label: "Checkbox label",
   helperText: "Helper text",
   required: false,
 };
@@ -52,7 +52,7 @@ const DesignerComponent = ({ element }: { element: FormElementInstance }) => {
   return (
     <div className="flex h-auto w-full flex-col justify-center gap-0">
       {selectedElement === element && (
-        <Label className="text-muted-foreground">Checkbox Field</Label>
+        <Label className="text-muted-foreground">Checkbox</Label>
       )}
       <FormComponent element={element} isReadOnly />
     </div>
@@ -238,7 +238,7 @@ export const CheckboxFieldFormElement: FormElement = {
   }),
   designerButton: {
     icon: IoMdCheckboxOutline,
-    label: "Checkbox Field",
+    label: "Checkbox",
   },
   designerComponent: DesignerComponent,
   formComponent: FormComponent,

@@ -20,7 +20,7 @@ const DesignerComponent = ({ element }: { element: FormElementInstance }) => {
   return (
     <div className="my-2 flex h-auto w-full flex-col justify-center gap-0">
       {selectedElement === element && (
-        <Label className="text-muted-foreground">Separator Field</Label>
+        <Label className="text-muted-foreground">Separator</Label>
       )}
       <FormComponent element={element} />
     </div>
@@ -28,7 +28,7 @@ const DesignerComponent = ({ element }: { element: FormElementInstance }) => {
 };
 
 const FormComponent = ({ element }: FormElementFormComponentProps) => {
-  return <Separator />;
+  return <Separator className="my-3" />;
 };
 
 const PropertiesComponent = ({ element }: { element: FormElementInstance }) => {

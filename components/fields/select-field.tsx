@@ -34,13 +34,13 @@ import {
   type FormElementInstance,
   type SubmitFunction,
   type FormElement,
-  FormElementFormComponentProps,
+  type FormElementFormComponentProps,
 } from "../form-elements";
 
 const type: ElementsType = "SelectField";
 
 const extraAttributes = {
-  label: "Select Field Label",
+  label: "Dropdown Field Label",
   helperText: "Helper text",
   required: false,
   placeHolder: "Value here...",
@@ -66,7 +66,7 @@ const DesignerComponent = ({ element }: { element: FormElementInstance }) => {
   return (
     <div className="flex h-auto w-full flex-col justify-center gap-0">
       {selectedElement === element && (
-        <Label className="text-muted-foreground">Select Field</Label>
+        <Label className="text-muted-foreground">Dropdown Field</Label>
       )}
       <FormComponent element={element} isReadOnly />
     </div>
@@ -338,7 +338,7 @@ export const SelectFieldFormElement: FormElement = {
   }),
   designerButton: {
     icon: RxDropdownMenu,
-    label: "Select Field",
+    label: "Dropdown Field",
   },
   designerComponent: DesignerComponent,
   formComponent: FormComponent,

@@ -29,7 +29,7 @@ import { Bs123 } from "react-icons/bs";
 const type: ElementsType = "NumberField";
 
 const extraAttributes = {
-  label: "Number Field Label",
+  label: "Number Input Label",
   helperText: "Helper text",
   min: 0,
   max: 100,
@@ -48,7 +48,7 @@ const DesignerComponent = ({ element }: { element: FormElementInstance }) => {
   return (
     <div className="flex h-auto w-full flex-col justify-center gap-0">
       {selectedElement === element && (
-        <Label className="text-muted-foreground">Number Field</Label>
+        <Label className="text-muted-foreground">Number Input</Label>
       )}
       <FormComponent element={element} isReadOnly />
     </div>
@@ -300,7 +300,7 @@ export const NumberFieldFormElement: FormElement = {
   }),
   designerButton: {
     icon: Bs123,
-    label: "Number Field",
+    label: "Number Input",
   },
   designerComponent: DesignerComponent,
   formComponent: FormComponent,

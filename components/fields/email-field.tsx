@@ -31,7 +31,7 @@ import { Bs123, BsPhone } from "react-icons/bs";
 const type: ElementsType = "EmailField";
 
 const extraAttributes = {
-  label: "Email Field Label",
+  label: "Email Input Label",
   helperText: "Helper text",
   required: false,
   placeholder: "",
@@ -48,7 +48,7 @@ const DesignerComponent = ({ element }: { element: FormElementInstance }) => {
   return (
     <div className="flex h-auto w-full flex-col justify-center gap-0">
       {selectedElement === element && (
-        <Label className="text-muted-foreground">Email Field</Label>
+        <Label className="text-muted-foreground">Email Input</Label>
       )}
       <FormComponent element={element} isReadOnly />
     </div>

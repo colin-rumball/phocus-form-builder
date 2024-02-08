@@ -30,7 +30,7 @@ import { cn } from "@/lib/utils";
 const type: ElementsType = "TextField";
 
 const extraAttributes = {
-  label: "Text Field Label",
+  label: "Text Input Label",
   helperText: "Helper text",
   required: false,
   placeholder: "Value here...",
@@ -54,7 +54,7 @@ const DesignerComponent = ({ element }: { element: FormElementInstance }) => {
   return (
     <div className="flex h-auto w-full flex-col justify-center gap-0">
       {selectedElement === element && (
-        <Label className="text-muted-foreground">Text Field</Label>
+        <Label className="text-muted-foreground">Text Input</Label>
       )}
       <FormComponent element={element} isReadOnly />
     </div>
@@ -248,7 +248,7 @@ export const TextFieldFormElement: FormElement = {
   }),
   designerButton: {
     icon: MdTextFields,
-    label: "Text Field",
+    label: "Text Input",
   },
   designerComponent: DesignerComponent,
   formComponent: FormComponent,

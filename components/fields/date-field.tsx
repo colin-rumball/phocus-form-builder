@@ -33,7 +33,7 @@ import { Calendar } from "../ui/calendar";
 const type: ElementsType = "DateField";
 
 const extraAttributes = {
-  label: "Date Field Label",
+  label: "Date Input Label",
   helperText: "Pick a date",
   required: false,
 };
@@ -55,7 +55,7 @@ const DesignerComponent = ({ element }: { element: FormElementInstance }) => {
   return (
     <div className="flex h-auto w-full flex-col justify-center gap-0">
       {selectedElement === element && (
-        <Label className="text-muted-foreground">Date Field</Label>
+        <Label className="text-muted-foreground">Date Input</Label>
       )}
       <FormComponent element={element} isReadOnly />
     </div>
@@ -249,7 +249,7 @@ export const DateFieldFormElement: FormElement = {
   }),
   designerButton: {
     icon: IoCalendarNumberOutline,
-    label: "Date Field",
+    label: "Date Input",
   },
   designerComponent: DesignerComponent,
   formComponent: FormComponent,
