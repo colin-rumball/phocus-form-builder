@@ -23,7 +23,7 @@ import PreviewBtn from "./preview-btn";
 
 const FormBuilderHeader = () => {
   const params = useParams();
-  const form = useQuery(api.forms.get, { id: params.formId as Id<"forms"> });
+  const form = useQuery(api.forms.get, { id: params.id as Id<"forms"> });
 
   if (form?.published) return null;
 
@@ -101,7 +101,7 @@ export default FormBuilderHeader;
 
 const FormName = () => {
   const params = useParams();
-  const form = useQuery(api.forms.get, { id: params.formId as Id<"forms"> });
+  const form = useQuery(api.forms.get, { id: params.id as Id<"forms"> });
   const [nameInput, setNameInput] = useState("");
   const updateForm = useMutation(api.forms.update);
 

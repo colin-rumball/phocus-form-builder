@@ -187,7 +187,10 @@ const Nav = ({ sideMenu = false }) => {
           : "hidden items-center lg:flex",
       )}
     >
-      {[["Dashboard", "/dashboard"]].map(([label, href]) => {
+      {[
+        ["Home", "/"],
+        ["Dashboard", "/dashboard"],
+      ].map(([label, href]) => {
         return (
           href && (
             <Link

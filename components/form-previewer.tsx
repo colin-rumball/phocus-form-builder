@@ -18,7 +18,7 @@ const FormPreviewer = ({ className }: FormPreviewerProps) => {
         className,
       )}
     >
-      <div className="flex h-auto w-[620px] w-full flex-col gap-2 overflow-y-auto rounded-2xl bg-background p-9">
+      <div className="flex h-auto w-[620px] flex-col gap-2 overflow-y-auto rounded-2xl bg-background p-9">
         {elements.map((element) => {
           const FormComponent = FormElements[element.type].formComponent;
           return <FormComponent key={element.id} element={element} />;

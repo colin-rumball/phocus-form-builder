@@ -222,9 +222,10 @@ const FormCard = ({
             {formatDistance(_creationTime, Date.now(), { addSuffix: true })}
           </span>
           {published && (
-            <span className="flex items-center gap-2">
+            <span className="grid grid-cols-2 items-center gap-x-1">
               <LuView className="text-muted-foreground" />
               <span className="">{visits.toLocaleString()}</span>
+
               <FaWpforms className="text-muted-foreground" />
               <span className="">{submissions.toLocaleString()}</span>
             </span>
