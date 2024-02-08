@@ -68,7 +68,7 @@ const FormBuilder = ({
       setSavedAt(form.updatedAt ? new Date(form.updatedAt) : null);
       resume();
     }
-  }, [form, setSelectedElement, setElements]);
+  }, [preloadedForm, setSelectedElement, setElements]);
 
   const mouseSensor = useSensor(MouseSensor, {
     activationConstraint: {
@@ -85,7 +85,7 @@ const FormBuilder = ({
 
   const sensors = useSensors(mouseSensor, touchSensor);
 
-  if (!form || (form.content != "[]" && elements.length === 0)) {
+  if (!form) {
     return (
       <div className="flex h-full w-full flex-grow items-center justify-center">
         <SimpleLoadingSpinner className="h-12 w-12" />
