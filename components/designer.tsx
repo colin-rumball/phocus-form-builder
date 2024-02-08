@@ -81,47 +81,44 @@ const Designer = ({
   return (
     <div
       ref={droppable.setNodeRef}
-      className={cn("flex h-full w-full py-xl", className)}
+      className={cn(
+        "relative flex h-full w-full flex-grow flex-col py-xl",
+        className,
+      )}
+      onClick={(e) => {
+        e.stopPropagation();
+        if (selectedElement) setSelectedElement(null);
+      }}
     >
       <div
-        className="relative h-full w-full transition-all"
-        onClick={(e) => {
-          e.stopPropagation();
-          if (selectedElement) setSelectedElement(null);
-        }}
+        className={cn(
+          "mx-auto flex h-auto w-[620px] flex-col items-center overflow-y-auto rounded-xl bg-background p-5 pt-9",
+        )}
       >
-        <div
-          className={cn(
-            "m-auto flex h-auto max-w-[620px] flex-col items-center overflow-y-auto rounded-xl bg-background p-4",
-          )}
-        >
-          {elements.length === 0 && (
-            <FormGenerator className="mt-16" form={form} />
-          )}
-          {!droppable.isOver && elements.length === 0 && (
-            <p className="flex flex-grow items-center text-xl font-bold text-muted-foreground">
-              Or add form fields manually
-            </p>
-          )}
-          {elements.length > 0 && (
-            <div className="flex w-full flex-col gap-0 p-1">
-              {elements.map((element: FormElementInstance) => {
-                return (
-                  <>
-                    <DesignerElementWrapper
-                      key={element.id}
-                      droppable={droppable}
-                      element={element}
-                    />
-                  </>
-                );
-              })}
-            </div>
-          )}
-          {selectedElement === null && (
-            <DesignerControls droppable={droppable} />
-          )}
-        </div>
+        {elements.length === 0 && (
+          <FormGenerator className="mt-16" form={form} />
+        )}
+        {!droppable.isOver && elements.length === 0 && (
+          <p className="flex flex-grow items-center text-xl font-bold text-muted-foreground">
+            Or add form fields manually
+          </p>
+        )}
+        {elements.length > 0 && (
+          <div className="flex w-full flex-col gap-2">
+            {elements.map((element: FormElementInstance) => {
+              return (
+                <>
+                  <DesignerElementWrapper
+                    key={element.id}
+                    droppable={droppable}
+                    element={element}
+                  />
+                </>
+              );
+            })}
+          </div>
+        )}
+        {selectedElement === null && <DesignerControls droppable={droppable} />}
       </div>
     </div>
   );
@@ -181,7 +178,7 @@ const DesignerElementWrapper = ({
           setSelectedElement(element);
         }}
         className={cn(
-          "relative m-1 flex h-auto flex-col rounded-md text-foreground",
+          "relative m-0 flex h-auto flex-col rounded-md text-foreground",
         )}
       >
         {!isSelectedElement && (

@@ -1,6 +1,6 @@
 "use client";
 
-import { type ReactNode, useEffect, useRef, useState } from "react";
+import { useEffect } from "react";
 import Headline from "./ui/headline";
 import { Button } from "./ui/button";
 import Designer from "./designer";
@@ -146,7 +146,7 @@ const FormBuilder = ({
 
   return (
     <DndContext sensors={sensors}>
-      <div className={cn("relative h-full w-full flex-grow")}>
+      <div className={cn("relative flex h-full w-full flex-grow flex-col")}>
         {!previewing && <Designer form={form} />}
         {previewing && <FormPreviewer />}
         {/* <AnimatedTab myTab="DESIGN"> */}
