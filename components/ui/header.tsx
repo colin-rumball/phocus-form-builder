@@ -162,13 +162,13 @@ const Logo = () => (
   <Link variant={"image"} href={"/"} className="flex items-center gap-5">
     <Image
       src={LogoLightImg}
-      alt="Formulate Logo"
+      alt="PHOCUS Logo"
       className="hidden h-[70px] w-auto py-3 dark:block"
       priority
     />
     <Image
       src={LogoDarkImg}
-      alt="Formulate Logo"
+      alt="PHOCUS Logo"
       className="block h-[70px] w-auto py-3 dark:hidden"
       priority
     />
