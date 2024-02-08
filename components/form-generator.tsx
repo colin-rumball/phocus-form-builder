@@ -1,5 +1,5 @@
 import { cn, generateId } from "@/lib/utils";
-import { useState, useTransition, type ComponentPropsWithoutRef } from "react";
+import { useState, useTransition } from "react";
 import {
   Card,
   CardContent,
@@ -9,21 +9,27 @@ import {
 } from "./ui/card";
 import { api } from "@/convex/_generated/api";
 import useDesigner from "@/lib/hooks/useDesigner";
-import { useAction } from "convex/react";
+import { useAction, useMutation } from "convex/react";
 import { type FormElementInstance } from "./form-elements";
 import { Button } from "./ui/button";
 import { Textarea } from "./ui/textarea";
 import useBuilderTabs from "@/lib/hooks/useBuilderTabs";
 import SimpleLoadingSpinner from "./loading-icons";
+import { type Doc } from "@/convex/_generated/dataModel";
 
-type FormGeneratorProps = ComponentPropsWithoutRef<"div">;
-
-const FormGenerator = ({ className }: FormGeneratorProps) => {
+const FormGenerator = ({
+  className,
+  form,
+}: {
+  className: string;
+  form: Doc<"forms">;
+}) => {
   const [error, setError] = useState(false);
   const setCurrentTab = useBuilderTabs((state) => state.setCurrentTab);
   const [generating, startTransition] = useTransition();
   const [userInput, setUserInput] = useState("");
   const generate = useAction(api.openai.generate);
+  const updateForm = useMutation(api.forms.update);
   const { elements, setElements } = useDesigner((state) => ({
     elements: state.elements,
     setElements: state.setElements,
@@ -43,9 +49,18 @@ const FormGenerator = ({ className }: FormGeneratorProps) => {
 
     try {
       const jsonResponse = JSON.parse(rawResponse) as {
+        formName: string;
         elements: FormElementInstance[];
       };
-      const newElements = jsonResponse.elements;
+      const { formName, elements: newElements } = jsonResponse;
+
+      await updateForm({
+        id: form._id,
+        data: {
+          name: formName ?? "Untitled Form",
+          content: JSON.stringify(newElements),
+        },
+      });
 
       newElements.forEach((element) => {
         element.id = generateId();
@@ -54,6 +69,7 @@ const FormGenerator = ({ className }: FormGeneratorProps) => {
       setElements(newElements);
       setCurrentTab("DESIGN");
     } catch (e) {
+      // TODO: look at all errors and handle them
       console.log("Error parsing openai response", rawResponse);
 
       console.error(e);
@@ -95,7 +111,8 @@ const FormGenerator = ({ className }: FormGeneratorProps) => {
                 startTransition(generateForm);
               }}
             >
-              Generate form using AI{" "}
+              {!generating && <>Generate form using AI </>}
+              {generating && <>Generating </>}
               {generating && <SimpleLoadingSpinner className="" />}
             </Button>
           )}

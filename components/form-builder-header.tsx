@@ -13,10 +13,18 @@ import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import DeleteAllBtn from "./delete-all-btn";
 import UndoBtn from "./undo-btn";
+import { Switch } from "./ui/switch";
+import { Label } from "./ui/label";
+import { RxEyeClosed, RxEyeOpen } from "react-icons/rx";
+import { Button } from "./ui/button";
 
 const FormBuilderHeader = () => {
   const params = useParams();
   const form = useQuery(api.forms.get, { id: params.formId as Id<"forms"> });
+  const { currentTab, setCurrentTab } = useBuilderTabs((state) => ({
+    currentTab: state.currentTab,
+    setCurrentTab: state.setCurrentTab,
+  }));
 
   if (form?.published) return null;
 
@@ -34,8 +42,25 @@ const FormBuilderHeader = () => {
           <MdOutlineKeyboardDoubleArrowLeft />
           <span>Dashboard</span>
         </Link>
-        <BuilderTabs form={form} />
+        {/* <BuilderTabs form={form} /> */}
         <div className="mr-lg flex h-full items-center gap-2">
+          {/* <div className="flex flex-col items-center justify-center space-x-2">
+            <Switch
+              id="preview-toggle"
+              className="data-[state=checked]:bg-foreground"
+            />
+            <Label htmlFor="preview-togglee">Preview</Label>
+          </div> */}
+          {/* <Button
+            className={cn("gap-2 opacity-100 transition-all")}
+            variant={"secondary"}
+            onClick={() => {
+              setCurrentTab(currentTab === "DESIGN" ? "PREVIEW" : "DESIGN");
+            }}
+          >
+            {currentTab === "DESIGN" && <RxEyeClosed />}
+            {currentTab === "PREVIEW" && <RxEyeOpen />}
+          </Button> */}
           <UndoBtn form={form} />
           <DeleteAllBtn form={form} />
           <SaveFormBtn form={form} />

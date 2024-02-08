@@ -1,7 +1,6 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { type ComponentPropsWithoutRef } from "react";
 import { useDndMonitor, useDraggable, useDroppable } from "@dnd-kit/core";
 import { type FormElementInstance, FormElements } from "./form-elements";
 import useDesigner from "@/lib/hooks/useDesigner";
@@ -11,10 +10,15 @@ import { PiDotsSixBold } from "react-icons/pi";
 import FormElementInspector from "./form-element-inspector";
 import { HiTrash } from "react-icons/hi2";
 import DesignerControls from "./designer-controls";
+import { type Doc } from "@/convex/_generated/dataModel";
 
-type DesignerProps = ComponentPropsWithoutRef<"div">;
-
-const Designer = ({ className }: DesignerProps) => {
+const Designer = ({
+  className,
+  form,
+}: {
+  className?: string;
+  form: Doc<"forms">;
+}) => {
   const { elements, selectedElement, setSelectedElement, moveElement } =
     useDesigner((state) => ({
       elements: state.elements,
@@ -90,7 +94,9 @@ const Designer = ({ className }: DesignerProps) => {
             "m-auto flex h-auto max-w-[620px] flex-col items-center overflow-y-auto rounded-xl bg-background p-4",
           )}
         >
-          {elements.length === 0 && <FormGenerator className="mt-16" />}
+          {elements.length === 0 && (
+            <FormGenerator className="mt-16" form={form} />
+          )}
           {!droppable.isOver && elements.length === 0 && (
             <p className="flex flex-grow items-center text-xl font-bold text-muted-foreground">
               Or add form fields manually

@@ -146,13 +146,13 @@ const FormBuilder = ({
   return (
     <DndContext sensors={sensors}>
       <div className={cn("relative h-full w-full flex-grow")}>
-        <AnimatedTab myTab="DESIGN">
-          <Designer />
-        </AnimatedTab>
+        {/* <AnimatedTab myTab="DESIGN"> */}
+        {currentTab === "DESIGN" && <Designer form={form} />}
+        {/* </AnimatedTab> */}
 
-        <AnimatedTab myTab="PREVIEW">
-          <FormPreviewer />
-        </AnimatedTab>
+        {/* <AnimatedTab myTab="PREVIEW"> */}
+        {currentTab === "PREVIEW" && <FormPreviewer />}
+        {/* </AnimatedTab> */}
       </div>
       <div
         className={cn(
