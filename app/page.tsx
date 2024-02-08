@@ -4,7 +4,7 @@ import Section from "@/components/ui/section";
 export default async function HomePage() {
   return (
     <Page>
-      <Section>Home Page!</Section>
+      <Section>Home Page 2!</Section>
     </Page>
   );
 }
