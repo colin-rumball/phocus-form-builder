@@ -39,6 +39,10 @@ const Header = forwardRef<HTMLDivElement, HeaderProps>(({ className }, ref) => {
   useEffect(() => {
     let prevScrollPos = window.scrollY;
     const handleScroll = () => {
+      if (window.innerWidth > 768) {
+        setHeaderVisible(true);
+        return;
+      }
       const currentScrollPos = window.scrollY;
 
       if (currentScrollPos < prevScrollPos) {
