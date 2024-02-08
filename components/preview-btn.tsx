@@ -2,8 +2,6 @@
 
 import { type Doc } from "@/convex/_generated/dataModel";
 import useDesigner from "@/lib/hooks/useDesigner";
-import { cn } from "@/lib/utils";
-import { Button } from "./ui/button";
 import {
   Tooltip,
   TooltipProvider,
@@ -11,13 +9,16 @@ import {
   TooltipContent,
 } from "./ui/tooltip";
 import { Skeleton } from "./ui/skeleton";
-import { RxEyeOpen, RxEyeClosed } from "react-icons/rx";
+import { Switch } from "./ui/switch";
 
 const PreviewBtn = ({ form }: { form?: Doc<"forms"> | null }) => {
-  const { elements, setSelectedElement } = useDesigner((state) => ({
-    elements: state.elements,
-    setSelectedElement: state.setSelectedElement,
-  }));
+  const { elements, setSelectedElement, previewing, setPreviewing } =
+    useDesigner((state) => ({
+      elements: state.elements,
+      setSelectedElement: state.setSelectedElement,
+      previewing: state.previewing,
+      setPreviewing: state.setPreviewing,
+    }));
 
   return (
     <>
@@ -25,23 +26,17 @@ const PreviewBtn = ({ form }: { form?: Doc<"forms"> | null }) => {
       {!!form && (
         <TooltipProvider delayDuration={300}>
           <Tooltip>
-            <TooltipTrigger asChild>
-              {/* <Switch
-              id="preview-toggle"
-              className="data-[state=checked]:bg-foreground"
-            />
-            <Label htmlFor="preview-togglee">Preview</Label> */}
-              <Button
-                className={cn("gap-2 opacity-100 transition-all")}
-                variant={"secondary"}
-                disabled={elements.length === 0}
-                onClick={() => {
-                  setSelectedElement(null);
-                  console.log("Preview");
-                }}
-              >
-                <RxEyeOpen />
-              </Button>
+            <TooltipTrigger>
+              <div className="flex flex-col items-center justify-center">
+                <Switch
+                  id="preview-toggle"
+                  onCheckedChange={(checked) => {
+                    setPreviewing(checked);
+                  }}
+                  className="data-[state=checked]:bg-primary-foreground"
+                />
+                {/* <Label htmlFor="preview-toggle">Preview</Label> */}
+              </div>
             </TooltipTrigger>
             <TooltipContent side="bottom" className="mx-2">
               <p>Preview form</p>

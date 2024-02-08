@@ -36,12 +36,14 @@ const FormBuilder = ({
     setElements,
     setSelectedElement,
     setSavedAt,
+    previewing,
     setPreviewing,
   } = useDesigner((state) => ({
     elements: state.elements,
     setElements: state.setElements,
     setSelectedElement: state.setSelectedElement,
     setSavedAt: state.setSavedAt,
+    previewing: state.previewing,
     setPreviewing: state.setPreviewing,
   }));
   const { pause, resume, clear } = useDesigner.temporal.getState();
@@ -145,7 +147,8 @@ const FormBuilder = ({
   return (
     <DndContext sensors={sensors}>
       <div className={cn("relative h-full w-full flex-grow")}>
-        <Designer form={form} />
+        {!previewing && <Designer form={form} />}
+        {previewing && <FormPreviewer />}
         {/* <AnimatedTab myTab="DESIGN"> */}
         {/* {currentTab === "DESIGN" && <Designer form={form} />} */}
         {/* </AnimatedTab> */}

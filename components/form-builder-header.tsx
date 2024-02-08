@@ -34,11 +34,9 @@ const FormBuilderHeader = () => {
       )}
     >
       <div className="container flex h-full items-center justify-between">
-        <div className="flex h-full items-center gap-2">
+        <div className="flex h-full items-center gap-4">
           <SaveFormBtn form={form} />
-          <div className="flex flex-col items-center justify-center space-x-2">
-            <PreviewBtn form={form} />
-          </div>
+          <PreviewBtn form={form} />
         </div>
 
         <FormName />
