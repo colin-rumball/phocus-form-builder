@@ -30,6 +30,7 @@ const PreviewBtn = ({ form }: { form?: Doc<"forms"> | null }) => {
               <div className="flex flex-col items-center justify-center">
                 <Switch
                   id="preview-toggle"
+                  disabled={elements.length === 0}
                   onCheckedChange={(checked) => {
                     setPreviewing(checked);
                   }}
