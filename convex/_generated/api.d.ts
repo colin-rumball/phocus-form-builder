@@ -21,7 +21,6 @@ import type * as openai from "../openai.js";
 import type * as submissions from "../submissions.js";
 import type * as users from "../users.js";
 import type * as utils from "../utils.js";
-import type * as zodSchemas_form from "../zodSchemas/form.js";
 
 /**
  * A utility for referencing Convex functions in your app's API.
@@ -39,7 +38,6 @@ declare const fullApi: ApiFromModules<{
   submissions: typeof submissions;
   users: typeof users;
   utils: typeof utils;
-  "zodSchemas/form": typeof zodSchemas_form;
 }>;
 export declare const api: FilterApi<
   typeof fullApi,

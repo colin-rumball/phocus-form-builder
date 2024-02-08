@@ -112,7 +112,6 @@ const FormCardSkeleton = () => {
 
 const FormCard = ({
   name,
-  description,
   published,
   visits,
   submissions,
@@ -122,7 +121,6 @@ const FormCard = ({
   updatedAt,
 }: {
   name: string;
-  description: string;
   published: boolean;
   visits: number;
   submissions: number;
@@ -139,7 +137,6 @@ const FormCard = ({
   const onDuplicateClicked = async () => {
     const formId = await createForm({
       name: `${name} (copy)`,
-      description: description,
     });
 
     if (!formId) {
@@ -234,9 +231,7 @@ const FormCard = ({
           )}
         </CardDescription>
       </CardHeader>
-      <CardContent className="h-[20px] truncate">
-        {description ? description : "No description"}
-      </CardContent>
+      <CardContent className="h-[20px] truncate"></CardContent>
       <CardFooter>
         {published && (
           <Button asChild className="mt-2 w-full gap-4">

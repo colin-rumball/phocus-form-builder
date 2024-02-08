@@ -6,7 +6,6 @@ import { getClerkId, getUser } from "./utils";
 import { z } from "zod";
 import { NoOp } from "convex-helpers/server/customFunctions";
 import { zCustomMutation } from "convex-helpers/server/zod";
-import { createFormSchemaInner } from "./zodSchemas/form";
 
 const zMutation = zCustomMutation(mutation, NoOp);
 
@@ -16,7 +15,6 @@ export const update = mutation({
     data: v.object({
       published: v.optional(v.boolean()),
       name: v.optional(v.string()),
-      description: v.optional(v.string()),
       content: v.optional(v.string()),
     }),
   },
@@ -155,9 +153,11 @@ export const list = query({
   },
 });
 
-export const create = zMutation({
-  args: createFormSchemaInner,
-  handler: async (ctx, { name, description }) => {
+export const create = mutation({
+  args: {
+    name: v.string(),
+  },
+  handler: async (ctx, { name }) => {
     const clerkId = await getClerkId(ctx);
 
     if (!clerkId) {
@@ -178,7 +178,6 @@ export const create = zMutation({
     const form = await ctx.db.insert("forms", {
       authorId: user?._id,
       name: name,
-      description: description ?? "",
       published: false,
       visits: 0,
       submissions: 0,
