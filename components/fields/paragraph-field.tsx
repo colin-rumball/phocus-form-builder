@@ -43,7 +43,7 @@ const DesignerComponent = ({ element }: { element: FormElementInstance }) => {
     selectedElement: state.selectedElement,
   }));
   return (
-    <div className="flex h-auto w-full flex-col gap-2">
+    <div className="flex h-auto w-full flex-col justify-center gap-0">
       {selectedElement === element && (
         <Label className="text-muted-foreground">Paragraph Field</Label>
       )}

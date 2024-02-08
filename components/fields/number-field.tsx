@@ -46,14 +46,12 @@ const DesignerComponent = ({ element }: { element: FormElementInstance }) => {
     selectedElement: state.selectedElement,
   }));
   return (
-    <>
+    <div className="flex h-auto w-full flex-col justify-center gap-0">
       {selectedElement === element && (
-        <Label className="font-headline text-muted-foreground">
-          Title Field
-        </Label>
+        <Label className="text-muted-foreground">Number Field</Label>
       )}
-      <FormComponent element={element} />
-    </>
+      <FormComponent element={element} isReadOnly />
+    </div>
   );
 };
 
@@ -62,6 +60,7 @@ const FormComponent = ({
   submitValue,
   defaultValue,
   isInvalid,
+  isReadOnly,
 }: FormElementFormComponentProps) => {
   const elementTyped = element as CustomInstance;
 
@@ -83,6 +82,7 @@ const FormComponent = ({
         {required && "*"}
       </Label>
       <Input
+        readOnly={isReadOnly}
         type="number"
         className={cn(error && "border-red-500")}
         placeholder={placeholder}

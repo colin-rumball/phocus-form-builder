@@ -47,19 +47,21 @@ const DesignerComponent = ({ element }: { element: FormElementInstance }) => {
   const { height } = elementTyped.extraAttributes;
   const isSelected = selectedElement === element;
   return (
-    <div className="flex h-full w-full flex-col items-center justify-center gap-2">
+    <div className="flex h-full w-full flex-col justify-center gap-0">
       {isSelected && (
-        <Label className="mb-24 text-muted-foreground">
-          Spacer Field: {height}px
-        </Label>
+        <>
+          <Label className="mb-24 text-muted-foreground">
+            Spacer Field: {height}px
+          </Label>
+          <div
+            className={cn(
+              "pointer-events-none absolute inset-0 flex select-none items-center justify-center transition-all",
+            )}
+          >
+            <LuSeparatorHorizontal className="h-8 w-8" />
+          </div>
+        </>
       )}
-      <div
-        className={cn(
-          "pointer-events-none absolute inset-0 flex select-none items-center justify-center transition-all",
-        )}
-      >
-        <LuSeparatorHorizontal className="h-8 w-8" />
-      </div>
       <FormComponent element={element} />
     </div>
   );

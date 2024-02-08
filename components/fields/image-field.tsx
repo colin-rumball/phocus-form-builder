@@ -66,16 +66,11 @@ const DesignerComponent = ({ element }: { element: FormElementInstance }) => {
   const { selectedElement } = useDesigner((state) => ({
     selectedElement: state.selectedElement,
   }));
-  const elementTyped = element as CustomInstance;
-  const { label, imageUrl, helperText, size } = elementTyped.extraAttributes;
   return (
-    <div className="w-full">
+    <div className="flex h-auto w-full flex-col justify-center gap-0">
       {selectedElement === element && (
-        <Label className="font-headline text-muted-foreground">
-          Image Field
-        </Label>
+        <Label className="text-muted-foreground">Image Field</Label>
       )}
-
       <FormComponent element={element} />
     </div>
   );

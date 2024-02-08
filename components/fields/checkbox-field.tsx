@@ -46,21 +46,15 @@ const propertiesSchema = z.object({
 });
 
 const DesignerComponent = ({ element }: { element: FormElementInstance }) => {
-  const elementTyped = element as CustomInstance;
-  const { label, required, helperText } = elementTyped.extraAttributes;
-  const id = `checkbox-${element.id}`;
+  const { selectedElement } = useDesigner((state) => ({
+    selectedElement: state.selectedElement,
+  }));
   return (
-    <div className="flex w-full flex-col items-start space-x-2">
-      <div className="pointer-events-none flex items-center gap-2">
-        <Checkbox id={id} className="" />
-        <Label htmlFor={id}>
-          {label}
-          {required && "*"}
-        </Label>
-      </div>
-      {helperText && (
-        <p className="text-[0.8rem] text-muted-foreground">{helperText}</p>
+    <div className="flex h-auto w-full flex-col justify-center gap-0">
+      {selectedElement === element && (
+        <Label className="text-muted-foreground">Checkbox Field</Label>
       )}
+      <FormComponent element={element} isReadOnly />
     </div>
   );
 };
@@ -70,6 +64,7 @@ const FormComponent = ({
   submitValue,
   defaultValue,
   isInvalid,
+  isReadOnly,
 }: FormElementFormComponentProps) => {
   const elementTyped = element as CustomInstance;
 
@@ -85,42 +80,48 @@ const FormComponent = ({
   const { label, required, helperText } = elementTyped.extraAttributes;
   const id = `checkbox ${element.id}`;
   return (
-    <div className="flex space-x-2">
-      <Checkbox
-        id={id}
-        checked={value}
-        className={cn(error ?? "border-red-500")}
-        onCheckedChange={(checked) => {
-          setValue(checked === true);
-          if (!submitValue) return;
-          const valid = CheckboxFieldFormElement.validate(
-            element,
-            checked.toString(),
-          );
-          if (valid) {
-            setError(false);
-            submitValue(element.id, checked.toString());
-          } else {
-            setError(true);
-          }
-        }}
-      />
-      <div className="grid gap-1.5">
+    <div className={cn("flex flex-col")}>
+      <div
+        className={cn(
+          "flex items-center gap-2",
+          isReadOnly && "pointer-events-none",
+        )}
+        aria-readonly={isReadOnly}
+      >
+        <Checkbox
+          id={id}
+          checked={value}
+          className={cn(error ?? "border-red-500")}
+          onCheckedChange={(checked) => {
+            setValue(checked === true);
+            if (!submitValue) return;
+            const valid = CheckboxFieldFormElement.validate(
+              element,
+              checked.toString(),
+            );
+            if (valid) {
+              setError(false);
+              submitValue(element.id, checked.toString());
+            } else {
+              setError(true);
+            }
+          }}
+        />
         <Label htmlFor={id} className={cn(error && "text-red-500")}>
           {label}
           {required && "*"}
         </Label>
-        {helperText && (
-          <p
-            className={cn(
-              "text-[0.8rem] text-muted-foreground",
-              error && "text-red-500",
-            )}
-          >
-            {helperText}
-          </p>
-        )}
       </div>
+      {helperText && (
+        <p
+          className={cn(
+            "text-[0.8rem] text-muted-foreground",
+            error && "text-red-500",
+          )}
+        >
+          {helperText}
+        </p>
+      )}
     </div>
   );
 };

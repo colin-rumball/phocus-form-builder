@@ -42,9 +42,7 @@ const DesignerComponent = ({ element }: { element: FormElementInstance }) => {
   return (
     <div className="flex h-auto w-full flex-col justify-center gap-0">
       {selectedElement === element && (
-        <Label className="font-headline text-muted-foreground">
-          Title Field
-        </Label>
+        <Label className="text-muted-foreground">Title Field</Label>
       )}
       <FormComponent element={element} />
     </div>

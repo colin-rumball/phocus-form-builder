@@ -26,6 +26,7 @@ import {
   type FormElementInstance,
   type SubmitFunction,
   type FormElement,
+  FormElementFormComponentProps,
 } from "../form-elements";
 import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
 import { GoCheckbox } from "react-icons/go";
@@ -53,24 +54,27 @@ const propertiesSchema = z.object({
   options: z.array(z.string()).default([]),
 });
 
-function DesignerComponent({ element }: { element: FormElementInstance }) {
-  const elementTyped = element as CustomInstance;
-  const { label, required, placeHolder, helperText } =
-    elementTyped.extraAttributes;
-  return <FormComponent element={elementTyped} />;
-}
+const DesignerComponent = ({ element }: { element: FormElementInstance }) => {
+  const { selectedElement } = useDesigner((state) => ({
+    selectedElement: state.selectedElement,
+  }));
+  return (
+    <div className="flex h-auto w-full flex-col justify-center gap-0">
+      {selectedElement === element && (
+        <Label className="text-muted-foreground">Multi Select Field</Label>
+      )}
+      <FormComponent element={element} isReadOnly />
+    </div>
+  );
+};
 
 function FormComponent({
   element,
   submitValue,
   isInvalid,
   defaultValue,
-}: {
-  element: FormElementInstance;
-  submitValue?: SubmitFunction;
-  isInvalid?: boolean;
-  defaultValue?: string;
-}) {
+  isReadOnly,
+}: FormElementFormComponentProps) {
   const elementTyped = element as CustomInstance;
 
   const [value, setValue] = useState<string[]>([]);
@@ -100,7 +104,8 @@ function FormComponent({
         {required && "*"}
       </Label>
       <div
-        className="grid grid-cols-2"
+        aria-readonly={!!isReadOnly}
+        className={cn("grid grid-cols-2", isReadOnly && "pointer-events-none")}
         // onValueChange={(value) => {
         //   setValue(value);
         //   if (!submitValue) return;

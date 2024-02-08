@@ -49,21 +49,15 @@ const propertiesSchema = z.object({
 });
 
 const DesignerComponent = ({ element }: { element: FormElementInstance }) => {
-  const elementTyped = element as CustomInstance;
-  const { label, required, helperText } = elementTyped.extraAttributes;
+  const { selectedElement } = useDesigner((state) => ({
+    selectedElement: state.selectedElement,
+  }));
   return (
-    <div className="flex w-full flex-col gap-2">
-      <Label>
-        {label}
-        {required && "*"}
-      </Label>
-      <Button variant={"outline"} className="w-full">
-        <IoCalendarNumberOutline className="mr-2 h-4 w-4" />
-        <span>Pick a date</span>
-      </Button>
-      {helperText && (
-        <p className="text-[0.8rem] text-muted-foreground">{helperText}</p>
+    <div className="flex h-auto w-full flex-col justify-center gap-0">
+      {selectedElement === element && (
+        <Label className="text-muted-foreground">Date Field</Label>
       )}
+      <FormComponent element={element} isReadOnly />
     </div>
   );
 };
@@ -73,6 +67,7 @@ const FormComponent = ({
   submitValue,
   defaultValue,
   isInvalid,
+  isReadOnly,
 }: FormElementFormComponentProps) => {
   const elementTyped = element as CustomInstance;
 
@@ -95,7 +90,11 @@ const FormComponent = ({
         {required && "*"}
       </Label>
       <Popover>
-        <PopoverTrigger asChild>
+        <PopoverTrigger
+          asChild
+          aria-readonly={!!isReadOnly}
+          className={cn(isReadOnly && "pointer-events-none select-none")}
+        >
           <Button
             variant={"outline"}
             className={cn(

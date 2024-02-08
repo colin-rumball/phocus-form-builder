@@ -53,19 +53,15 @@ const propertiesSchema = z.object({
 });
 
 const DesignerComponent = ({ element }: { element: FormElementInstance }) => {
-  const elementTyped = element as CustomInstance;
-  const { label, placeholder, required, helperText, rows } =
-    elementTyped.extraAttributes;
+  const { selectedElement } = useDesigner((state) => ({
+    selectedElement: state.selectedElement,
+  }));
   return (
-    <div className="flex w-full flex-col">
-      <Label>
-        {label}
-        {required && "*"}
-      </Label>
-      <Textarea rows={rows} readOnly placeholder={placeholder} />
-      {helperText && (
-        <p className="text-[0.8rem] text-muted-foreground">{helperText}</p>
+    <div className="flex h-auto w-full flex-col justify-center gap-0">
+      {selectedElement === element && (
+        <Label className="text-muted-foreground">Text Area Field</Label>
       )}
+      <FormComponent element={element} isReadOnly />
     </div>
   );
 };
@@ -75,6 +71,7 @@ const FormComponent = ({
   submitValue,
   defaultValue,
   isInvalid,
+  isReadOnly,
 }: FormElementFormComponentProps) => {
   const elementTyped = element as CustomInstance;
 
@@ -96,6 +93,7 @@ const FormComponent = ({
         {required && "*"}
       </Label>
       <Textarea
+        readOnly={isReadOnly}
         rows={rows}
         className={cn(error && "border-red-500")}
         placeholder={placeholder}
