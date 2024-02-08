@@ -1,7 +1,7 @@
 export default {
   providers: [
     {
-      domain: "https://discrete-goldfish-67.clerk.accounts.dev",
+      domain: "https://clerk.phocus.studio",
       applicationID: "convex",
     },
   ],
