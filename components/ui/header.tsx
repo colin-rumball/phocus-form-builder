@@ -8,7 +8,8 @@ import {
   useEffect,
 } from "react";
 import Image from "next/image";
-import HeaderLogoImg from "@/public/images/logo.png";
+import LogoLightImg from "@/public/images/logo-light.png";
+import LogoDarkImg from "@/public/images/logo-dark.png";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { Link } from "../ui/link";
 import { useParams, usePathname } from "next/navigation";
@@ -20,11 +21,11 @@ import { useConvexAuth, useMutation, useQuery } from "convex/react";
 import { FaRegUser } from "react-icons/fa";
 import { type Id } from "@/convex/_generated/dataModel";
 import { api } from "@/convex/_generated/api";
-import Headline from "./headline";
 import useHeader from "@/lib/hooks/useHeader";
 import { Input } from "./input";
 import FormBuilderHeader from "../form-builder-header";
 import { Skeleton } from "./skeleton";
+import Headline from "./headline";
 
 type HeaderProps = ComponentPropsWithRef<"header">;
 
@@ -81,27 +82,11 @@ export default Header;
 const ConditionalContent = () => {
   const pathname = usePathname();
 
-  if (pathname.includes("/builder")) {
-    return <BuilderHeaderContent />;
-  }
-
   if (pathname.includes("/submit")) {
     return <SubmitHeaderContent />;
   }
 
   return <SiteHeaderContent />;
-};
-
-const BuilderHeaderContent = () => {
-  return (
-    <div className="container relative flex w-full items-center justify-between">
-      <Logo />
-      <div className="flex flex-grow justify-center">
-        <FormHeaderInfo />
-      </div>
-      <UserOptions />
-    </div>
-  );
 };
 
 const SubmitHeaderContent = () => {
@@ -111,52 +96,6 @@ const SubmitHeaderContent = () => {
         <Logo />
       </div>
       <ThemeSwitcher />
-    </div>
-  );
-};
-
-const FormHeaderInfo = () => {
-  const params = useParams();
-  const form = useQuery(api.forms.get, { id: params.formId as Id<"forms"> });
-  const [nameInput, setNameInput] = useState("");
-  const updateForm = useMutation(api.forms.update);
-
-  useEffect(() => {
-    if (!form) return;
-    setNameInput(form.name);
-  }, [form]);
-
-  const onNameChanged = async (newName?: string) => {
-    if (!form) return;
-    if (newName === "") setNameInput(form.name);
-    if (newName === form.name) return;
-
-    await updateForm({
-      id: form._id as Id<"forms">,
-      data: { name: newName },
-    });
-  };
-
-  return (
-    <div className="pointer-events-none absolute inset-y-0 left-1/2 flex w-full -translate-x-1/2 flex-col items-center justify-evenly">
-      {!form && <Skeleton className="h-10 w-56" />}
-      {!!form && (
-        <div
-          className={cn(
-            "pointer-events-auto hidden w-full max-w-[300px] text-center md:block lg:max-w-[460px] xl:max-w-[700px] 2xl:max-w-[900px]",
-          )}
-        >
-          <Input
-            value={nameInput}
-            onChange={(e) => setNameInput(e.target.value)}
-            onBlur={() => onNameChanged(nameInput)}
-            className={cn(
-              "mx-0 ml-0 h-full w-full truncate rounded-none border-none bg-transparent px-0 py-0 text-center font-headline text-background focus-visible:border-0 focus-visible:bg-background focus-visible:text-foreground focus-visible:ring-0 focus-visible:ring-offset-0",
-              "text-heading leading-heading",
-            )}
-          />
-        </div>
-      )}
     </div>
   );
 };
@@ -216,16 +155,20 @@ const SiteHeaderContent = () => {
 };
 
 const Logo = () => (
-  <Link variant={"image"} href={"/"} className="flex items-center">
+  <Link variant={"image"} href={"/"} className="flex items-center gap-5">
     <Image
-      src={HeaderLogoImg}
+      src={LogoLightImg}
       alt="Formulate Logo"
-      className="block h-[70px] w-auto py-2"
+      className="hidden h-[70px] w-auto py-3 dark:block"
       priority
     />
-    {/* <Headline as="h2" className="">
-      Formulate
-    </Headline> */}
+    <Image
+      src={LogoDarkImg}
+      alt="Formulate Logo"
+      className="block h-[70px] w-auto py-3 dark:hidden"
+      priority
+    />
+    <span className="text-xl uppercase tracking-headline">Phocus</span>
   </Link>
 );
 
@@ -247,7 +190,9 @@ const Nav = ({ sideMenu = false }) => {
               key={href}
               href={href}
               variant={pathName === href ? "active" : "default"}
-              className="rounded-md px-3 py-1 text-lg no-underline transition-colors duration-300 hover:bg-secondary hover:text-primary-foreground hover:shadow-md lg:rounded-lg lg:transition-colors lg:duration-300 lg:hover:bg-secondary lg:hover:text-primary-foreground lg:hover:shadow-lg"
+              className={cn(
+                "rounded-md px-3 py-1 text-lg transition-colors duration-300 hover:bg-secondary hover:text-primary-foreground hover:shadow-md lg:rounded-lg lg:transition-colors lg:duration-300 lg:hover:bg-secondary lg:hover:text-primary-foreground lg:hover:shadow-lg",
+              )}
             >
               {label}
             </Link>

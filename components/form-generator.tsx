@@ -13,7 +13,6 @@ import { useAction, useMutation } from "convex/react";
 import { type FormElementInstance } from "./form-elements";
 import { Button } from "./ui/button";
 import { Textarea } from "./ui/textarea";
-import useBuilderTabs from "@/lib/hooks/useBuilderTabs";
 import SimpleLoadingSpinner from "./loading-icons";
 import { type Doc } from "@/convex/_generated/dataModel";
 
@@ -25,14 +24,14 @@ const FormGenerator = ({
   form: Doc<"forms">;
 }) => {
   const [error, setError] = useState(false);
-  const setCurrentTab = useBuilderTabs((state) => state.setCurrentTab);
   const [generating, startTransition] = useTransition();
   const [userInput, setUserInput] = useState("");
   const generate = useAction(api.openai.generate);
   const updateForm = useMutation(api.forms.update);
-  const { elements, setElements } = useDesigner((state) => ({
+  const { elements, setElements, setPreviewing } = useDesigner((state) => ({
     elements: state.elements,
     setElements: state.setElements,
+    setPreviewing: state.setPreviewing,
   }));
 
   const generateForm = async () => {
@@ -67,7 +66,7 @@ const FormGenerator = ({
       });
 
       setElements(newElements);
-      setCurrentTab("DESIGN");
+      setPreviewing(false);
     } catch (e) {
       // TODO: look at all errors and handle them
       console.log("Error parsing openai response", rawResponse);

@@ -35,6 +35,9 @@ export type DesignerState = {
 
   unsavedChanges: boolean;
   setUnsavedChanges: (unsavedChanges: boolean) => void;
+
+  previewing: boolean;
+  setPreviewing: (previewing: boolean) => void;
 };
 
 type PartialDesignerState = Pick<DesignerState, "elements">;
@@ -109,6 +112,8 @@ const useDesigner = create<DesignerState>()(
       setSavedAt: (date) => set(() => ({ savedAt: date })),
       unsavedChanges: false,
       setUnsavedChanges: (unsavedChanges) => set(() => ({ unsavedChanges })),
+      previewing: false,
+      setPreviewing: (previewing) => set(() => ({ previewing })),
     }),
     {
       equality: (

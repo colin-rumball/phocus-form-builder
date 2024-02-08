@@ -20,10 +20,6 @@ import { toast } from "./ui/use-toast";
 import { Input } from "./ui/input";
 import { Link } from "./ui/link";
 import { BsArrowLeft, BsArrowRight } from "react-icons/bs";
-import useBuilderTabs, {
-  type BuilderTab,
-  tabMap,
-} from "@/lib/hooks/useBuilderTabs";
 import { AnimatePresence, motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import FormPreviewer from "./form-previewer";
@@ -35,24 +31,26 @@ const FormBuilder = ({
   preloadedForm: Preloaded<typeof api.forms.get>;
 }) => {
   const form = usePreloadedQuery(preloadedForm);
-  const { setElements, setSelectedElement, setSavedAt } = useDesigner(
-    (state) => ({
-      setElements: state.setElements,
-      setSelectedElement: state.setSelectedElement,
-      setSavedAt: state.setSavedAt,
-    }),
-  );
-  const { pause, resume, clear } = useDesigner.temporal.getState();
-  const { currentTab, setCurrentTab } = useBuilderTabs((state) => ({
-    currentTab: state.currentTab,
-    setCurrentTab: state.setCurrentTab,
+  const {
+    elements,
+    setElements,
+    setSelectedElement,
+    setSavedAt,
+    setPreviewing,
+  } = useDesigner((state) => ({
+    elements: state.elements,
+    setElements: state.setElements,
+    setSelectedElement: state.setSelectedElement,
+    setSavedAt: state.setSavedAt,
+    setPreviewing: state.setPreviewing,
   }));
+  const { pause, resume, clear } = useDesigner.temporal.getState();
 
   useEffect(() => {
     clear();
     setSelectedElement(null);
     window.scrollTo({ top: 0 });
-    setCurrentTab("DESIGN");
+    setPreviewing(false);
   }, []);
 
   useEffect(() => {
@@ -85,7 +83,7 @@ const FormBuilder = ({
 
   const sensors = useSensors(mouseSensor, touchSensor);
 
-  if (!form) {
+  if (!form || (form.content != "[]" && elements.length === 0)) {
     return (
       <div className="flex h-full w-full flex-grow items-center justify-center">
         <SimpleLoadingSpinner className="h-12 w-12" />
@@ -147,21 +145,19 @@ const FormBuilder = ({
   return (
     <DndContext sensors={sensors}>
       <div className={cn("relative h-full w-full flex-grow")}>
+        <Designer form={form} />
         {/* <AnimatedTab myTab="DESIGN"> */}
-        {currentTab === "DESIGN" && <Designer form={form} />}
+        {/* {currentTab === "DESIGN" && <Designer form={form} />} */}
         {/* </AnimatedTab> */}
 
         {/* <AnimatedTab myTab="PREVIEW"> */}
-        {currentTab === "PREVIEW" && <FormPreviewer />}
+        {/* {currentTab === "PREVIEW" && <FormPreviewer />} */}
         {/* </AnimatedTab> */}
       </div>
       <div
         className={cn(
           "fixed inset-x-0 bottom-0 top-0 -z-50 transition-all",
-          currentTab === "DESIGN" &&
-            "bg-accent bg-[url(/svg/subtle-prism.svg)] dark:bg-[url(/svg/subtle-prism.svg)]",
-          currentTab === "PREVIEW" &&
-            "bg-accent bg-[url(/svg/subtle-prism.svg)] dark:bg-[url(/svg/subtle-prism.svg)]",
+          "bg-accent bg-[url(/svg/subtle-prism.svg)] dark:bg-[url(/svg/subtle-prism.svg)]",
         )}
       />
       <DragOverlayWrapper />
@@ -191,45 +187,45 @@ const variants = {
   },
 };
 
-const AnimatedTab = ({
-  children,
-  myTab,
-}: {
-  children: ReactNode;
-  myTab: BuilderTab;
-}) => {
-  const currentTab = useBuilderTabs((state) => state.currentTab);
-  const prevTab = useRef(currentTab);
-  useEffect(() => {
-    prevTab.current = currentTab;
-  }, [currentTab]);
-  const [animating, setAnimating] = useState(false);
-  const direction = tabMap[currentTab] > tabMap[prevTab.current] ? 1 : -1;
-  return (
-    <AnimatePresence initial={false} custom={direction}>
-      {currentTab === myTab && (
-        <motion.div
-          className={cn(
-            "absolute inset-0",
-            animating && "pointer-events-none select-none overflow-hidden",
-          )}
-          key={`${myTab}-TAB`}
-          custom={direction}
-          variants={variants}
-          initial="enter"
-          animate="center"
-          exit={"exit"}
-          transition={{ ease: "backInOut", duration: 0.4 }}
-          onAnimationStart={() => {
-            setAnimating(true);
-          }}
-          onAnimationComplete={() => {
-            setAnimating(false);
-          }}
-        >
-          {children}
-        </motion.div>
-      )}
-    </AnimatePresence>
-  );
-};
+// const AnimatedTab = ({
+//   children,
+//   myTab,
+// }: {
+//   children: ReactNode;
+//   myTab: BuilderTab;
+// }) => {
+//   const currentTab = useBuilderTabs((state) => state.currentTab);
+//   const prevTab = useRef(currentTab);
+//   useEffect(() => {
+//     prevTab.current = currentTab;
+//   }, [currentTab]);
+//   const [animating, setAnimating] = useState(false);
+//   const direction = tabMap[currentTab] > tabMap[prevTab.current] ? 1 : -1;
+//   return (
+//     <AnimatePresence initial={false} custom={direction}>
+//       {currentTab === myTab && (
+//         <motion.div
+//           className={cn(
+//             "absolute inset-0",
+//             animating && "pointer-events-none select-none overflow-hidden",
+//           )}
+//           key={`${myTab}-TAB`}
+//           custom={direction}
+//           variants={variants}
+//           initial="enter"
+//           animate="center"
+//           exit={"exit"}
+//           transition={{ ease: "backInOut", duration: 0.4 }}
+//           onAnimationStart={() => {
+//             setAnimating(true);
+//           }}
+//           onAnimationComplete={() => {
+//             setAnimating(false);
+//           }}
+//         >
+//           {children}
+//         </motion.div>
+//       )}
+//     </AnimatePresence>
+//   );
+// };
