@@ -42,13 +42,14 @@ const FormBuilder = ({
       setSavedAt: state.setSavedAt,
     }),
   );
-  const { pause, resume } = useDesigner.temporal.getState();
+  const { pause, resume, clear } = useDesigner.temporal.getState();
   const { currentTab, setCurrentTab } = useBuilderTabs((state) => ({
     currentTab: state.currentTab,
     setCurrentTab: state.setCurrentTab,
   }));
 
   useEffect(() => {
+    clear();
     setSelectedElement(null);
     window.scrollTo({ top: 0 });
     setCurrentTab("DESIGN");

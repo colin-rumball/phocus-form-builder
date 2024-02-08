@@ -69,6 +69,7 @@ const Designer = ({
           let newElementIndex = overElementIndex;
           if (isDroppingOverDesignerElementBottomHalf) newElementIndex += 1;
           moveElement(activeElement.id, newElementIndex);
+          setSelectedElement(null);
         } else {
           // Dropping over the drop area
           // moveElement(activeElement.id, elements.length);
@@ -109,19 +110,17 @@ const Designer = ({
                   <>
                     <DesignerElementWrapper
                       key={element.id}
+                      droppable={droppable}
                       element={element}
                     />
-                    {selectedElement === element && (
-                      <div className="flex w-full justify-center">
-                        <DesignerControls droppable={droppable} />
-                      </div>
-                    )}
                   </>
                 );
               })}
             </div>
           )}
-          {!selectedElement && <DesignerControls droppable={droppable} />}
+          {selectedElement === null && (
+            <DesignerControls droppable={droppable} />
+          )}
         </div>
       </div>
     </div>
@@ -130,8 +129,10 @@ const Designer = ({
 
 const DesignerElementWrapper = ({
   element,
+  droppable,
 }: {
   element: FormElementInstance;
+  droppable: ReturnType<typeof useDroppable>;
 }) => {
   const { selectedElement, setSelectedElement, removeElement } = useDesigner(
     (state) => ({
@@ -171,80 +172,91 @@ const DesignerElementWrapper = ({
 
   const isSelectedElement = selectedElement?.id === element.id;
   const DesignerElement = FormElements[element.type].designerComponent;
-  return (
-    <div
-      onClick={(e) => {
-        e.stopPropagation();
-        setSelectedElement(element);
-      }}
-      className={cn(
-        "relative m-1 flex h-auto flex-col rounded-md text-foreground",
-      )}
-    >
-      {!isSelectedElement && (
-        <>
-          <div
-            ref={topHalf.setNodeRef}
-            className={cn(
-              "absolute inset-x-0 top-0 h-1/2 rounded-t-md",
-              // topHalf.isOver && "bg-primary/20",
-            )}
-          />
-          <div
-            ref={bottomHalf.setNodeRef}
-            className={cn(
-              "absolute inset-x-0 bottom-0 h-1/2 rounded-b-md",
-              // bottomHalf.isOver && "bg-primary/20",
-            )}
-          />
-          {topHalf.isOver && (
-            <div className="absolute top-0 h-[7px] w-full rounded-md rounded-b-none bg-primary" />
-          )}
-          {bottomHalf.isOver && (
-            <div className="absolute bottom-0 h-[7px] w-full rounded-md rounded-t-none bg-primary" />
-          )}
-        </>
-      )}
 
+  return (
+    <>
       <div
+        onClick={(e) => {
+          e.stopPropagation();
+          setSelectedElement(element);
+        }}
         className={cn(
-          "flex h-full w-full flex-col items-center rounded-md px-4 py-0 transition-all",
-          isSelectedElement && "bg-accent ring-1 ring-foreground",
+          "relative m-1 flex h-auto flex-col rounded-md text-foreground",
         )}
       >
+        {!isSelectedElement && (
+          <>
+            <div
+              ref={topHalf.setNodeRef}
+              className={cn(
+                "absolute inset-x-0 top-0 h-1/2 rounded-t-md",
+                // topHalf.isOver && "bg-primary/20",
+              )}
+            />
+            <div
+              ref={bottomHalf.setNodeRef}
+              className={cn(
+                "absolute inset-x-0 bottom-0 h-1/2 rounded-b-md",
+                // bottomHalf.isOver && "bg-primary/20",
+              )}
+            />
+            {topHalf.isOver && (
+              <div className="absolute top-0 h-[7px] w-full rounded-md rounded-b-none bg-primary" />
+            )}
+            {bottomHalf.isOver && (
+              <div className="absolute bottom-0 h-[7px] w-full rounded-md rounded-t-none bg-primary" />
+            )}
+          </>
+        )}
+
         <div
           className={cn(
-            "relative m-0 flex h-0 w-full items-center justify-end overflow-hidden transition-all",
-            isSelectedElement && "my-2 h-7",
+            "flex h-full w-full flex-col items-center rounded-md px-4 py-0 transition-all",
+            isSelectedElement && "bg-accent ring-1 ring-foreground",
           )}
         >
           <div
-            ref={draggable.setNodeRef}
-            {...draggable.attributes}
-            {...draggable.listeners}
-            className="absolute left-1/2 -translate-x-1/2 cursor-grab active:cursor-grabbing"
+            className={cn(
+              "relative m-0 flex h-0 w-full items-center justify-end overflow-hidden transition-all",
+              isSelectedElement && "my-2 h-7",
+            )}
           >
-            <PiDotsSixBold className="h-7 w-7" />
+            <div
+              ref={draggable.setNodeRef}
+              {...draggable.attributes}
+              {...draggable.listeners}
+              className="absolute left-1/2 -translate-x-1/2 cursor-grab active:cursor-grabbing"
+            >
+              <PiDotsSixBold className="h-7 w-7" />
+            </div>
+            {!!selectedElement && (
+              <>
+                <Button
+                  variant={"ghost"}
+                  className="p-2 transition-all hover:scale-110 hover:text-destructive"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    removeElement(element.id);
+                    setSelectedElement(null);
+                  }}
+                >
+                  <HiTrash className="h-6 w-6" />
+                </Button>
+                <FormElementInspector element={selectedElement} />
+              </>
+            )}
           </div>
-          <Button
-            variant={"ghost"}
-            className="p-2 transition-all hover:scale-110 hover:text-destructive"
-            onClick={() => {
-              removeElement(element.id);
-              setSelectedElement(null);
-            }}
-          >
-            <HiTrash className="h-6 w-6" />
-          </Button>
-          {!!selectedElement && (
-            <FormElementInspector element={selectedElement} />
-          )}
-        </div>
-        <div className="w-full">
-          <DesignerElement element={element} />
+          <div className="w-full">
+            <DesignerElement element={element} />
+          </div>
         </div>
       </div>
-    </div>
+      {selectedElement === element && (
+        <div className="flex w-full justify-center">
+          <DesignerControls droppable={droppable} />
+        </div>
+      )}
+    </>
   );
 };
 
