@@ -165,7 +165,7 @@ const FormCard = ({
   };
 
   return (
-    <Card className="h-[190px]">
+    <Card className="flex h-[210px] flex-col">
       <CardHeader>
         <CardTitle className="flex items-center justify-between">
           <Input
@@ -231,8 +231,7 @@ const FormCard = ({
           )}
         </CardDescription>
       </CardHeader>
-      <CardContent className="h-[20px] truncate"></CardContent>
-      <CardFooter>
+      <CardContent className="flex flex-grow flex-col items-center justify-end">
         {published && (
           <Button asChild className="mt-2 w-full gap-4">
             <Link href={`/form/${_id}`}>
@@ -247,7 +246,7 @@ const FormCard = ({
             </Link>
           </Button>
         )}
-      </CardFooter>
+      </CardContent>
     </Card>
   );
 };
