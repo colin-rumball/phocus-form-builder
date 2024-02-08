@@ -14,7 +14,9 @@ const Providers = ({ children }: ProvidersProps) => {
       enableSystem
       disableTransitionOnChange
     >
-      <ClerkProvider publishableKey="pk_test_ZGlzY3JldGUtZ29sZGZpc2gtNjcuY2xlcmsuYWNjb3VudHMuZGV2JA">
+      <ClerkProvider
+        publishableKey={process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}
+      >
         <ConvexProvider>{children}</ConvexProvider>
       </ClerkProvider>
     </ThemeProvider>
