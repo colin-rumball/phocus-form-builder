@@ -8,13 +8,13 @@ import { preloadQuery } from "convex/nextjs";
 export default async function BuilderPage({
   params,
 }: {
-  params: { formId: string };
+  params: { id: string };
 }) {
   const token = await getAuthToken();
   const preloadedForm = await preloadQuery(
     api.forms.get,
     {
-      id: params.formId as Id<"forms">,
+      id: params.id as Id<"forms">,
     },
     { token },
   );

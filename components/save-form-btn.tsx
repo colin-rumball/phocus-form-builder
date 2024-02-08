@@ -73,15 +73,21 @@ const SaveFormBtn = ({ form }: { form?: Doc<"forms"> | null }) => {
   }, [unsavedChanges]);
 
   const saving = loading || delayedSave;
+  const labelText = unsavedChanges && saving ? "SAVING" : "SAVED";
 
   return (
     <>
-      {!form && <Skeleton className="h-10 w-12" />}
+      {!form && <Skeleton className="h-9 w-24" />}
       {!!form && (
         <TooltipProvider delayDuration={300}>
           <Tooltip>
             <TooltipTrigger asChild>
-              <Button
+              <div className="flex items-center justify-center gap-1 rounded-md border border-primary-foreground px-3 py-1">
+                <span className="select-none">{labelText}</span>
+                {saving && <SimpleLoadingSpinner className="" />}
+                {!unsavedChanges && !saving && <HiCheck />}
+              </div>
+              {/* <Button
                 className={cn(
                   "gap-2 opacity-100 transition-all",
                   !unsavedChanges && "bg-green-600 hover:bg-green-300",
@@ -95,7 +101,7 @@ const SaveFormBtn = ({ form }: { form?: Doc<"forms"> | null }) => {
                 {!unsavedChanges && !saving && <HiCheck />}
                 {unsavedChanges && !saving && <FaRegSave />}
                 {saving && <SimpleLoadingSpinner className="" />}
-              </Button>
+              </Button> */}
             </TooltipTrigger>
             {savedAt !== null && (
               <TooltipContent side="bottom" className="mx-2">

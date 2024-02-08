@@ -1,8 +1,6 @@
 "use client";
 
-import { MdTextFields } from "react-icons/md";
 import {
-  SubmitFunction,
   type ElementsType,
   type FormElement,
   type FormElementInstance,
@@ -31,8 +29,10 @@ import { Bs123 } from "react-icons/bs";
 const type: ElementsType = "NumberField";
 
 const extraAttributes = {
-  label: "Number Field Label",
+  label: "Number Input Label",
   helperText: "Helper text",
+  min: 0,
+  max: 100,
   required: false,
   placeholder: "",
 };
@@ -42,19 +42,15 @@ type CustomInstance = FormElementInstance & {
 };
 
 const DesignerComponent = ({ element }: { element: FormElementInstance }) => {
-  const elementTyped = element as CustomInstance;
-  const { label, placeholder, required, helperText } =
-    elementTyped.extraAttributes;
+  const { selectedElement } = useDesigner((state) => ({
+    selectedElement: state.selectedElement,
+  }));
   return (
-    <div className="flex w-full flex-col gap-2">
-      <Label>
-        {label}
-        {required && "*"}
-      </Label>
-      <Input type="number" readOnly placeholder={placeholder} />
-      {helperText && (
-        <p className="text-[0.8rem] text-muted-foreground">{helperText}</p>
+    <div className="flex h-auto w-full flex-col justify-center gap-0">
+      {selectedElement === element && (
+        <Label className="text-muted-foreground">Number Input</Label>
       )}
+      <FormComponent element={element} isReadOnly />
     </div>
   );
 };
@@ -64,6 +60,7 @@ const FormComponent = ({
   submitValue,
   defaultValue,
   isInvalid,
+  isReadOnly,
 }: FormElementFormComponentProps) => {
   const elementTyped = element as CustomInstance;
 
@@ -85,11 +82,13 @@ const FormComponent = ({
         {required && "*"}
       </Label>
       <Input
+        readOnly={isReadOnly}
         type="number"
         className={cn(error && "border-red-500")}
         placeholder={placeholder}
         onChange={(e) => {
           setValue(e.target.value);
+          submitValue && submitValue(element.id, e.target.value);
         }}
         onBlur={(e) => {
           const valid = NumberFieldFormElement.validate(
@@ -119,6 +118,8 @@ const FormComponent = ({
 const propertiesSchema = z.object({
   label: z.string().min(2).max(50),
   helperText: z.string().max(200),
+  min: z.number().default(0),
+  max: z.number().default(100),
   required: z.boolean().default(false),
   placeholder: z.string().max(50),
 });
@@ -134,6 +135,8 @@ const PropertiesComponent = ({ element }: { element: FormElementInstance }) => {
     defaultValues: {
       label: elementTyped.extraAttributes.label,
       placeholder: elementTyped.extraAttributes.placeholder,
+      min: elementTyped.extraAttributes.min,
+      max: elementTyped.extraAttributes.max,
       required: elementTyped.extraAttributes.required,
       helperText: elementTyped.extraAttributes.helperText,
     },
@@ -221,6 +224,48 @@ const PropertiesComponent = ({ element }: { element: FormElementInstance }) => {
         />
         <FormField
           control={form.control}
+          name="min"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Minimum Number</FormLabel>
+              <FormControl>
+                <Input
+                  {...field}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") e.currentTarget.blur();
+                  }}
+                />
+              </FormControl>
+              <FormDescription>
+                The minimum number that can be entered.
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="max"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Maximum Number</FormLabel>
+              <FormControl>
+                <Input
+                  {...field}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") e.currentTarget.blur();
+                  }}
+                />
+              </FormControl>
+              <FormDescription>
+                The maximum number that can be entered.
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
           name="required"
           render={({ field }) => (
             <FormItem className="flex items-center justify-between rounded-lg border p-3 shadow-sm">
@@ -255,13 +300,18 @@ export const NumberFieldFormElement: FormElement = {
   }),
   designerButton: {
     icon: Bs123,
-    label: "Number Field",
+    label: "Number Input",
   },
   designerComponent: DesignerComponent,
   formComponent: FormComponent,
   propertiesComponent: PropertiesComponent,
   validate: (element, value) => {
     const elementTyped = element as CustomInstance;
+    const numberValue = Number(value);
+
+    if (elementTyped.extraAttributes.min > numberValue) return false;
+    if (elementTyped.extraAttributes.max < numberValue) return false;
+
     if (elementTyped.extraAttributes.required) {
       return value.length > 0;
     }

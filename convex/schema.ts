@@ -12,7 +12,6 @@ export default defineSchema({
     authorId: v.id("users"),
     published: v.boolean(),
     name: v.string(),
-    description: v.string(),
     content: v.string(), //TODO: string?
     visits: v.number(),
     submissions: v.number(),

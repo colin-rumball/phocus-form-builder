@@ -79,7 +79,7 @@ function UserSubmitForm({
   if (submitted) {
     return (
       <div className="flex h-full w-full items-center justify-center p-8">
-        <div className="flex w-full max-w-[620px] flex-grow flex-col gap-4 overflow-y-auto rounded border bg-background p-8 shadow-xl">
+        <div className="flex max-w-[620px] flex-grow flex-col gap-4 overflow-y-auto rounded-2xl border bg-background p-8 shadow-xl">
           <h1 className="text-2xl font-bold">Form submitted</h1>
           <p className="text-muted-foreground">
             Thank you for submitting the form, you can close this page now.
@@ -93,7 +93,7 @@ function UserSubmitForm({
     <div className="flex h-full w-full items-center justify-center p-8">
       <div
         key={renderKey}
-        className="flex w-full max-w-[620px] flex-grow flex-col gap-4 overflow-y-auto rounded border bg-background p-8 shadow-xl"
+        className="flex w-full max-w-[620px] flex-grow flex-col gap-4 overflow-y-auto rounded-2xl border bg-background p-8 shadow-xl"
       >
         {content.map((element) => {
           const FormElement = FormElements[element.type].formComponent;

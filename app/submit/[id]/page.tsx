@@ -4,6 +4,7 @@ import UserSubmitForm from "@/components/user-submit-form";
 import { api } from "@/convex/_generated/api";
 import { type Id } from "@/convex/_generated/dataModel";
 import { getAuthToken } from "@/lib/auth";
+import { cn } from "@/lib/utils";
 import { fetchMutation, fetchQuery } from "convex/nextjs";
 
 export default async function SubmitPage({
@@ -33,6 +34,12 @@ export default async function SubmitPage({
   return (
     <Page>
       <UserSubmitForm formId={params.id} content={formContent} />
+      <div
+        className={cn(
+          "fixed inset-x-0 bottom-0 top-0 -z-50 transition-all",
+          "bg-accent bg-[url(/svg/subtle-prism.svg)] dark:bg-[url(/svg/subtle-prism.svg)]",
+        )}
+      />
     </Page>
   );
 }

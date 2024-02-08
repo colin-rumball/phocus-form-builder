@@ -28,7 +28,7 @@ const Footer = forwardRef<HTMLDivElement, Props>(({ className }, ref) => {
         </ul>
       </div>
       <div className="border-tan relative mt-xl w-full border py-lg text-center opacity-60">
-        <small className="">© 2024, FORMULATE</small>
+        <small className="">© 2024, PHOCUS</small>
       </div>
     </footer>
   );

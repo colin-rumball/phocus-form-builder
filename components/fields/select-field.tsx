@@ -34,12 +34,13 @@ import {
   type FormElementInstance,
   type SubmitFunction,
   type FormElement,
+  type FormElementFormComponentProps,
 } from "../form-elements";
 
 const type: ElementsType = "SelectField";
 
 const extraAttributes = {
-  label: "Select Field Label",
+  label: "Dropdown Field Label",
   helperText: "Helper text",
   required: false,
   placeHolder: "Value here...",
@@ -58,39 +59,27 @@ const propertiesSchema = z.object({
   options: z.array(z.string()).default([]),
 });
 
-function DesignerComponent({ element }: { element: FormElementInstance }) {
-  const elementTyped = element as CustomInstance;
-  const { label, required, placeHolder, helperText } =
-    elementTyped.extraAttributes;
+const DesignerComponent = ({ element }: { element: FormElementInstance }) => {
+  const { selectedElement } = useDesigner((state) => ({
+    selectedElement: state.selectedElement,
+  }));
   return (
-    <div className="flex w-full flex-col gap-2">
-      <Label>
-        {label}
-        {required && "*"}
-      </Label>
-      <Select>
-        <SelectTrigger className="w-full">
-          <SelectValue placeholder={placeHolder} />
-        </SelectTrigger>
-      </Select>
-      {helperText && (
-        <p className="text-[0.8rem] text-muted-foreground">{helperText}</p>
+    <div className="flex h-auto w-full flex-col justify-center gap-0">
+      {selectedElement === element && (
+        <Label className="text-muted-foreground">Dropdown Field</Label>
       )}
+      <FormComponent element={element} isReadOnly />
     </div>
   );
-}
+};
 
 function FormComponent({
   element,
   submitValue,
   isInvalid,
   defaultValue,
-}: {
-  element: FormElementInstance;
-  submitValue?: SubmitFunction;
-  isInvalid?: boolean;
-  defaultValue?: string;
-}) {
+  isReadOnly,
+}: FormElementFormComponentProps) {
   const elementTyped = element as CustomInstance;
 
   const [value, setValue] = useState(defaultValue ?? "");
@@ -118,7 +107,14 @@ function FormComponent({
           submitValue(elementTyped.id, value);
         }}
       >
-        <SelectTrigger className={cn("w-full", error && "border-red-500")}>
+        <SelectTrigger
+          aria-readonly={!!isReadOnly}
+          className={cn(
+            "w-full",
+            error && "border-red-500",
+            isReadOnly && "pointer-events-none select-none",
+          )}
+        >
           <SelectValue placeholder={placeHolder} />
         </SelectTrigger>
         <SelectContent>
@@ -342,7 +338,7 @@ export const SelectFieldFormElement: FormElement = {
   }),
   designerButton: {
     icon: RxDropdownMenu,
-    label: "Select Field",
+    label: "Dropdown Field",
   },
   designerComponent: DesignerComponent,
   formComponent: FormComponent,

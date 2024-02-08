@@ -45,7 +45,7 @@ type ImageFieldExtraAttributes = {
 };
 
 const extraAttributes: ImageFieldExtraAttributes = {
-  label: "Image Field Label",
+  label: "Image Label",
   helperText: "Helper text",
   imageUrl: null,
   size: "MEDIUM",
@@ -66,16 +66,11 @@ const DesignerComponent = ({ element }: { element: FormElementInstance }) => {
   const { selectedElement } = useDesigner((state) => ({
     selectedElement: state.selectedElement,
   }));
-  const elementTyped = element as CustomInstance;
-  const { label, imageUrl, helperText, size } = elementTyped.extraAttributes;
   return (
-    <div className="w-full">
+    <div className="flex h-auto w-full flex-col justify-center gap-0">
       {selectedElement === element && (
-        <Label className="font-headline text-muted-foreground">
-          Image Field
-        </Label>
+        <Label className="text-muted-foreground">Image</Label>
       )}
-
       <FormComponent element={element} />
     </div>
   );
@@ -98,30 +93,32 @@ const FormComponent = ({
 
   const { label, helperText, imageUrl, size } = elementTyped.extraAttributes;
   return (
-    <div className="flex w-full flex-col items-center gap-2">
+    <div className="flex w-full flex-col gap-2">
       <Label className={cn(error && "text-red-500")}>{label}</Label>
-      <div
-        className={cn(
-          "relative flex flex-col gap-2",
-          size === "SMALL" && "w-1/3",
-          size === "MEDIUM" && "w-2/3",
-          size === "LARGE" && "w-full",
-        )}
-      >
-        {imageUrl && (
-          <Image
-            src={imageUrl}
-            className="h-auto rounded-lg"
-            alt={helperText || "Uploaded Image"}
-            width={620}
-            height={300}
-          />
-        )}
-        {!imageUrl && (
-          <div className="flex h-40 w-full items-center justify-center rounded-lg border-2 border-dotted bg-transparent">
-            <RiFileUploadLine className="h-10 w-10" />
-          </div>
-        )}
+      <div className="flex w-full justify-center">
+        <div
+          className={cn(
+            "relative flex flex-col items-center gap-2",
+            size === "SMALL" && "w-1/3",
+            size === "MEDIUM" && "w-2/3",
+            size === "LARGE" && "w-full",
+          )}
+        >
+          {imageUrl && (
+            <Image
+              src={imageUrl}
+              className="h-auto rounded-lg"
+              alt={helperText || "Uploaded Image"}
+              width={620}
+              height={300}
+            />
+          )}
+          {!imageUrl && (
+            <div className="flex h-40 w-full items-center justify-center rounded-lg border-2 border-dotted bg-transparent">
+              <RiFileUploadLine className="h-10 w-10" />
+            </div>
+          )}
+        </div>
       </div>
       <p
         className={cn(
@@ -287,7 +284,7 @@ export const ImageFieldFormElement: FormElement = {
   }),
   designerButton: {
     icon: CiImageOn,
-    label: "Image Field",
+    label: "Image",
   },
   designerComponent: DesignerComponent,
   formComponent: FormComponent,

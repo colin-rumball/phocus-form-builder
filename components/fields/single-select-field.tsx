@@ -34,6 +34,7 @@ import {
   type FormElementInstance,
   type SubmitFunction,
   type FormElement,
+  FormElementFormComponentProps,
 } from "../form-elements";
 import { MdOutlineRadioButtonChecked } from "react-icons/md";
 import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
@@ -41,7 +42,7 @@ import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
 const type: ElementsType = "SingleSelectField";
 
 const extraAttributes = {
-  label: "Single Select Field Label",
+  label: "Single Select Label",
   helperText: "Helper text",
   required: false,
   placeHolder: "Value here...",
@@ -60,24 +61,27 @@ const propertiesSchema = z.object({
   options: z.array(z.string()).default([]),
 });
 
-function DesignerComponent({ element }: { element: FormElementInstance }) {
-  const elementTyped = element as CustomInstance;
-  const { label, required, placeHolder, helperText } =
-    elementTyped.extraAttributes;
-  return <FormComponent element={elementTyped} />;
-}
+const DesignerComponent = ({ element }: { element: FormElementInstance }) => {
+  const { selectedElement } = useDesigner((state) => ({
+    selectedElement: state.selectedElement,
+  }));
+  return (
+    <div className="flex h-auto w-full flex-col justify-center gap-0">
+      {selectedElement === element && (
+        <Label className="text-muted-foreground">Single Select</Label>
+      )}
+      <FormComponent element={element} isReadOnly />
+    </div>
+  );
+};
 
 function FormComponent({
   element,
   submitValue,
   isInvalid,
   defaultValue,
-}: {
-  element: FormElementInstance;
-  submitValue?: SubmitFunction;
-  isInvalid?: boolean;
-  defaultValue?: string;
-}) {
+  isReadOnly,
+}: FormElementFormComponentProps) {
   const elementTyped = element as CustomInstance;
 
   const [value, setValue] = useState(defaultValue ?? "");
@@ -96,7 +100,8 @@ function FormComponent({
         {required && "*"}
       </Label>
       <RadioGroup
-        className="grid grid-cols-2"
+        aria-readonly={!!isReadOnly}
+        className={cn("grid grid-cols-2", isReadOnly && "pointer-events-none")}
         onValueChange={(value) => {
           setValue(value);
           if (!submitValue) return;

@@ -40,6 +40,7 @@ export type FormElementFormComponentProps = {
   submitValue?: SubmitFunction;
   defaultValue?: string;
   isInvalid?: boolean;
+  isReadOnly?: boolean;
 };
 export type SubmitFunction = (key: string, value: string) => void;
 

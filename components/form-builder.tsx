@@ -1,6 +1,6 @@
 "use client";
 
-import { type ReactNode, useEffect, useRef, useState } from "react";
+import { useEffect } from "react";
 import Headline from "./ui/headline";
 import { Button } from "./ui/button";
 import Designer from "./designer";
@@ -20,10 +20,6 @@ import { toast } from "./ui/use-toast";
 import { Input } from "./ui/input";
 import { Link } from "./ui/link";
 import { BsArrowLeft, BsArrowRight } from "react-icons/bs";
-import useBuilderTabs, {
-  type BuilderTab,
-  tabMap,
-} from "@/lib/hooks/useBuilderTabs";
 import { AnimatePresence, motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import FormPreviewer from "./form-previewer";
@@ -35,23 +31,28 @@ const FormBuilder = ({
   preloadedForm: Preloaded<typeof api.forms.get>;
 }) => {
   const form = usePreloadedQuery(preloadedForm);
-  const { setElements, setSelectedElement, setSavedAt } = useDesigner(
-    (state) => ({
-      setElements: state.setElements,
-      setSelectedElement: state.setSelectedElement,
-      setSavedAt: state.setSavedAt,
-    }),
-  );
-  const { pause, resume } = useDesigner.temporal.getState();
-  const { currentTab, setCurrentTab } = useBuilderTabs((state) => ({
-    currentTab: state.currentTab,
-    setCurrentTab: state.setCurrentTab,
+  const {
+    elements,
+    setElements,
+    setSelectedElement,
+    setSavedAt,
+    previewing,
+    setPreviewing,
+  } = useDesigner((state) => ({
+    elements: state.elements,
+    setElements: state.setElements,
+    setSelectedElement: state.setSelectedElement,
+    setSavedAt: state.setSavedAt,
+    previewing: state.previewing,
+    setPreviewing: state.setPreviewing,
   }));
+  const { pause, resume, clear } = useDesigner.temporal.getState();
 
   useEffect(() => {
+    clear();
     setSelectedElement(null);
     window.scrollTo({ top: 0 });
-    setCurrentTab("DESIGN");
+    setPreviewing(false);
   }, []);
 
   useEffect(() => {
@@ -67,7 +68,7 @@ const FormBuilder = ({
       setSavedAt(form.updatedAt ? new Date(form.updatedAt) : null);
       resume();
     }
-  }, [form, setSelectedElement, setElements]);
+  }, [preloadedForm, setSelectedElement, setElements]);
 
   const mouseSensor = useSensor(MouseSensor, {
     activationConstraint: {
@@ -145,22 +146,21 @@ const FormBuilder = ({
 
   return (
     <DndContext sensors={sensors}>
-      <div className={cn("relative h-full w-full flex-grow")}>
-        <AnimatedTab myTab="DESIGN">
-          <Designer />
-        </AnimatedTab>
+      <div className={cn("relative flex h-full w-full flex-grow flex-col")}>
+        {!previewing && <Designer form={form} />}
+        {previewing && <FormPreviewer />}
+        {/* <AnimatedTab myTab="DESIGN"> */}
+        {/* {currentTab === "DESIGN" && <Designer form={form} />} */}
+        {/* </AnimatedTab> */}
 
-        <AnimatedTab myTab="PREVIEW">
-          <FormPreviewer />
-        </AnimatedTab>
+        {/* <AnimatedTab myTab="PREVIEW"> */}
+        {/* {currentTab === "PREVIEW" && <FormPreviewer />} */}
+        {/* </AnimatedTab> */}
       </div>
       <div
         className={cn(
           "fixed inset-x-0 bottom-0 top-0 -z-50 transition-all",
-          currentTab === "DESIGN" &&
-            "bg-accent bg-[url(/svg/subtle-prism.svg)] dark:bg-[url(/svg/subtle-prism.svg)]",
-          currentTab === "PREVIEW" &&
-            "bg-accent bg-[url(/svg/subtle-prism.svg)] dark:bg-[url(/svg/subtle-prism.svg)]",
+          "bg-accent bg-[url(/svg/subtle-prism.svg)] dark:bg-[url(/svg/subtle-prism.svg)]",
         )}
       />
       <DragOverlayWrapper />
@@ -190,45 +190,45 @@ const variants = {
   },
 };
 
-const AnimatedTab = ({
-  children,
-  myTab,
-}: {
-  children: ReactNode;
-  myTab: BuilderTab;
-}) => {
-  const currentTab = useBuilderTabs((state) => state.currentTab);
-  const prevTab = useRef(currentTab);
-  useEffect(() => {
-    prevTab.current = currentTab;
-  }, [currentTab]);
-  const [animating, setAnimating] = useState(false);
-  const direction = tabMap[currentTab] > tabMap[prevTab.current] ? 1 : -1;
-  return (
-    <AnimatePresence initial={false} custom={direction}>
-      {currentTab === myTab && (
-        <motion.div
-          className={cn(
-            "absolute inset-0",
-            animating && "pointer-events-none select-none overflow-hidden",
-          )}
-          key={`${myTab}-TAB`}
-          custom={direction}
-          variants={variants}
-          initial="enter"
-          animate="center"
-          exit={"exit"}
-          transition={{ ease: "backInOut", duration: 0.4 }}
-          onAnimationStart={() => {
-            setAnimating(true);
-          }}
-          onAnimationComplete={() => {
-            setAnimating(false);
-          }}
-        >
-          {children}
-        </motion.div>
-      )}
-    </AnimatePresence>
-  );
-};
+// const AnimatedTab = ({
+//   children,
+//   myTab,
+// }: {
+//   children: ReactNode;
+//   myTab: BuilderTab;
+// }) => {
+//   const currentTab = useBuilderTabs((state) => state.currentTab);
+//   const prevTab = useRef(currentTab);
+//   useEffect(() => {
+//     prevTab.current = currentTab;
+//   }, [currentTab]);
+//   const [animating, setAnimating] = useState(false);
+//   const direction = tabMap[currentTab] > tabMap[prevTab.current] ? 1 : -1;
+//   return (
+//     <AnimatePresence initial={false} custom={direction}>
+//       {currentTab === myTab && (
+//         <motion.div
+//           className={cn(
+//             "absolute inset-0",
+//             animating && "pointer-events-none select-none overflow-hidden",
+//           )}
+//           key={`${myTab}-TAB`}
+//           custom={direction}
+//           variants={variants}
+//           initial="enter"
+//           animate="center"
+//           exit={"exit"}
+//           transition={{ ease: "backInOut", duration: 0.4 }}
+//           onAnimationStart={() => {
+//             setAnimating(true);
+//           }}
+//           onAnimationComplete={() => {
+//             setAnimating(false);
+//           }}
+//         >
+//           {children}
+//         </motion.div>
+//       )}
+//     </AnimatePresence>
+//   );
+// };

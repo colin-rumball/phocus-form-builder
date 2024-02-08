@@ -112,7 +112,6 @@ const FormCardSkeleton = () => {
 
 const FormCard = ({
   name,
-  description,
   published,
   visits,
   submissions,
@@ -122,7 +121,6 @@ const FormCard = ({
   updatedAt,
 }: {
   name: string;
-  description: string;
   published: boolean;
   visits: number;
   submissions: number;
@@ -139,7 +137,6 @@ const FormCard = ({
   const onDuplicateClicked = async () => {
     const formId = await createForm({
       name: `${name} (copy)`,
-      description: description,
     });
 
     if (!formId) {
@@ -168,7 +165,7 @@ const FormCard = ({
   };
 
   return (
-    <Card className="h-[190px]">
+    <Card className="flex h-[210px] flex-col">
       <CardHeader>
         <CardTitle className="flex items-center justify-between">
           <Input
@@ -225,19 +222,17 @@ const FormCard = ({
             {formatDistance(_creationTime, Date.now(), { addSuffix: true })}
           </span>
           {published && (
-            <span className="flex items-center gap-2">
+            <span className="grid grid-cols-2 items-center gap-x-1">
               <LuView className="text-muted-foreground" />
               <span className="">{visits.toLocaleString()}</span>
+
               <FaWpforms className="text-muted-foreground" />
               <span className="">{submissions.toLocaleString()}</span>
             </span>
           )}
         </CardDescription>
       </CardHeader>
-      <CardContent className="h-[20px] truncate">
-        {description ? description : "No description"}
-      </CardContent>
-      <CardFooter>
+      <CardContent className="flex flex-grow flex-col items-center justify-end">
         {published && (
           <Button asChild className="mt-2 w-full gap-4">
             <Link href={`/form/${_id}`}>
@@ -252,7 +247,7 @@ const FormCard = ({
             </Link>
           </Button>
         )}
-      </CardFooter>
+      </CardContent>
     </Card>
   );
 };

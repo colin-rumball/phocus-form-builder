@@ -24,7 +24,7 @@ const quicksand = Quicksand({
 });
 
 export const metadata = {
-  title: "Formulate",
+  title: "Phocus Form Builder",
   description: "An online form builder",
   icons: [{ rel: "icon", url: "/favicon.ico" }],
 };
