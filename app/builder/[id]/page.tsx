@@ -22,6 +22,7 @@ export default async function BuilderPage({
   if (preloadedForm === null) {
     throw new Error("Form not found");
   }
+
   return (
     <Page>
       <FormBuilder preloadedForm={preloadedForm} />
