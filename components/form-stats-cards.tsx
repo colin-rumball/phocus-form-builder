@@ -42,7 +42,7 @@ const FormStatsCards = ({ className, form }: FormStatsCardsProps) => {
   return (
     <div
       className={cn(
-        "container grid w-full grid-cols-1 gap-4 pt-8 md:grid-cols-2 lg:grid-cols-4",
+        "container grid w-full grid-cols-1 gap-4 pt-8 md:grid-cols-2",
         className,
       )}
     >
@@ -52,7 +52,7 @@ const FormStatsCards = ({ className, form }: FormStatsCardsProps) => {
         helperText="All time form visits"
         value={visits.toLocaleString() || ""}
         loading={false}
-        className="shadow-md shadow-blue-600"
+        className="shadow-md"
       />
 
       <StatsCard
@@ -61,7 +61,7 @@ const FormStatsCards = ({ className, form }: FormStatsCardsProps) => {
         helperText="All time form submissions"
         value={submissions.toLocaleString() || ""}
         loading={false}
-        className="shadow-md shadow-yellow-600"
+        className="shadow-md"
       />
 
       <StatsCard
@@ -70,7 +70,7 @@ const FormStatsCards = ({ className, form }: FormStatsCardsProps) => {
         helperText="Visits that result in form submission"
         value={submissionRate.toLocaleString() + "%" || ""}
         loading={false}
-        className="shadow-md shadow-green-600"
+        className="shadow-md"
       />
 
       <StatsCard
@@ -79,7 +79,7 @@ const FormStatsCards = ({ className, form }: FormStatsCardsProps) => {
         helperText="Visits that leaves without interacting"
         value={bounceRate.toLocaleString() + "%" || ""}
         loading={false}
-        className="shadow-md shadow-red-600"
+        className="shadow-md"
       />
     </div>
   );
