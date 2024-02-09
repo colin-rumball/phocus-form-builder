@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
 import Headline from "@/components/ui/headline";
 import Page from "@/components/ui/page";
+import Section from "@/components/ui/section";
 import {
   Table,
   TableBody,
@@ -51,19 +52,23 @@ export default async function FormPage({ params }: { params: { id: string } }) {
   return (
     <Page className="gap-xl">
       <div className="border-y border-muted py-10">
-        <div className="container flex justify-between">
+        <Section className="container flex justify-between">
           <Headline as="h2">{form?.name}</Headline>
           <VisitBtn formId={params.id} />
-        </div>
+        </Section>
       </div>
       <div className="border-b border-muted py-4">
-        <div className="container flex items-center justify-between gap-2">
+        <Section className="container flex items-center justify-between gap-2">
           <FormShareButton formId={params.id} />
-        </div>
+        </Section>
       </div>
-      <FormStatsCards form={form} />
+      <Section className="container">
+        <FormStatsCards form={form} />
+      </Section>
 
-      <SubmissionsTable form={form} submissions={submissions} />
+      <Section className="container">
+        <SubmissionsTable form={form} submissions={submissions} />
+      </Section>
     </Page>
   );
 }
