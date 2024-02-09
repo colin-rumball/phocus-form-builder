@@ -107,13 +107,11 @@ const Designer = ({
           <div className="flex w-full flex-col gap-2">
             {elements.map((element: FormElementInstance) => {
               return (
-                <>
-                  <DesignerElementWrapper
-                    key={element.id}
-                    droppable={droppable}
-                    element={element}
-                  />
-                </>
+                <DesignerElementWrapper
+                  key={element.id}
+                  droppable={droppable}
+                  element={element}
+                />
               );
             })}
           </div>
@@ -173,6 +171,7 @@ const DesignerElementWrapper = ({
   return (
     <>
       <div
+        key={element.id}
         onClick={(e) => {
           e.stopPropagation();
           setSelectedElement(element);
@@ -249,7 +248,7 @@ const DesignerElementWrapper = ({
         </div>
       </div>
       {selectedElement === element && (
-        <div className="flex w-full justify-center">
+        <div key="designer-controls" className="flex w-full justify-center">
           <DesignerControls droppable={droppable} />
         </div>
       )}

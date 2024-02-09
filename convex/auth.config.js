@@ -1,7 +1,7 @@
 export default {
   providers: [
     {
-      domain: "https://clerk.phocus.studio",
+      domain: process.env.CONVEX_AUTH_DOMAIN,
       applicationID: "convex",
     },
   ],

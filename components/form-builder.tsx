@@ -68,7 +68,7 @@ const FormBuilder = ({
       setSavedAt(form.updatedAt ? new Date(form.updatedAt) : null);
       resume();
     }
-  }, [preloadedForm, setSelectedElement, setElements]);
+  }, [preloadedForm, form, setSelectedElement, setElements]);
 
   const mouseSensor = useSensor(MouseSensor, {
     activationConstraint: {

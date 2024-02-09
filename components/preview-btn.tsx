@@ -26,7 +26,7 @@ const PreviewBtn = ({ form }: { form?: Doc<"forms"> | null }) => {
       {!!form && (
         <TooltipProvider delayDuration={300}>
           <Tooltip>
-            <TooltipTrigger>
+            <TooltipTrigger asChild>
               <div className="flex flex-col items-center justify-center">
                 <Switch
                   id="preview-toggle"
