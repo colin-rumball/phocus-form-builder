@@ -141,7 +141,8 @@ export const list = query({
       .first();
 
     if (!user) {
-      throw new ConvexError("No user found");
+      // throw new ConvexError("No user found");
+      return null;
     }
 
     const forms = await ctx.db

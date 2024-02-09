@@ -15,7 +15,7 @@ import { Link } from "../ui/link";
 import { useParams, usePathname } from "next/navigation";
 import { Button } from "./button";
 import { IoCloseOutline } from "react-icons/io5";
-import { SignInButton, UserButton } from "@clerk/nextjs";
+import { SignInButton, UserButton, useAuth } from "@clerk/nextjs";
 import ThemeSwitcher from "../theme-switcher";
 import { useConvexAuth, useMutation, useQuery } from "convex/react";
 import { FaRegUser } from "react-icons/fa";
@@ -211,19 +211,30 @@ const Nav = ({ sideMenu = false }) => {
 };
 
 const UserOptions = () => {
-  const { isAuthenticated, isLoading } = useConvexAuth();
   return (
     <div className="flex items-center space-x-lg">
       <ThemeSwitcher />
-      <div className="min-w-8">
-        {isLoading && <Skeleton className="h-7 w-7" />}
-        {!isLoading && isAuthenticated && <UserButton afterSignOutUrl="/" />}
-        {!isLoading && !isAuthenticated && (
-          <SignInButton>
-            <FaRegUser className="h-5 w-7 cursor-pointer" />
-          </SignInButton>
-        )}
-      </div>
+      <UserIcon />
+    </div>
+  );
+};
+
+const UserIcon = () => {
+  const { isSignedIn } = useAuth();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => setMounted(true), []);
+
+  if (!mounted) return <Skeleton className="h-9 w-10" />;
+
+  return (
+    <div className="min-w-8">
+      {isSignedIn && <UserButton afterSignOutUrl="/" />}
+      {!isSignedIn && (
+        <SignInButton>
+          <FaRegUser className="h-5 w-7 cursor-pointer" />
+        </SignInButton>
+      )}
     </div>
   );
 };
