@@ -37,6 +37,7 @@ export default async function HomePage() {
           quality={100}
           sizes="100vw"
           className="object-cover brightness-[0.8]"
+          priority
         />
       </div>
     </Page>
