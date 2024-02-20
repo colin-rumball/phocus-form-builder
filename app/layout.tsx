@@ -35,7 +35,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" className="scroll-smooth" suppressHydrationWarning>
       <head></head>
       <body
         className={`font-sans ${roboto.className} ${quicksand.variable} relative h-full min-h-screen overflow-x-hidden`}
@@ -46,7 +46,7 @@ export default function RootLayout({
             <Header />
             {children}
             <Toaster />
-            <Footer />
+            {/* <Footer /> */}
           </div>
         </Providers>
         {/* TODO: enable analytics */}
