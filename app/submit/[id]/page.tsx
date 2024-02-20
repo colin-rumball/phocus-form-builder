@@ -37,7 +37,7 @@ export default async function SubmitPage({
       <div
         className={cn(
           "fixed inset-x-0 bottom-0 top-0 -z-50 transition-all",
-          "bg-accent bg-[url(/svg/subtle-prism.svg)] dark:bg-[url(/svg/subtle-prism.svg)]",
+          "bg-accent bg-[url(/svgs/subtle-prism.svg)] dark:bg-[url(/svgs/subtle-prism.svg)]",
         )}
       />
     </Page>
