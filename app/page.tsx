@@ -12,7 +12,7 @@ export default async function HomePage() {
       <Section className="flex h-full flex-grow flex-col justify-center">
         <div className="flex h-full max-w-[58ch] flex-col justify-center gap-xl py-xl">
           <div className="">
-            <Headline as="h1">
+            <Headline as="h1" className="font-bold">
               Build Beautiful Forms Easily and Efficiently using AI
             </Headline>
           </div>
@@ -29,17 +29,8 @@ export default async function HomePage() {
           </div>
         </div>
       </Section>
-      <div className="absolute left-0 top-0 -z-10 h-full w-full">
-        <Image
-          src={backgroundImg}
-          alt="background image"
-          fill
-          quality={100}
-          sizes="100vw"
-          className="object-cover brightness-[0.8]"
-          priority
-          placeholder="blur"
-        />
+      <div className="absolute inset-0 -z-10 bg-[url(/svgs/dot-grid-light.svg)] text-white dark:bg-[url(/svgs/dot-grid-dark.svg)]">
+        <div className="bg-gradient-radial -z-20 h-full w-full from-transparent to-background to-80%" />
       </div>
     </Page>
   );
