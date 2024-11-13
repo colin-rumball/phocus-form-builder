@@ -43,7 +43,7 @@ http.route({
           await ctx.runMutation(internal.users.createUser, {
             clerkId: data.id,
             email: email,
-            name: data.first_name,
+            name: data.first_name || "Anonymous",
           });
           break;
       }
